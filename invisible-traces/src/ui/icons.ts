@@ -1,0 +1,14 @@
+const paths:Record<string,string>={
+search:'<circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/>',
+arrow:'<path d="M4 12h15m-6-6 6 6-6 6"/>',back:'<path d="M20 12H5m6-6-6 6 6 6"/>',check:'<path d="m5 12 4 4L19 6"/>',lock:'<rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 5v2"/>',
+home:'<path d="m3 11 9-8 9 8v9H3zM9 20v-7h6v7"/>',map:'<path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3zm6-3v15m6-12v15"/>',
+file:'<path d="M6 3h8l4 4v14H6zM14 3v5h5M9 12h6m-6 4h6"/>',settings:'<path d="m9 3-1 3-3 1-1 3 2 2-2 3 2 3 3-1 3 3 3-3 3 1 2-3-2-3 2-2-1-3-3-1-1-3z"/><circle cx="12" cy="12" r="3"/>',
+sound:'<path d="M4 9h4l5-4v14l-5-4H4zm12-1c3 2 3 6 0 8m3-11c5 4 5 10 0 14"/>',mute:'<path d="M4 9h4l5-4v14l-5-4H4zm12 0 6 6m0-6-6 6"/>',
+window:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M12 4v16M3 12h18m-2-5 3 1"/>',air:'<path d="M3 8h12c5 0 5-6 1-6m-13 10h15c5 0 5 7 0 7m-15-3h8m-8 4h5"/>',hand:'<path d="M5 13V9a2 2 0 0 1 3 0V5a2 2 0 0 1 3 0v5-7a2 2 0 0 1 3 0v7-4a2 2 0 0 1 3 0v7l2-2a2 2 0 0 1 3 2l-5 7H8l-5-6a2 2 0 0 1 2-1z"/>',
+plate:'<circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="3"/><path d="M2 3v7m3-7v7m-3-3h3m-2 3v11M22 3v18m0-18c-4 1-4 9 0 9"/>',ball:'<circle cx="12" cy="12" r="9"/><path d="m12 8 4 3-2 5h-4l-2-5zm0-5v5m9 3-5 0m-2 5 3 4m-7-4-3 4m-4-9h5"/>',
+drop:'<path d="M12 2c-2 4-8 8-8 13a8 8 0 0 0 16 0c0-5-6-9-8-13zM8 15c0 2 1 3 3 3"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/>',walk:'<circle cx="13" cy="4" r="2"/><path d="m10 21 2-6-3-4 3-4 3 5h5M5 11l4-1m4 5 5 6"/>',bag:'<path d="M5 8h14l2 13H3zm4 0V5a3 3 0 0 1 6 0v3M8 13h8v5H8z"/>',
+link:'<path d="m10 14 4-4m-6 7-1 1a4 4 0 0 1-6-6l5-5a4 4 0 0 1 6 0m0 0 1-1a4 4 0 0 1 6 6l-5 5a4 4 0 0 1-6 0"/>',
+flask:'<path d="M9 3h6m-5 0v7L4 20h16l-6-10V3M7 15h10"/>',spark:'<path d="m12 2 3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/>',people:'<circle cx="9" cy="8" r="3"/><path d="M3 21v-4a6 6 0 0 1 12 0v4m1-16a3 3 0 0 1 0 6m2 3a5 5 0 0 1 3 5v2"/>',
+book:'<path d="M3 4h8v16H3zm10 0h8v16h-8M11 6l2 0m-2 12h2"/>',play:'<path d="m8 4 12 8-12 8z"/>',pause:'<path d="M8 4v16M16 4v16"/>',rewind:'<path d="m12 5-9 7 9 7zm9 0-9 7 9 7z"/>',close:'<path d="m6 6 12 12M6 18 18 6"/>',print:'<path d="M6 8V3h12v5M6 17H3V9h18v8h-3m-12-3h12v7H6z"/>',info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10v1"/>',bolt:'<path d="m13 2-9 12h7l-1 8 10-13h-7z"/>',undo:'<path d="M8 4 3 9l5 5M3 9h11a6 6 0 0 1 0 12"/>',flag:'<path d="M5 22V3c5-4 9 4 14 0v12c-5 4-9-4-14 0"/>'};
+export const icon=(name:string,size=24)=>`<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name]??paths.spark}</svg>`;
+export const esc=(s:unknown)=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));

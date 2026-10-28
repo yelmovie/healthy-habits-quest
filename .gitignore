@@ -1,0 +1,20 @@
+# Dependencies and generated builds
+node_modules/
+dist/
+coverage/
+.playwright/
+playwright-report/
+test-results/
+*.log
+
+# Local originals and sample archives; optimized game assets are tracked
+/image/
+/files/
+/invisible-traces/docs/asset-contact-sheet.jpg
+
+# Machine-local files and credentials
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db
