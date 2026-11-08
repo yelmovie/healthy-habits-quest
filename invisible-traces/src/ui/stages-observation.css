@@ -1,0 +1,213 @@
+/* S1·S2: 활동은 남은 높이를 사용하고, 작은 화면은 초점 탭으로 바꾼다. */
+.observation-page { display: flex; flex-direction: column; height: 100%; min-height: 0; min-width: 0; flex: 1 1 0; gap: .55rem; overflow: hidden; }
+.observation-page :is(button,span,div,aside,strong,small,p,nav) { min-width: 0; }
+.observation-page button { touch-action: none; }
+.observation-page .mission-question { flex: none; margin: 0; line-height: 1.35; }
+.observation-page :is(.obs-focus-tabs,.obs-site-tabs,.obs-clue-pager) { display: flex; gap: .4rem; min-height: 44px; flex: none; }
+.observation-page :is(.obs-focus-tabs,.obs-site-tabs,.obs-clue-pager) .btn { min-height: 44px; padding: .35rem .7rem; line-height: 1.2; }
+.observation-page .obs-focus-tabs { display: none; }
+.observation-page .obs-next { border-color: var(--purple); }
+.observation-page button.obs-next:focus-visible { outline-color: var(--purple); }
+.obs-toolbar,.obs-scan-toolbar { display: flex; align-items: center; flex-wrap: wrap; justify-content: space-between; gap: .4rem; flex: none; }
+.obs-scan-toolbar .playback-controls { margin-left: auto; }
+.observation-p01 .obs-site-tabs { display: none; }
+.observation-p01 .site-scenes { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); grid-template-rows: minmax(0,1fr); gap: .7rem; flex: 1 1 0; min-height: 0; }
+.observation-p01 .site-scene { display: grid; grid-template-rows: minmax(0,1fr) auto; min-height: 0; height: 100%; padding: 0; overflow: hidden; text-align: left; background: var(--surface); border: 2px solid var(--line); }
+.observation-p01 .site-scene.obs-next { border-color: var(--purple); }
+.observation-p01 .site-scene.discovered { border-color: var(--teal); }
+.obs-site-visual { display: block; position: relative; min-height: 0; width: 100%; overflow: hidden; background: var(--sky); }
+.observation-p01 .site-image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.observation-p01 .scanner-orb { top: 50%; width: 72px; height: 72px; z-index: 1; animation: none; box-shadow: 0 0 0 7px #ffffff55; }
+.observation-p01 .site-scene.discovered .scanner-orb { background: var(--teal); color: #fff; animation: none; box-shadow: none; }
+.obs-viewfinder { position: absolute; inset: 15% 18%; border: 2px solid #fff9; border-radius: 16px; pointer-events: none; }
+.observation-p01 .site-bottom { position: static; display: flex; align-items: center; flex-wrap: wrap; justify-content: space-between; gap: .25rem .6rem; padding: .65rem .8rem; background: var(--surface); color: var(--ink); }
+.observation-p01 .site-bottom strong { font-size: 1.1rem; }
+.observation-p01 .site-bottom > span { display: inline-flex; align-items: center; gap: .3rem; color: var(--teal-strong); font-size: .92rem; }
+
+.observation-p02 .obs-clue-pager { display: none; }
+.observation-p02 .obs-site-picker { display: none; }
+.observation-p02 .evidence-layout { display: grid; grid-template-columns: minmax(0,1fr) minmax(235px,.33fr); grid-template-rows: minmax(0,1fr); flex: 1 1 0; min-height: 0; gap: .65rem; }
+.observation-p02 .clue-board { display: flex; flex-direction: column; min-height: 0; padding: .7rem; }
+.observation-p02 .clue-backdrop { opacity: .2; }
+.observation-p02 .clue-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); grid-template-rows: minmax(0,1fr); gap: .65rem; height: 100%; min-height: 0; flex: 1 1 0; }
+.observation-p02 .clue-card { display: flex; flex-direction: column; justify-content: center; min-height: 0; padding: .8rem; gap: .8rem; border: 2px solid var(--line); overflow: hidden; }
+.observation-p02 .clue-card.obs-next { border-color: var(--purple); }
+.observation-p02 .clue-card.selected { border-color: var(--teal); background: var(--teal-soft); }
+.obs-clue-heading { display: grid; grid-template-columns: 48px minmax(0,1fr) 22px; align-items: center; gap: .5rem; align-self: stretch; }
+.obs-clue-heading .clue-icon { width: 48px; height: 48px; flex: none; }
+.obs-clue-heading strong { font-size: 1.08rem; line-height: 1.4; }
+.obs-clue-heading > svg { color: var(--teal-strong); }
+.observation-p02 .clue-card > .obs-clue-description { font-size: 1rem; line-height: 1.6; color: var(--ink); }
+.observation-p02 .evidence-tray { display: flex; min-height: 0; padding: .7rem; gap: .6rem; border: 1px solid var(--line); box-shadow: none; }
+.observation-p02 .panel-heading { flex: none; font-size: 1rem; }
+.obs-evidence-slots { display: grid; grid-template-rows: repeat(5,minmax(0,1fr)); gap: .45rem; min-height: 0; flex: 1 1 0; }
+.observation-p02 .evidence-slot { display: grid; grid-template-columns: 25px minmax(0,1fr); min-height: 44px; gap: .4rem; padding: .4rem; }
+.observation-p02 .evidence-slot.filled { grid-template-columns: 25px 20px minmax(0,1fr) 17px; }
+.observation-p02 .evidence-slot > span { width: 25px; height: 25px; }
+.observation-p02 .evidence-slot.filled b { line-height: 1.3; font-size: .92rem; }
+.observation-p02 .evidence-slot.replace { animation: none; border-style: dashed; }
+
+.observation-p03 .relationship-board { display: grid; grid-template-columns: minmax(0,.75fr) minmax(0,1.4fr); grid-template-rows: minmax(0,1fr); gap: .8rem; flex: 1 1 0; min-height: 0; align-items: stretch; }
+.observation-p03 .source-cards { display: grid; grid-template-rows: repeat(5,minmax(0,1fr)); gap: .5rem; min-height: 0; }
+.observation-p03 .source-card { display: grid; grid-template-columns: 44px minmax(0,1fr) 20px; min-height: 44px; padding: .5rem .65rem; gap: .55rem; }
+.observation-p03 .source-card strong { font-size: 1rem; line-height: 1.35; }
+.observation-p03 .source-card small { font-size: .88rem; color: var(--ink-2); }
+.observation-p03 .source-card.selected { border-color: var(--purple); background: var(--purple-soft); }
+.obs-target-section,.obs-impact-targets { display: flex; flex-direction: column; gap: .55rem; min-height: 0; }
+.obs-active-selection { display: flex; align-items: center; gap: .4rem; padding: .45rem .7rem; min-height: 44px; flex: none; border: 1px dashed var(--line); border-radius: var(--radius-sm); background: var(--surface); color: var(--ink-2); font-size: .95rem; line-height: 1.35; }
+.obs-active-selection.ready { display: none; border-color: var(--purple); background: var(--purple-soft); color: var(--purple); }
+.obs-active-selection:not(.ready) { display: none; }
+.obs-active-selection > svg { flex: none; }
+.observation-p03 .target-cards { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); grid-template-rows: repeat(2,minmax(0,1fr)); gap: .6rem; min-height: 0; flex: 1 1 0; }
+.observation-p03 .target-card { display: flex; flex-direction: column; justify-content: center; align-items: stretch; min-height: 0; padding: .7rem; gap: .55rem; overflow: hidden; }
+.obs-target-title { display: flex; align-items: center; gap: .5rem; }
+.obs-target-title strong { font-size: 1rem; line-height: 1.35; }
+.observation-p03 .target-icon { width: 44px; height: 44px; border-radius: 12px; flex: none; }
+.obs-relationship-scene { display: flex; align-items: center; justify-content: center; gap: .35rem; min-height: 0; padding: .5rem; border-radius: 10px; background: var(--surface-2); color: var(--teal-strong); flex: 1 1 0; }
+.obs-relationship-scene > span { display: flex; flex: 1 1 0; flex-direction: column; align-items: center; gap: .2rem; text-align: center; }
+.obs-relationship-scene small { color: var(--ink-2); font-size: .88rem; line-height: 1.3; }
+.obs-relationship-scene > svg { flex: none; }
+.obs-link-count { display: flex; justify-content: center; align-items: center; gap: .3rem; color: var(--teal-strong); font-size: .88rem; line-height: 1.3; }
+.observation-p03 .obs-linked-target { border-color: var(--teal); }
+
+.observation-p04 .impact-layout { display: grid; grid-template-columns: minmax(0,.85fr) minmax(0,1.4fr); grid-template-rows: minmax(0,1fr); gap: .8rem; min-height: 0; flex: 1 1 0; }
+.observation-p04 .impact-effects { display: grid; grid-template-rows: repeat(3,minmax(0,1fr)); min-height: 0; gap: .6rem; }
+.observation-p04 .impact-effect { display: grid; grid-template-columns: 30px minmax(0,1fr) 20px; align-items: center; min-height: 44px; gap: .55rem; padding: .75rem; font-size: 1rem; line-height: 1.5; }
+.observation-p04 .impact-effect.selected { border-color: var(--purple); background: var(--purple-soft); }
+.observation-p04 .impact-domains { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); grid-template-rows: minmax(0,1fr); gap: .6rem; min-height: 0; flex: 1 1 0; }
+.observation-p04 .impact-domain { display: flex; flex-direction: column; align-items: stretch; justify-content: center; min-height: 0; padding: .7rem; gap: .7rem; text-align: center; overflow: hidden; }
+.obs-impact-scene { display: grid; place-items: center; flex: 1 1 0; min-height: 0; padding: .5rem; border-radius: var(--radius-sm); background: var(--sky); color: var(--sky-strong); }
+.domain-1 .obs-impact-scene { background: var(--purple-soft); color: var(--purple); }
+.domain-2 .obs-impact-scene { background: var(--teal-soft); color: var(--teal-strong); }
+.observation-p04 .impact-domain > strong { font-size: 1.05rem; line-height: 1.4; }
+.obs-domain-reason { display: flex; align-items: flex-start; gap: .3rem; font-weight: 700; line-height: 1.4; text-align: left; }
+.obs-domain-reason > svg { flex: none; margin-top: .1rem; }
+.observation-p04 .obs-impact-linked { border-style: solid; border-color: var(--teal); }
+
+@media (max-height:740px) {
+  .observation-p03 .obs-target-title .target-icon { display: none; }
+  .observation-p03 .obs-relationship-scene { padding: .25rem; }
+  .observation-p03 .obs-relationship-scene small { display: none; }
+  .observation-p03 .obs-relationship-scene > span > svg { width: 32px; height: 32px; }
+}
+
+/* 초점 모드에서는 한 패널만 보여 글자·조작 크기를 지킨다. */
+@media (max-width:700px),(max-height:560px) {
+  .observation-page { gap: .4rem; }
+  .observation-page .obs-focus-tabs { display: flex; }
+  .observation-page .obs-active-selection.ready { display: flex; }
+  .observation-p01 .obs-site-tabs { display: flex; }
+  .observation-p01 .site-scenes { grid-template-columns: minmax(0,1fr); gap: 0; }
+  .observation-p01 .site-scene:not(.obs-current) { display: none; }
+  .observation-p01 .site-bottom { padding: .4rem .65rem; }
+  .observation-p01 .scanner-orb { width: 58px; height: 58px; }
+  .observation-p02 .evidence-layout { grid-template-columns: minmax(0,1fr); }
+  .observation-p02.obs-mode-clues .evidence-tray,.observation-p02.obs-mode-tray .clue-board { display: none; }
+  .observation-p02.obs-mode-tray :is(.obs-site-tabs,.obs-clue-pager) { display: none; }
+  .observation-p02 .evidence-tray .panel-heading:not(.obs-replacement) { display: none; }
+  .observation-p02 .obs-clue-pager { display: flex; }
+  .observation-p02 .obs-clue-pager .btn { min-width: 44px; padding-inline: .4rem; }
+  .observation-p02 .clue-grid { grid-template-columns: minmax(0,1fr); gap: 0; }
+  .observation-p02 .clue-card:not(.obs-current) { display: none; }
+  .observation-p02 .clue-card { justify-content: center; padding: .7rem; gap: .6rem; }
+  .observation-p02 .obs-clue-heading { grid-template-columns: 40px minmax(0,1fr) 22px; }
+  .observation-p02 .obs-clue-heading .clue-icon { width: 40px; height: 40px; }
+  .observation-p03 .relationship-board,.observation-p04 .impact-layout { grid-template-columns: minmax(0,1fr); }
+  .observation-p03.obs-mode-sources .obs-target-section,.observation-p03.obs-mode-targets .source-cards { display: none; }
+  .observation-p03 .source-cards { grid-template-columns: repeat(2,minmax(0,1fr)); grid-template-rows: repeat(3,minmax(0,1fr)); }
+  .observation-p04.obs-mode-effects .obs-impact-targets,.observation-p04.obs-mode-domains .impact-effects { display: none; }
+}
+@media (max-width:700px) {
+  .observation-p01 .obs-scan-toolbar { gap: .3rem; }
+  .observation-p01 .obs-site-tabs { width: 100%; }
+  .observation-p01 .obs-site-tabs .btn { flex: 1 1 0; }
+  .observation-p01 .playback-controls { width: 100%; }
+  .observation-p02 .obs-toolbar { display: grid; grid-template-columns: minmax(0,1fr) auto; grid-template-rows: auto auto; gap: .45rem; align-items: stretch; }
+  .observation-p02 .obs-focus-tabs { grid-column: 1/-1; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .observation-p02 .obs-site-tabs { display: none; }
+  .observation-p02 .obs-site-picker { display: flex; grid-column: 1; grid-row: 2; min-width: 0; min-height: 44px; }
+  .observation-p02 .obs-site-picker select { min-width: 0; width: 100%; min-height: 44px; padding-block: .35rem; }
+  .observation-p02 .obs-clue-pager { grid-column: 2; grid-row: 2; display: grid; grid-auto-flow: column; grid-auto-columns: 44px; gap: .3rem; }
+  .observation-p02 .obs-clue-pager .btn { min-width: 44px; width: 44px; padding-inline: .2rem; }
+  .observation-p02.obs-mode-tray .obs-site-picker { display: none; }
+  .observation-p02.obs-mode-tray .obs-toolbar { grid-template-rows: auto; }
+  .observation-p03 .source-card { grid-template-columns: 32px minmax(0,1fr) 18px; padding: .45rem; gap: .35rem; }
+  .observation-p03 .source-card .clue-icon { width: 32px; height: 36px; }
+  .observation-p03 .source-card .clue-icon > svg { width: 26px; }
+  .observation-p03 .source-card strong { font-size: .95rem; }
+  .observation-p03 .source-card small { display: none; }
+  .observation-p03 .target-card { padding: .55rem; gap: .5rem; }
+  .observation-p03 .target-icon { width: 34px; height: 36px; }
+  .observation-p03 .target-icon > svg { width: 26px; }
+  .observation-p03 .obs-target-title { gap: .35rem; }
+  .observation-p03 .obs-target-title strong { font-size: .95rem; }
+  .observation-p03 .obs-relationship-scene { gap: .2rem; padding: .3rem; }
+  .observation-p03 .obs-relationship-scene > span > svg { width: 30px; height: 30px; }
+  .observation-p03 .obs-relationship-scene > svg { width: 12px; }
+  .observation-p04 .impact-domains { grid-template-columns: minmax(0,1fr); grid-template-rows: repeat(3,minmax(0,1fr)); }
+  .observation-p04 .impact-domain { display: grid; grid-template-columns: 64px minmax(0,1fr); align-items: center; gap: .4rem .65rem; text-align: left; }
+  .observation-p04 .impact-domain .obs-impact-scene { grid-row: 1/3; height: 100%; padding: .3rem; }
+  .observation-p04 .obs-impact-scene > svg { width: 50px; height: 50px; }
+  .observation-p04 .impact-domain > strong,.observation-p04 .obs-domain-reason { grid-column: 2; }
+}
+@media (max-height:560px) and (min-width:701px) {
+  .observation-page .mission-question { font-size: 1rem; }
+  .observation-p01 .obs-scan-toolbar { flex-wrap: nowrap; }
+  .observation-p01 .playback-controls { margin-left: auto; }
+  .observation-p02 .obs-toolbar { flex-wrap: nowrap; }
+  .observation-p02 .clue-card { padding: .55rem; gap: .3rem; }
+  .observation-p02 .obs-clue-heading { grid-template-columns: 32px minmax(0,1fr) 22px; }
+  .observation-p02 .obs-clue-heading .clue-icon { width: 32px; height: 32px; }
+  .observation-p02 .obs-clue-heading .clue-icon > svg { width: 27px; }
+  .observation-p02 .obs-clue-description { line-height: 1.4; }
+  .observation-p02 .obs-evidence-slots { grid-template-columns: repeat(3,minmax(0,1fr)); grid-template-rows: repeat(2,minmax(0,1fr)); }
+  .observation-p03 .source-cards { grid-template-columns: repeat(3,minmax(0,1fr)); grid-template-rows: repeat(2,minmax(0,1fr)); }
+  .observation-p03 .source-card { padding: .35rem .5rem; }
+  .observation-p03 .source-card small { display: none; }
+  .observation-p03 .obs-active-selection,.observation-p04 .obs-active-selection { padding: .3rem .5rem; min-height: 36px; }
+  .observation-p03 .target-cards { grid-template-columns: repeat(4,minmax(0,1fr)); grid-template-rows: minmax(0,1fr); gap: .45rem; }
+  .observation-p03 .target-card { padding: .4rem; gap: .3rem; }
+  .observation-p03 .target-icon { width: 30px; height: 32px; }
+  .observation-p03 .target-icon > svg { width: 24px; height: 24px; }
+  .observation-p03 .obs-target-title { gap: .3rem; }
+  .observation-p03 .obs-target-title strong { font-size: .92rem; }
+  .observation-p03 .obs-relationship-scene { padding: .2rem; gap: .2rem; }
+  .observation-p03 .obs-relationship-scene > span > svg { width: 26px; height: 26px; }
+  .observation-p03 .obs-relationship-scene small { display: none; }
+  .observation-p03 .obs-relationship-scene { display: none; }
+  .observation-p04 .impact-effects { grid-template-columns: repeat(3,minmax(0,1fr)); grid-template-rows: minmax(0,1fr); }
+  .observation-p04 .impact-effect { padding: .5rem; }
+  .observation-p04 .impact-domain { padding: .5rem; gap: .35rem; }
+  .observation-p04 .obs-impact-targets:has(.obs-active-selection.ready) .obs-domain-reason { display: none; }
+  .observation-p04 .impact-domain:has(.obs-domain-reason) .obs-impact-scene { display: none; }
+  .observation-p04 .obs-impact-scene > svg { width: 46px; height: 46px; }
+}
+@media (max-height:340px) {
+  .observation-page .mission-question { display: none; }
+  .observation-p01 .site-bottom { min-height: 36px; padding-block: .2rem; }
+  .observation-p01 .site-bottom strong { font-size: .95rem; }
+  .observation-p01 .scanner-orb { width: 38px; height: 38px; }
+  .observation-p01 .scanner-orb > svg { width: 26px; height: 26px; }
+  .observation-page .obs-active-selection.ready { display: none; }
+  .observation-p03 .obs-relationship-scene,.observation-p04 .obs-impact-scene { display: none; }
+  .observation-p04 .obs-domain-reason { display: none; }
+  .observation-p03 .source-card .clue-icon { width: 32px; height: 32px; }
+  .observation-p03 .source-card .clue-icon > svg { width: 26px; height: 26px; }
+  .observation-p03 .source-card { grid-template-columns: 32px minmax(0,1fr) 20px; gap: .35rem; }
+  .observation-p04 .impact-domain { gap: .25rem; }
+}
+
+/* 큰 글자의 단서함은 이름이 한 줄에 들어갈 폭을 먼저 확보한다. */
+@media (min-width:1000px) and (max-width:1100px) and (min-height:561px) {
+  body.large-text .observation-p02 .evidence-layout { grid-template-columns: minmax(0,1fr) 320px; }
+}
+/* 아주 낮은 화면은 5칸을 한 줄로 펴고 보조 번호·그림을 접는다. */
+@media (max-height:340px) and (min-width:701px) {
+  body.large-text .observation-p02 .obs-evidence-slots { grid-template-columns: repeat(5,minmax(0,1fr)); grid-template-rows: minmax(0,1fr); gap: .35rem; }
+  body.large-text .observation-p02 .evidence-slot { grid-template-columns: minmax(0,1fr); min-height: 44px; padding: .3rem; gap: .2rem; }
+  body.large-text .observation-p02 .evidence-slot.filled { grid-template-columns: minmax(0,1fr) 17px; }
+  body.large-text .observation-p02 .evidence-slot > span,
+  body.large-text .observation-p02 .evidence-slot.filled > svg:first-of-type { display: none; }
+  body.large-text .observation-p02 .evidence-slot.filled b { grid-column: 1; line-height: 1.2; }
+  body.large-text .observation-p02 .evidence-slot.filled > svg:last-of-type { grid-column: 2; }
+}

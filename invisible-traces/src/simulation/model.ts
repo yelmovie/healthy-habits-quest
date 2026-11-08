@@ -33,6 +33,9 @@ export function addPlacement(s:State,p:Placement):'ok'|'duplicate'|'wrong-site'|
  if(!validPlacement(p))return 'wrong-site';if(s.strategy.placements.some(x=>placementKey(x)===placementKey(p)))return 'duplicate';
  if(planCost([...s.strategy.placements,p])>5)return 'budget';s.strategy.placements.push(p);s.strategy.simulated=false;return 'ok';
 }
+export const nextPlacement=(s:State)=>s.strategy.placements.find(p=>!s.final.applied.includes(placementKey(p)));
+// 화면에 보이던 계획만 적용한다. 연속 탭이 다음 계획까지 적용하지 않게 key를 대조한다.
+export function applyPlacement(s:State,key:string):boolean {const p=nextPlacement(s);if(!p||placementKey(p)!==key)return false;s.final.applied.push(key);s.final.hands=[];return true;}
 export function derive(s:State):State {
  const done:string[]=[]; const pass=(id:string,ok:boolean)=>{if(ok)done.push(id);return ok;};
  const one=pass('P01',DATA.p01.requiredSites.every(x=>s.found.includes(x)));

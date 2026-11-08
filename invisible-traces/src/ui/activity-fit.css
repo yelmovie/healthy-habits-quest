@@ -1,0 +1,63 @@
+/* Activities own one viewport: compact heading, large work area, fixed navigation. */
+body.on-activity { height: var(--app-h); min-height: 0; overflow: hidden; }
+.on-activity #app { display: grid; grid-template-rows: auto minmax(0,1fr); height: var(--app-h); min-height: 0; }
+.on-activity #app:has(.storage-warning) { grid-template-rows: auto auto minmax(0,1fr); }
+.activity-topbar { position: static; grid-template-columns: 44px minmax(0,1fr) auto; gap: 12px; height: 64px; padding-inline: 20px; }
+.activity-topbar .icon-btn { width: 44px; height: 44px; }
+.activity-heading { display: flex; align-items: center; gap: 16px; min-width: 0; }
+.activity-heading h1 { font-size: 1.4rem; line-height: 1.25; }
+.activity-mission { flex: none; padding: 4px 12px; border-radius: 12px; color: var(--teal-strong); background: var(--teal-soft); font-size: .88rem; font-weight: 800; }
+.activity-layout { display: block; height: 100%; min-height: 0; overflow: hidden; }
+.activity-layout .play-main { height: 100%; min-height: 0; grid-template-rows: minmax(0,1fr) auto; }
+.activity-layout .page-content { min-height: 0; min-width: 0; overflow: hidden; padding: 12px 20px; gap: 8px; scrollbar-gutter: auto; background: var(--bg); }
+.activity-layout .page-content > * { flex-shrink: 1; min-width: 0; }
+.activity-layout .mission-question { flex: none; font-size: 1.05rem; line-height: 1.35; }
+.activity-layout .actionbar { position: static; flex-direction: row; flex-wrap: nowrap; min-height: 56px; padding: 4px 20px max(4px, env(safe-area-inset-bottom)); gap: 12px; box-shadow: none; }
+.activity-status { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.activity-layout .status-line { font-size: .92rem; line-height: 1.25; }
+.activity-layout .status-line > svg { color: var(--teal-strong); }
+.activity-layout .activity-info { width: 44px; height: 44px; flex: none; border-color: transparent; background: transparent; }
+.activity-layout .actionbar > .btn { min-height: 44px; min-width: 112px; padding: 8px 20px; }
+.playback-controls { position: relative; display: flex; flex: none; align-items: center; justify-content: center; gap: 8px; min-width: 0; min-height: 44px; }
+.playback-controls .playback-toggle { flex: none; min-height: 44px; padding: 8px 16px; font-size: .92rem; }
+.playback-speed { display: flex; align-items: center; gap: 8px; font-size: .88rem; font-weight: 700; color: var(--ink-2); }
+.playback-speed select { min-height: 44px; min-width: 84px; padding: 4px 8px; background: var(--surface); border: 2px solid var(--line); border-radius: 12px; }
+.playback-state { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.next-target { box-shadow: inset 0 0 0 2px var(--teal-strong); }
+.activity-layout input[type="range"] { min-width: 0; height: 44px; }
+.activity-layout select { max-width: 100%; min-height: 44px; }
+.tracing-lab-play:empty { display: none; }
+.activity-layout:has(.ending) .actionbar { display: none; }
+.question-dialog { gap: 8px; }
+.question-dialog-card { display: flex; flex-direction: column; align-items: flex-start; border-radius: 12px; text-align: left; padding: 12px; }
+.question-dialog-card > span { font-weight: 500; color: var(--ink-2); }
+@media (max-width:700px) {
+ .activity-topbar { padding-inline: 8px; gap: 8px; height: 56px; }
+ .activity-heading h1 { font-size: 1.15rem; }
+ .activity-mission { display: none; }
+ .activity-topbar .tools > [data-action="records"], .activity-topbar .tools > [data-action="sound"] { display: none; }
+ .activity-topbar .tools { gap: 4px; }
+ .activity-topbar .tools > .btn { font-size: .88rem; min-height: 44px; padding-inline: 8px; }
+ .activity-topbar .tools > [data-action="exit-replay"] { width: 44px; padding: 0; }
+ .activity-topbar .tools > [data-action="exit-replay"] > span { display: none; }
+ .activity-layout .page-content { padding: 8px; gap: 6px; }
+ .activity-layout .actionbar { padding-inline: 8px; gap: 8px; }
+ .activity-layout .status-line { font-size: .88rem; }
+ .activity-layout .status-line > svg { display: none; }
+ .activity-layout .actionbar > .btn { min-width: 104px; padding-inline: 12px; }
+ .playback-controls { gap: 8px; justify-content: flex-start; }
+ .playback-controls .playback-toggle { padding-inline: 12px; }
+}
+@media (max-height:560px) {
+ .activity-topbar { height: 48px; padding-inline: 12px; gap: 8px; }
+ .activity-heading h1 { font-size: 1.15rem; }
+ .activity-layout .page-content { padding: 6px 12px; gap: 4px; }
+ .activity-layout .actionbar { min-height: 48px; padding: 2px 12px; }
+ .activity-layout .mission-question { font-size: 1rem; }
+}
+@media print {
+ body.on-activity { height: auto; overflow: visible; }
+ .on-activity #app { display: block; height: auto; }
+ .activity-topbar { display: none; }
+ .activity-layout, .activity-layout .play-main, .activity-layout .page-content { display: block; height: auto; overflow: visible; }
+}

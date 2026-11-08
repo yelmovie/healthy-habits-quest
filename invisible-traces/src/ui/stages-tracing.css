@@ -1,0 +1,238 @@
+/* S3: 장면과 조작을 한 화면의 서로 다른 행에 둔다. */
+.tracing-page { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; height: 100%; min-height: 0; min-width: 0; flex: 1 1 0; gap: .5rem; overflow: hidden; }
+.tracing-page :is(section,div,span,button,p,h2) { min-width: 0; }
+.tracing-page .mission-question { font-size: 1rem; line-height: 1.35; }
+.tracing-timeline { display: grid; grid-template-columns: minmax(0, 1fr) minmax(230px, 24%); grid-template-rows: minmax(0, 1fr); min-height: 0; gap: .6rem; align-items: stretch; }
+.tracing-stage { display: flex; padding: .8rem; min-height: 0; height: 100%; background: var(--ink); isolation: isolate; }
+.tracing-stage .timeline-background { z-index: -1; opacity: .17; }
+.tracing-sequence { position: relative; inset: auto; display: grid; flex: 1 1 0; min-height: 0; grid-template-columns: repeat(6, minmax(0, 1fr)); grid-template-rows: minmax(0, 1fr); gap: .8rem; align-items: stretch; }
+.tracing-sequence .trace-node { position: relative; left: auto; top: auto; width: auto; min-width: 0; min-height: 44px; padding: .5rem .25rem; display: grid; grid-template-rows: auto minmax(0, 1fr) auto auto auto; gap: .25rem; align-items: center; justify-items: center; border: 2px solid #a9c8c9; border-radius: 14px; box-shadow: none; background: #f7fbfc; }
+.tracing-sequence .trace-node:not(:last-child)::before { content: ''; position: absolute; left: calc(100% + .18rem); top: 50%; width: 0; height: 0; border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-left: 6px solid #d2e6e7; pointer-events: none; }
+.tracing-sequence .trace-node > span { width: auto; height: auto; border-radius: 0; background: none; color: inherit; }
+.tracing-sequence .trace-node .trace-step-number { display: inline; color: var(--ink-2); font-size: .88rem; font-weight: 700; }
+.tracing-sequence .trace-node .trace-object { display: grid; place-items: center; width: 100%; max-width: 150px; height: 100%; max-height: 150px; min-height: 0; border-radius: 16px; background: var(--sky); color: var(--sky-strong); }
+.tracing-sequence .trace-object > svg { width: 80%; height: 80%; max-width: 120px; max-height: 120px; min-height: 0; }
+.tracing-sequence .trace-node b { font-size: .95rem; font-weight: 800; line-height: 1.35; }
+.tracing-sequence .trace-node .trace-state { display: flex; font-size: .88rem; color: var(--muted); }
+.trace-state > span { display: inline-flex; align-items: center; gap: .15rem; }
+.trace-state .trace-state-on { display: none; }
+.tracing-sequence .trace-node.has-trace { border-color: var(--purple); background: #f5f1ff; box-shadow: inset 0 -4px var(--purple); }
+.tracing-sequence .trace-node.has-trace .trace-object { background: var(--purple); color: white; }
+.trace-node.has-trace .trace-state-on { display: inline-flex; color: #573ba7; font-weight: 800; }
+.trace-node.has-trace .trace-state-off { display: none; }
+.tracing-sequence .trace-node.source { outline: 3px solid var(--orange); outline-offset: 2px; }
+.tracing-sequence .trace-node.source::after { content: none; }
+.trace-source-label { display: inline-flex; visibility: hidden; align-items: center; justify-content: center; gap: .15rem; color: #97500c; font-size: .88rem; font-style: normal; font-weight: 800; line-height: 1.2; }
+.trace-node.source .trace-source-label { visibility: visible; }
+.tracing-intervention { justify-content: center; gap: .6rem; min-height: 0; padding: .8rem; }
+.tracing-intervention-label { display: inline-flex; align-items: center; gap: .4rem; font-size: 1rem; }
+.tracing-intervention-label > svg { color: var(--teal-strong); }
+.tracing-choices { display: grid; gap: .45rem; }
+.tracing-choices .btn.choice { min-height: 48px; padding: .5rem .6rem; gap: .35rem; text-align: left; white-space: normal; justify-content: space-between; }
+.tracing-intervention-select { display: none; width: 100%; min-height: 44px; border: 2px solid var(--line); border-radius: 10px; padding: .3rem .5rem; background: var(--surface); font-size: .92rem; }
+.tracing-intervention .intervention-result { display: flex; align-items: flex-start; gap: .35rem; padding: .5rem; font-size: .88rem; line-height: 1.4; }
+.tracing-play-row { display: flex; flex-wrap: nowrap; gap: .7rem; align-items: center; min-height: 44px; }
+.tracing-page .playback-state { display: none; }
+.tracing-time-controls { display: flex; gap: .5rem; flex: 1; align-items: center; min-width: 0; }
+.tracing-time-controls input { flex: 1; min-width: 30px; width: 0; height: 44px; }
+.tracing-time-controls > span { flex: none; font-size: .88rem; font-variant-numeric: tabular-nums; color: var(--ink-2); }
+.tracing-lab-tabs { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: .4rem; margin: 0; }
+.tracing-lab-tabs .btn { min-width: 0; min-height: 44px; gap: .3rem; padding: .35rem .5rem; white-space: normal; }
+.tracing-device { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto auto; align-items: stretch; justify-items: center; min-height: 0; height: 100%; gap: .45rem; padding: .7rem 1rem; overflow: hidden; }
+.tracing-device-contact, .tracing-device-water { grid-template-rows: auto minmax(0, 1fr) auto; }
+.tracing-device .tracing-device-heading { max-width: 100%; font-size: 1.15rem; line-height: 1.3; }
+.tracing-device-art { display: flex; flex: 1 1 0; width: 100%; height: 100%; min-height: 0; min-width: 0; align-items: center; justify-content: center; }
+.tracing-device-action { display: flex; align-items: center; justify-content: center; gap: .4rem; max-width: 100%; width: 100%; min-height: 44px; }
+.tracing-device-action > .btn { min-height: 44px; max-width: 100%; padding-block: .35rem; white-space: normal; }
+.tracing-device-result { display: flex; align-items: center; justify-content: center; gap: .35rem; width: 100%; padding: .3rem .6rem; border-radius: 10px; background: var(--surface-2); text-align: center; font-size: .92rem; line-height: 1.35; }
+.tracing-device-result > svg { color: var(--sky-strong); }
+.tracing-device-result.is-observed { background: var(--teal-soft); }
+.tracing-device-result.is-observed > svg { color: var(--teal-strong); }
+.tracing-result-compact, .tracing-contact-short { display: none; }
+.tracing-lab-play { display: flex; align-items: center; justify-content: space-between; gap: .6rem; min-height: 44px; }
+.tracing-lab-play > .btn { min-height: 44px; padding: .35rem .8rem; }
+.tracing-choice-hint { display: inline-flex; align-items: center; gap: .4rem; color: var(--ink-2); font-size: .92rem; }
+.tracing-contact { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 1rem; align-items: center; padding: .6rem; }
+.tracing-contact-node { position: relative; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; justify-items: center; align-items: center; min-height: 0; height: 85%; gap: .4rem; padding: .7rem .3rem; border: 2px solid var(--line); border-radius: 16px; background: var(--surface-2); }
+.tracing-contact-node > svg { color: var(--sky-strong); width: 85%; height: 100%; max-height: 150px; max-width: 150px; min-height: 0; }
+.tracing-contact-node.observed { border-color: var(--purple); background: var(--purple-soft); }
+.tracing-contact-node.observed > svg { color: var(--purple); }
+.tracing-contact-node > b { font-size: .95rem; line-height: 1.3; }
+.tracing-contact-order { color: var(--ink-2); font-size: .88rem; font-weight: 700; }
+.tracing-contact-arrow { position: absolute; left: calc(100% + .1rem); top: 50%; color: var(--purple); }
+.tracing-contact-arrow > svg { width: 20px; }
+.tracing-cough-view { display: flex; width: 100%; height: 100%; min-height: 0; padding: .6rem; border: 1px solid var(--line); border-radius: var(--radius); background: #f4fafa; }
+.tracing-cough-people { display: grid; flex: 1; min-height: 0; grid-template-columns: minmax(0, 1fr) minmax(30px, 1.3fr) minmax(0, 1fr); align-items: stretch; gap: .2rem; }
+.tracing-cough-person { display: grid; grid-template-rows: minmax(0, 1fr) auto; align-items: center; justify-items: center; gap: .25rem; min-width: 0; min-height: 0; }
+.tracing-learner { object-fit: contain; display: block; width: 100%; max-width: 310px; height: 100%; min-height: 0; }
+.tracing-cough-person b { font-size: .92rem; line-height: 1.3; }
+.tracing-cough-friend .tracing-learner { transform: scaleX(-1); }
+.tracing-cough-path { transform: translateY(-25%); position: relative; height: 100%; min-height: 0; max-height: 220px; align-self: center; }
+.tracing-cough-path > span { position: absolute; left: 0; right: 0; top: 50%; border-top: 2px dashed #bbaddd; }
+.tracing-cough-path i { position: absolute; width: clamp(10px, 1.6vw, 24px); height: clamp(10px, 1.6vw, 24px); border-radius: 50%; border: 2px solid #7556d4; background: #c2b0ee; transition: transform .3s, opacity .3s; }
+.tracing-cough-path i:nth-of-type(1) { left: 2%; top: 30%; }
+.tracing-cough-path i:nth-of-type(2) { left: 26%; top: 55%; }
+.tracing-cough-path i:nth-of-type(3) { left: 45%; top: 12%; }
+.tracing-cough-path i:nth-of-type(4) { left: 65%; top: 60%; }
+.tracing-cough-path i:nth-of-type(5) { left: 83%; top: 31%; }
+.is-covered .tracing-cough-path i:nth-of-type(n + 3) { opacity: .12; transform: scale(.35); }
+.is-covered .tracing-cough-path > span { right: 60%; border-color: var(--teal); }
+.tracing-room { padding: .4rem; max-width: 900px; }
+.tracing-window { width: 100%; max-width: none; height: 100%; min-height: 0; border-radius: var(--radius-sm); background: #d8e9eb; }
+.tracing-window .window-sky { background: #d5effb; }
+.tracing-window .window-pane { background: rgba(218, 236, 240, .93); }
+.tracing-window .window-handle { left: calc(50% - 18px); width: 10px; height: 30%; min-height: 24px; max-height: 60px; margin-top: 0; transform: translateY(-50%); transition: left .3s; }
+.tracing-window.open .window-handle { left: calc(100% - 35px); transform: translateY(-50%); }
+.tracing-outdoor { position: absolute; inset: 30px; display: flex; align-items: flex-end; justify-content: space-around; overflow: hidden; }
+.tracing-outdoor i { width: 24%; height: 40%; border-radius: 50% 50% 0 0; background: #92c9bd; }
+.tracing-outdoor i:nth-child(2) { height: 60%; background: #b5d9ce; }
+.tracing-window .air-streams { padding-left: 12%; gap: .1rem; align-items: flex-start; animation: none; }
+.tracing-window .air-streams > svg { width: 68%; height: 25%; min-height: 0; stroke-width: 2; filter: drop-shadow(0 1px white); }
+.tracing-device-controls { display: grid; grid-template-columns: auto minmax(50px, 1fr) auto; max-width: 650px; gap: .4rem; }
+.tracing-device-controls .btn { min-height: 44px; padding-inline: .7rem; white-space: normal; }
+.tracing-device-controls input { min-width: 0; width: 100%; height: 44px; }
+.tracing-water-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; max-width: 1000px; align-items: stretch; padding: .4rem; }
+.tracing-water-options .water-card { display: grid; grid-template-rows: minmax(0, 1fr) auto auto; min-width: 0; min-height: 44px; padding: .65rem; gap: .45rem; color: var(--sky-strong); }
+.tracing-water-options .water-card > strong { font-size: 1rem; line-height: 1.35; }
+.tracing-water-options .water-card > small { display: inline-flex; align-items: center; justify-content: center; gap: .25rem; padding: .25rem .4rem; font-size: .88rem; }
+.tracing-water-options .water-card:nth-child(2) > small { background: var(--orange-soft); color: #97500c; }
+.tracing-water-glass { object-fit: contain; display: block; width: 100%; max-width: 250px; height: 100%; min-height: 0; justify-self: center; }
+.tracing-water-options .water-card.selected { outline: 2px solid var(--teal); outline-offset: 2px; }
+.tracing-serving { display: grid; grid-template-columns: minmax(0, 1fr) minmax(60px, .6fr) minmax(0, 1fr); align-items: stretch; gap: .65rem; padding: .5rem; max-width: 1100px; border-radius: var(--radius); background: var(--surface-2); }
+.tracing-serving .shared-bowl, .tracing-serving .personal-plate, .tracing-serving .serving-tool { min-width: 0; min-height: 44px; width: 100%; padding: .5rem .3rem; gap: .35rem; justify-content: center; }
+.tracing-serving .shared-bowl, .tracing-serving .personal-plate { display: grid; grid-template-rows: minmax(0, 1fr) auto; align-items: center; font-size: 1rem; }
+.tracing-serving .serving-tool { display: flex; flex-direction: column; font-size: .92rem; border: 1px solid #d6c8f5; touch-action: none; }
+.tracing-food-drawing { width: 100%; height: 100%; max-height: 260px; min-height: 0; }
+.tracing-empty-plate { display: block; width: 100%; max-width: 320px; height: 65%; max-height: 150px; min-height: 0; justify-self: center; border: 3px solid var(--sky-strong); border-radius: 50%; background: #f1f9fd; box-shadow: inset 0 0 0 8px #e2f2fb; }
+.tracing-synthesis-scene { gap: .7rem; align-items: stretch; }
+.tracing-synthesis-window { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .4rem; width: 25%; border-radius: 14px; background: var(--sky); color: var(--sky-strong); font-size: .92rem; }
+.tracing-synthesis-window svg { width: 75%; height: 50%; max-width: 180px; min-height: 0; }
+.tracing-synthesis-scene .tracing-cough-view { flex: 1; width: 0; }
+.tracing-synthesis-choices { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .5rem; max-width: 1000px; }
+.tracing-synthesis-choices .btn { padding-inline: .6rem; gap: .4rem; }
+@media (max-width: 900px), (max-height: 520px) {
+  .tracing-timeline { grid-template-columns: minmax(0, 1fr) minmax(190px, 27%); }
+  .tracing-choices { display: none; }
+  .tracing-intervention-select { display: block; }
+  .tracing-sequence { gap: .65rem; }
+  .tracing-sequence .trace-node { padding: .35rem .15rem; }
+  .tracing-sequence .trace-node b { font-size: .88rem; }
+  .tracing-intervention { padding: .6rem; gap: .5rem; }
+}
+@media (max-width: 640px) and (min-height: 521px) {
+  .tracing-page { gap: .4rem; }
+  .tracing-timeline { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; gap: .5rem; }
+  .tracing-sequence { grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); gap: .75rem; }
+  .tracing-sequence .trace-node:nth-child(4) { grid-column: 3; grid-row: 2; }
+  .tracing-sequence .trace-node:nth-child(5) { grid-column: 2; grid-row: 2; }
+  .tracing-sequence .trace-node:nth-child(6) { grid-column: 1; grid-row: 2; }
+  .tracing-sequence .trace-node:nth-child(3)::before { left: 50%; top: calc(100% + .15rem); border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 0; border-top: 6px solid #d2e6e7; }
+  .tracing-sequence .trace-node:nth-child(4)::before, .tracing-sequence .trace-node:nth-child(5)::before { left: auto; right: calc(100% + .15rem); border-left: 0; border-right: 6px solid #d2e6e7; }
+  .tracing-stage { padding: .6rem; }
+  .tracing-intervention { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: .3rem .5rem; padding: .45rem .6rem; }
+  .tracing-intervention-label { font-size: .9rem; }
+  .tracing-intervention .intervention-result { grid-column: 1 / -1; justify-content: center; padding: .2rem; }
+  .tracing-play-row { flex-wrap: wrap; gap: .2rem; }
+  .tracing-play-row .playback-controls { width: 100%; justify-content: space-between; }
+  .tracing-time-controls { flex-basis: 100%; }
+  .tracing-lab-tabs { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .3rem; }
+  .tracing-lab-tabs .btn { padding: .25rem; }
+  .tracing-device { gap: .4rem; padding: .55rem; }
+  .tracing-device .tracing-device-heading { font-size: 1rem; }
+  .tracing-device-result { font-size: .88rem; padding-inline: .3rem; }
+  .tracing-contact { grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); gap: .5rem; padding: .2rem; }
+  .tracing-contact-node { height: 100%; gap: .25rem; padding: .4rem .2rem; }
+  .tracing-contact-node > b { font-size: .88rem; }
+  .tracing-contact-arrow { display: none; }
+  .tracing-cough-person b { font-size: .88rem; }
+  .tracing-cough-view { padding: .4rem .15rem; }
+  .tracing-water-options { grid-template-columns: 1fr; grid-template-rows: repeat(2, minmax(0, 1fr)); gap: .5rem; padding: .3rem; }
+  .tracing-water-options .water-card { grid-template-columns: 85px minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; gap: .3rem; padding: .4rem; text-align: left; }
+  .tracing-water-options .water-card > .tracing-water-glass { grid-column: 1; grid-row: 1 / 3; }
+  .tracing-water-options .water-card > strong, .tracing-water-options .water-card > small { grid-column: 2; }
+  .tracing-water-options .water-card > small { justify-content: flex-start; font-size: .88rem; }
+  .tracing-serving { gap: .3rem; padding: .3rem; grid-template-columns: minmax(0, 1fr) 60px minmax(0, 1fr); }
+  .tracing-serving .shared-bowl, .tracing-serving .personal-plate { font-size: .88rem; padding: .3rem; }
+  .tracing-serving .serving-tool { font-size: .88rem; padding-inline: .1rem; }
+  .tracing-serving .serving-tool > svg { max-width: 30px; }
+  .tracing-lab-play { flex-wrap: wrap; gap: .3rem; }
+  .tracing-lab-play .playback-controls { flex: 1; }
+  .tracing-lab-play .playback-state { display: none; }
+  .tracing-lab-play > .btn { font-size: .88rem; padding-inline: .5rem; }
+  .tracing-synthesis-window { width: 24%; font-size: .88rem; }
+  .tracing-synthesis-choices { grid-template-columns: 1fr; gap: .3rem; }
+  .tracing-synthesis-choices .btn { min-height: 44px; padding-block: .25rem; }
+}
+@media (max-height: 520px) {
+  .tracing-page { gap: .3rem; }
+  .tracing-stage { padding: .5rem; }
+  .tracing-device { gap: .3rem; padding: .4rem .7rem; }
+  .tracing-device .tracing-device-heading { font-size: 1rem; }
+  .tracing-device-result { font-size: .88rem; padding: .2rem .4rem; }
+  .tracing-contact { gap: .6rem; padding: .2rem; }
+  .tracing-contact-node { height: 100%; padding: .3rem .15rem; gap: .2rem; }
+  .tracing-contact-node > b { font-size: .88rem; }
+  .tracing-contact-arrow > svg { width: 15px; }
+  .tracing-cough-view { padding: .25rem; }
+  .tracing-cough-person b { font-size: .88rem; }
+  .tracing-serving .shared-bowl, .tracing-serving .personal-plate, .tracing-serving .serving-tool { padding: .25rem; font-size: .88rem; }
+  .tracing-water-options .water-card { padding: .35rem; gap: .25rem; }
+  .tracing-device:not(.tracing-device-contact):not(.tracing-device-water) { grid-template-columns: minmax(0, 1fr) minmax(180px, 30%); grid-template-rows: auto minmax(0, 1fr) auto; }
+  .tracing-device:not(.tracing-device-contact):not(.tracing-device-water) .tracing-device-heading { grid-column: 1 / -1; }
+  .tracing-device:not(.tracing-device-contact):not(.tracing-device-water) .tracing-device-art { grid-column: 1; grid-row: 2 / 4; }
+  .tracing-device:not(.tracing-device-contact):not(.tracing-device-water) .tracing-device-action { grid-column: 2; grid-row: 2; }
+  .tracing-device:not(.tracing-device-contact):not(.tracing-device-water) .tracing-device-result { grid-column: 2; grid-row: 3; }
+  .tracing-device-controls { grid-template-columns: auto auto; }
+  .tracing-device-controls input { display: none; }
+  .tracing-device.tracing-device-synthesis { grid-template-columns: minmax(0, 1fr) 55%; }
+  .tracing-synthesis-choices { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .3rem; }
+  .tracing-synthesis-choices .btn { padding-inline: .3rem; }
+  .tracing-synthesis-choices .btn > svg { width: 20px; }
+}
+@media (max-height: 360px) and (min-width: 641px) {
+  .tracing-p05 .mission-question { display: none; }
+  .tracing-p05 { grid-template-rows: minmax(0, 1fr) auto; }
+  .tracing-sequence .trace-node { grid-template-rows: minmax(0, 1fr) auto; padding: .2rem; gap: .1rem; }
+  .tracing-sequence .trace-node .trace-step-number, .tracing-sequence .trace-node .trace-state, .tracing-sequence .trace-source-label { display: none; }
+  .tracing-intervention { gap: .2rem; padding: .3rem; }
+  .tracing-intervention-label { display: none; }
+  .tracing-intervention .intervention-result { display: none; }
+  .tracing-p06 { grid-template-rows: 44px minmax(0, 1fr) 44px; gap: 0; }
+  .tracing-p06 .tracing-device { padding: 0; gap: 0 8px; }
+  .tracing-p06 .tracing-device:not(.tracing-device-contact):not(.tracing-device-water) { grid-template-columns: minmax(0, 1fr) minmax(270px, 36%); grid-template-rows: 44px minmax(0, 1fr); grid-template-areas: "art action" "art result"; }
+  .tracing-p06 .tracing-device .tracing-device-heading { display: none; }
+  .tracing-p06 .tracing-device:not(.tracing-device-contact):not(.tracing-device-water) .tracing-device-art { grid-area: art; }
+  .tracing-p06 .tracing-device:not(.tracing-device-contact):not(.tracing-device-water) .tracing-device-action { grid-area: action; align-self: start; height: 44px; min-height: 44px; }
+  .tracing-p06 .tracing-device:not(.tracing-device-contact):not(.tracing-device-water) .tracing-device-result { grid-area: result; align-self: center; font-size: .88rem; padding: 0; }
+  .tracing-p06 .tracing-device-contact, .tracing-p06 .tracing-device-water { grid-template-columns: minmax(0, 1fr) minmax(250px, 34%); grid-template-rows: minmax(0, 1fr); grid-template-areas: "art result"; }
+  .tracing-p06 :is(.tracing-device-contact, .tracing-device-water) .tracing-device-art { grid-area: art; }
+  .tracing-p06 :is(.tracing-device-contact, .tracing-device-water) .tracing-device-result { grid-area: result; align-self: center; font-size: .88rem; padding: 0; }
+  .tracing-p06 .tracing-device-action > .btn { height: 44px; min-height: 44px; padding: 0 8px; }
+  .tracing-p06 .tracing-result-full, .tracing-p06 .tracing-contact-name { display: none; }
+  .tracing-p06 .tracing-result-compact, .tracing-p06 .tracing-contact-short { display: inline; }
+  .tracing-p06 .tracing-device-result > span { white-space: nowrap; }
+  .tracing-contact { padding: 0; gap: .5rem; }
+  .tracing-contact-node { grid-template-rows: minmax(0, 1fr) auto; gap: .15rem; padding: .15rem; }
+  .tracing-contact-order { display: none; }
+  .tracing-contact-arrow > svg { width: 12px; }
+  .tracing-cough-person b { font-size: .88rem; }
+  .tracing-device-controls { grid-template-columns: auto auto; }
+  .tracing-device-controls input { display: none; }
+  .tracing-water-options .water-card { display: grid; grid-template-columns: 44px minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); gap: .2rem; }
+  .tracing-water-options .water-card > small { display: none; }
+  .tracing-water-options .water-card > strong { font-size: .88rem; }
+  .tracing-p06 .tracing-device:not(.tracing-device-contact):not(.tracing-device-water).tracing-device-synthesis { grid-template-columns: minmax(0, 1fr) 60%; grid-template-rows: minmax(0, 1fr); grid-template-areas: "art action"; }
+  .tracing-p06 .tracing-device:not(.tracing-device-contact):not(.tracing-device-water).tracing-device-synthesis .tracing-synthesis-choices { grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: 44px; align-self: center; height: 44px; gap: .25rem; }
+  .tracing-p06 .tracing-device-synthesis .tracing-synthesis-choices .btn { min-height: 44px; height: 44px; padding: 0 5px; align-items: center; }
+  .tracing-p06 .tracing-synthesis-choices .btn > span { white-space: nowrap; }
+  .tracing-device-synthesis .tracing-device-result { display: none; }
+  .tracing-synthesis-window { display: none; }
+  .tracing-synthesis-scene .tracing-cough-view { width: 100%; }
+  .tracing-serving { grid-template-columns: minmax(0, 1fr) 100px minmax(0, 1fr); padding: 0; gap: .3rem; }
+  .tracing-serving .serving-tool { padding: 0; gap: 0; }
+  .tracing-serving .serving-tool > svg { display: none; }
+  .tracing-serving .serving-tool > span { white-space: nowrap; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tracing-cough-path i, .tracing-window .window-handle { transition: none; }
+}

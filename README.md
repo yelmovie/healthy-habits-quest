@@ -4,7 +4,7 @@
 
 ## 현재 상태
 
-**구현 중간 저장본이다.** TypeScript 검사는 통과했다. 아직 src/ui/style.css가 없어 프로덕션 빌드는 실패하며, 브라우저 플레이 검증 전이다. 사용자 요청으로 현재 상태를 커밋하고 작업을 중단했다.
+**납품 전 점검 단계(2026-10-30).** 타입 검사·빌드·회귀 테스트 13개가 통과하고, 메인→지도→P01~P10→엔딩·인증서까지 실제 브라우저에서 끝까지 플레이해 확인했다. 대표 해상도(1920×1080, 1366×768, 1280×800, 1280×720, 1024×768)에서 전 화면 자동 점검 0건이다. 실기기(태블릿·전자칠판) 확인과 교사 콘텐츠 검수는 아직이다. 자세한 내용은 작업 메모에 있다.
 
 - 저장소: https://github.com/yelmovie/healthy-habits-quest
 - [재개 메모와 알려진 미완료 작업](docs/WORK_STATUS.md)
@@ -13,11 +13,15 @@
 
 ## 개발
 
-```powershell
-Set-Location -LiteralPath 'invisible-traces'
+```bash
+cd invisible-traces
 npm ci
-npm run check
-npm run dev
+node "/Volumes/T7 Shield/DevMaintenance/add-native-binaries.mjs"   # 맥·윈도우 공용 node_modules일 때
+npm run check    # 타입 검사
+npm test         # 핵심 로직 회귀 테스트(node --test + tsx)
+npm run dev      # 개발 서버
+npm run build    # 타입 검사 + 빌드 + 오프라인 캐시 목록(precache-manifest.json)
+npm run preview  # 빌드 결과 확인(서비스워커는 이때만 동작)
 ```
 
-npm run build는 스타일 파일을 작성한 뒤 실행한다. npm test 스크립트는 준비했지만 실제 테스트 파일은 아직 없다. 원본 image/와 files/는 로컬 참고 자료이고, 최적화한 게임 배경은 invisible-traces/public/assets/에 있다.
+원본 image/와 files/는 로컬 참고 자료이고, 최적화한 게임 배경은 invisible-traces/public/assets/에 있다.
