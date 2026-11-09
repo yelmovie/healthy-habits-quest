@@ -2,7 +2,7 @@ import { chromium } from 'playwright';
 import fs from 'node:fs';
 import path from 'node:path';
 
-const root = path.resolve('..', '.tmp/responsive-20261108');
+const root = path.resolve(process.env.OUT || path.join('..', '.tmp/responsive-20261108'));
 const phase = process.argv[2] || 'after';
 const out = path.join(root, phase);
 fs.mkdirSync(out, { recursive: true });
@@ -19,7 +19,7 @@ const context = await browser.newContext({ reducedMotion: 'reduce' });
 const page = await context.newPage();
 page.on('pageerror', e => errors.push(e.message));
 page.setDefaultTimeout(10000);
-await page.goto('http://127.0.0.1:5342');
+await page.goto(`http://127.0.0.1:${process.env.PORT || 5342}`);
 const sizes = phase === 'before'
   ? [[1280, 800], [915, 412], [390, 844]]
   : [[1920, 1080], [1366, 768], [1280, 800], [1024, 768], [1024, 600], [915, 412], [740, 360], [800, 270], [390, 844], [360, 740]];
