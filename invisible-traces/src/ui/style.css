@@ -898,3 +898,5 @@ body.reduced *, body.reduced *::before, body.reduced *::after { animation: none 
 .storage-warning{position:relative;left:auto;top:auto;transform:none;margin:8px auto;pointer-events:auto}
 /* Short landscape screens need the whole experiment above its navigation. */
 @media (max-height: 500px) { .actionbar { position: static; } }
+
+.map-icon-tool{width:48px;min-width:48px;min-height:48px;padding:8px;display:inline-flex;align-items:center;justify-content:center}.map-icon-tool[aria-pressed="true"]{background:#ffe3a0;color:#284d40}#pixel-map.hand-on{cursor:grab}#pixel-map.grabbing{cursor:grabbing}

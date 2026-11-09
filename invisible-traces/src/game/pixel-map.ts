@@ -65,11 +65,14 @@ export async function createMap(parent:HTMLElement,options:MapOptions):Promise<M
   applyView(){
    const cam=this.cameras.main;
    if(this.mode==='overview'){cam.stopFollow();cam.removeBounds();cam.setZoom(this.fitZoom());cam.centerOn(MAP_SIZE.width/2,MAP_SIZE.height/2);}
-   else{cam.setBounds(0,0,MAP_SIZE.width,MAP_SIZE.height);cam.setZoom(this.followZoom());if(this.mode==='follow'){cam.startFollow(this.hero,true,options.reduced?1:.14,options.reduced?1:.14,0,this.scale.height*.06/cam.zoom);}}
+   else{cam.stopFollow();cam.setBounds(0,0,MAP_SIZE.width,MAP_SIZE.height);cam.setZoom(this.followZoom());if(this.mode==='follow'){cam.startFollow(this.hero,true,options.reduced?1:.14,options.reduced?1:.14,0,this.scale.height*.06/cam.zoom);}}
+   parent.classList.toggle('hand-on',this.mode==='free');
+   page.querySelector('[data-action="map-hand"]')?.setAttribute('aria-pressed',String(this.mode==='free'));
+   page.querySelector('[data-action="map-view"]')?.setAttribute('aria-pressed',String(this.mode==='overview'));
    options.onView(this.mode);
   }
   setMode(mode:'follow'|'free'|'overview'){if(this.mode===mode)return;this.mode=mode;this.applyView();}
-  toggleView(){this.setMode(this.mode==='follow'?'overview':'follow');}
+  toggleView(){this.setMode(this.mode==='overview'?'follow':'overview');}
   stopWalking(){this.held.clear();this.route=null;const done=this.arrived;this.arrived=null;done?.();}
   placeTeam(){
    this.hero.setPosition(Math.round(this.pos.x),Math.round(this.pos.y));this.heroShadow.setPosition(this.hero.x,this.hero.y-1);
@@ -118,7 +121,7 @@ export async function createMap(parent:HTMLElement,options:MapOptions):Promise<M
    const grab=this.grab;if(!grab||!pointer.isDown||this.mode==='overview')return;
    const dx=pointer.x-grab.x,dy=pointer.y-grab.y;if(!grab.moved&&Math.hypot(dx,dy)<DRAG_START)return;
    const cam=this.cameras.main;
-   if(!grab.moved){grab.moved=true;if(this.mode==='follow'){cam.stopFollow();grab.scrollX=cam.scrollX;grab.scrollY=cam.scrollY;this.mode='free';options.onView('free');}parent.classList.add('grabbing');}
+   if(!grab.moved){grab.moved=true;if(this.mode==='follow'){cam.stopFollow();grab.scrollX=cam.scrollX;grab.scrollY=cam.scrollY;this.mode='free';this.applyView();}parent.classList.add('grabbing');}
    cam.setScroll(grab.scrollX-dx/cam.zoom,grab.scrollY-dy/cam.zoom);
   }
   pointerCancel(){this.grab=null;parent.classList.remove('grabbing');}
@@ -150,6 +153,7 @@ export async function createMap(parent:HTMLElement,options:MapOptions):Promise<M
   button.addEventListener('lostpointercapture',()=>{scene.held.delete(dir);if(performance.now()-pressedAt<TAP_MS)scene.nudge(dir);},{signal});
   button.addEventListener('click',e=>{if(e.detail===0&&!blocked())scene.nudge(dir);},{signal});
  });
+ page.querySelector('[data-action="map-hand"]')?.addEventListener('click',()=>{scene.stopWalking();scene.setMode(scene.mode==='free'?'follow':'free');},{signal});
  page.querySelector('[data-action="map-view"]')?.addEventListener('click',()=>scene.toggleView(),{signal});
  document.addEventListener('keydown',e=>{
   if(blocked()||e.ctrlKey||e.altKey||e.metaKey)return;
