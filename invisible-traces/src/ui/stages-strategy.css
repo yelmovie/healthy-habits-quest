@@ -305,3 +305,5 @@
  .strategy-ending .ending-card { max-height: none; max-width: none; width: 100%; }
  .strategy-ending .cert-fields { grid-template-columns: 1.2fr 1fr 1fr; }
 }
+.apply-playback { flex-wrap: wrap; align-items: center; gap: .5rem 1rem; }
+.apply-guide { margin: 0; font-weight: 700; color: var(--ink); text-align: center; }
