@@ -10,9 +10,9 @@ export interface State {
  experiment:{action:string;prediction:string;tick:number;pinned:string;explanation:string;baselineSeen:boolean};
  strategy:{asked:string[];placements:Placement[];simulated:boolean};
  final:{phase:'report'|'apply'|'restored'|'ending'|'certificate';applied:string[];hands:string[];coreClaimed:boolean};
- completed:string[]; evidence:string[];
+ restoration:Record<string,number>; completed:string[]; evidence:string[];
 }
-export const fresh = ():State => ({version:1,contentVersion:DATA.contentVersion,route:'C00',lastRoute:'C01',settings:{sound:true,reduced:false,large:false},found:[],clues:[],relations:{},impacts:{},timeline:{tick:5,source:'',intervention:null},labs:{done:[],values:{},synthesis:[]},experiment:{action:'',prediction:'',tick:0,pinned:'',explanation:'',baselineSeen:false},strategy:{asked:[],placements:[],simulated:false},final:{phase:'report',applied:[],hands:[],coreClaimed:false},completed:[],evidence:[]});
+export const fresh = ():State => ({version:1,contentVersion:DATA.contentVersion,route:'C00',lastRoute:'C01',settings:{sound:true,reduced:false,large:false},found:[],clues:[],relations:{},impacts:{},timeline:{tick:5,source:'',intervention:null},labs:{done:[],values:{},synthesis:[]},experiment:{action:'',prediction:'',tick:0,pinned:'',explanation:'',baselineSeen:false},strategy:{asked:[],placements:[],simulated:false},final:{phase:'report',applied:[],hands:[],coreClaimed:false},restoration:{},completed:[],evidence:[]});
 export function contactAt(tick:number,intervention:number|null=null): Set<string> {
  const trace = new Set(DATA.p05.initialTrace);
  const events:({tick:number;id:string;from?:string;to?:string;wash?:boolean})[] = DATA.p05.events.map(e=>({...e}));
@@ -73,6 +73,7 @@ export function sanitize(input:unknown):State {
  s.strategy.simulated=st.simulated===true;
  s.final.applied=uniq(fin.applied,s.strategy.placements.map(placementKey));s.final.hands=uniq(fin.hands,['palm','back','fingers']);
  s.final.phase=str(fin.phase,['report','apply','restored','ending','certificate'],'report') as State['final']['phase'];derive(s);
+ s.restoration=Object.fromEntries(Object.entries(record(r.restoration)).filter(([k,v])=>s.evidence.includes(k)&&Number.isInteger(v)&&Number(v)>=0&&Number(v)<=2).map(([k,v])=>[k,Number(v)]));
  if(!s.completed.includes('P10')&&['restored','ending','certificate'].includes(s.final.phase))s.final.phase='apply';
  const route=str(r.route,['C00','C01',...DATA.pages.map(p=>p.id)],'C00') as Route;
  s.lastRoute=str(r.lastRoute,['C01',...DATA.pages.map(p=>p.id)],'C01') as Route;

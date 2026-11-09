@@ -1,3 +1,5 @@
+import {mountWindowRestoration} from './ui/window-restoration';
+import './ui/window-restoration.css';
 import { createResearchAudio, type Cue } from './audio';
 import { mountNpcGuide } from './npc-guide';
 let disposeNpc: (()=>void) | undefined;
@@ -30,7 +32,7 @@ function render(keepTimer=false){disposeNpc?.();if(!keepTimer){stop();playbackSe
  root.innerHTML=header(state,!!archive)+(state.route==='C00'?home(state):state.route==='C01'?map(state,view):shell(state,view,pageContent(state,view)));
  if(state.route==='C00')disposeNpc=mountNpcGuide(root.querySelector('.title-actions'),{src:import.meta.env.BASE_URL+'assets/audio/npc-welcome.m4a',text:'보이지 않는 흔적을 함께 찾아보자. 증거를 살펴 감염이 퍼지는 경로를 생각하고, 생활 속에서 실천할 예방 방법을 골라 보자.',enabled:()=>state.settings.sound,quiet:value=>researchAudio.quiet(value)});
  if(protectedSave||saveWarning){const warning=document.createElement('div');warning.className='storage-warning';warning.setAttribute('role','status');warning.textContent=saveError()??'현재 탐구는 임시 상태예요. 창을 닫기 전에 연구 기록을 확인해 주세요.';root.prepend(warning);}
- if(state.route==='C01')mountMap();
+ if(state.route==='C01'){mountMap();mountWindowRestoration(root.querySelector('.map-page')!,state,persist,()=>sound('success'));}
  root.querySelectorAll<HTMLImageElement>('img').forEach(img=>{img.addEventListener('error',()=>{img.classList.add('failed-image');img.alt='배경 그림을 불러오지 못했어요.';const scene=img.parentElement;if(scene&&!scene.querySelector('.image-retry')){const button=document.createElement('button');button.className='image-retry btn small';button.textContent='그림 다시 읽기';button.onclick=()=>{img.classList.remove('failed-image');img.src=img.src;button.remove();};scene.append(button);}}, {once:true});});
 }
 function mapHint(place:number){const {open,done}=mapStatus(state,view),status=root.querySelector('.map-status');if(!status)return;const p=PLACES[place];status.textContent=!p?'길을 눌러 걷거나, 끌어서 학교를 둘러봐요.':!open[place]?`${p.name}은 앞선 미션을 마치면 열려요.`:done[place]?`${p.name}: 이름표를 누르면 다시 실험해요.`:`${p.name}에 도착했어요.`;}
