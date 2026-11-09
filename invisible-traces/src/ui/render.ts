@@ -1,3 +1,4 @@
+import {conceptRecall} from './concept-recall';
 import {DATA,STAGES,PAGES,LABS,SITES,CLUE_NAMES,asset} from '../data/game';
 import {branches,type State} from '../simulation/model';
 import {icon} from './icons';
@@ -68,4 +69,4 @@ export function pageContent(s:State,v:View):string {
  if(page<=6)return tracingPages(s,v);
  return strategyPages(s,v);
 }
-export function records(s:State){return `<div class="eyebrow">MY RESEARCH NOTE</div><h2>우리의 발견 기록</h2><p>플레이하며 남긴 근거가 여기 모여요.</p><div class="record-list">${DATA.evidence.map(e=>`<div class="record-entry ${s.evidence.includes(e.id)?'ready':''}"><span class="record-icon">${icon(s.evidence.includes(e.id)?'check':'lock',22)}</span><div><b>${e.name}</b><p>${s.evidence.includes(e.id)?e.id==='E1'?s.clues.map(id=>CLUE_NAMES[id]).join(' · '):e.id==='E2'?`설명한 관계 ${branches(s)}가지 · 생활 영향 3영역`:e.id==='E3'?'흔적의 이동과 다섯 생활 상황을 조사했어요.':e.id==='E4'?`${actionName(s.experiment.action)} 전후의 차이를 설명했어요.`:s.strategy.placements.map(p=>`${SITES.find(x=>x.id===p.site)?.name}: ${actionName(p.actionId)}`).join(' · '):'앞으로 탐구하며 채워갈 기록이에요.'}</p></div></div>`).join('')}</div>`;}
+export function records(s:State){return `<div class="eyebrow">MY RESEARCH NOTE</div><h2>우리의 발견 기록</h2><p>플레이하며 남긴 근거가 여기 모여요.</p>${conceptRecall()}<div class="record-list">${DATA.evidence.map(e=>`<div class="record-entry ${s.evidence.includes(e.id)?'ready':''}"><span class="record-icon">${icon(s.evidence.includes(e.id)?'check':'lock',22)}</span><div><b>${e.name}</b><p>${s.evidence.includes(e.id)?e.id==='E1'?s.clues.map(id=>CLUE_NAMES[id]).join(' · '):e.id==='E2'?`설명한 관계 ${branches(s)}가지 · 생활 영향 3영역`:e.id==='E3'?'흔적의 이동과 다섯 생활 상황을 조사했어요.':e.id==='E4'?`${actionName(s.experiment.action)} 전후의 차이를 설명했어요.`:s.strategy.placements.map(p=>`${SITES.find(x=>x.id===p.site)?.name}: ${actionName(p.actionId)}`).join(' · '):'앞으로 탐구하며 채워갈 기록이에요.'}</p></div></div>`).join('')}</div>`;}
