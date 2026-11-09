@@ -1,0 +1,51 @@
+[
+  {
+    "folder": "9 things",
+    "audio": {
+      "time": 0.681521,
+      "paused": false,
+      "duration": 7.941224
+    },
+    "stop": true,
+    "hidden": true,
+    "close": false,
+    "errors": [],
+    "deferredPlayStopPlay": true
+  },
+  {
+    "folder": "10 earthsea",
+    "audio": {
+      "time": 0.678203,
+      "paused": false,
+      "duration": 11.284898
+    },
+    "stop": true,
+    "hidden": true,
+    "close": true,
+    "errors": []
+  },
+  {
+    "folder": "11 sound",
+    "audio": {
+      "time": 0.691678,
+      "paused": false,
+      "duration": 10.30966
+    },
+    "stop": true,
+    "hidden": true,
+    "close": true,
+    "errors": []
+  },
+  {
+    "folder": "12 diseases/invisible-traces",
+    "audio": {
+      "time": 0.674215,
+      "paused": false,
+      "duration": 11.145578
+    },
+    "stop": true,
+    "hidden": true,
+    "close": true,
+    "errors": []
+  }
+]

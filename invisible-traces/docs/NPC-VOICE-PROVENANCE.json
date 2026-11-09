@@ -1,0 +1,16 @@
+{
+  "uuid": "f537bc6b-4700-4822-aa07-e2e60fba46ab",
+  "model": "momo-voice",
+  "language": "ko",
+  "voice": "F1",
+  "text": "보이지 않는 흔적을 함께 찾아보자. 증거를 살펴 감염이 퍼지는 경로를 생각하고, 생활 속에서 실천할 예방 방법을 골라 보자.",
+  "createdAt": "2026-11-07T22:01:00.591Z",
+  "license": "OpenRAIL-M (Supertonic 3)",
+  "licenseUrl": "https://huggingface.co/Supertone/supertonic-3/blob/main/LICENSE",
+  "sourceSha256": "31da77966ed53f89004ef86787745b61bfd066a6dd50f93bfcfa77697be07622",
+  "renderSha256": "0e365071d44d3ede442e84debce6f6b6312104ab5dd3ad6b6b7b0090776d9133",
+  "captionExactMatch": true,
+  "sourceDuration": 11.075916666666666,
+  "renderDuration": 11.075916666666666,
+  "normalizedCorrelation": 0.998902708611703
+}
