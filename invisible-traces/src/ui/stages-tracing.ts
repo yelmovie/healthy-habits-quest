@@ -67,7 +67,8 @@ function bowlSvg(personal = false): string {
 
 function labDevice(s: State, v: View): string {
   const value = v.labPreview ?? s.labs.values[v.lab] ?? 0;
-  const heading = (title: string) => `<h2 class="tracing-device-heading">${title}</h2>`;
+  // 한자어 실험 이름(비말·타액)은 제목 아래에 짧은 풀이를 붙인다. 낮은 가로 화면에서는 CSS로 숨긴다.
+const heading = (title: string, term = '') => `<h2 class="tracing-device-heading">${title}${term ? `<small class="tracing-term">${term}</small>` : ''}</h2>`;
   const result = (text: string, changed: boolean, compact = text) => `<p class="device-result tracing-device-result ${changed ? 'is-observed' : ''}">${icon(changed ? 'check' : 'search', 20)}<span class="tracing-result-full">${text}</span><span class="tracing-result-compact">${compact}</span></p>`;
   switch (v.lab) {
     case 'contact':
@@ -75,7 +76,7 @@ function labDevice(s: State, v: View): string {
         <div class="tracing-device-art tracing-contact">${DATA.p05.nodes.map((x, i) => `<div class="tracing-contact-node ${i <= v.demoStep ? 'observed' : ''}"><span class="tracing-contact-order">${i + 1}</span>${icon(nodeIcons[i], 66)}<b><span class="tracing-contact-name">${NODE_NAMES[x]}</span><span class="tracing-contact-short">${['책', 'A의 손', '공', 'B의 손', '손잡이', 'C의 손'][i]}</span></b>${i < 5 ? `<span class="tracing-contact-arrow" aria-hidden="true">${icon('arrow', 23)}</span>` : ''}</div>`).join('')}</div>
         ${result('늦게 손을 씻어도 이미 다른 물체에 옮겨진 흔적은 남아요.', s.labs.done.includes('contact'), '옮겨진 흔적은 남아요.')}`;
     case 'droplet':
-      return `${heading('옷소매로 입과 코를 가리면?')}<div class="tracing-device-art">${coughFigure(!!value)}</div>
+      return `${heading('옷소매로 입과 코를 가리면?', '비말: 기침·재채기를 할 때 튀어 나오는 작은 침방울')}<div class="tracing-device-art">${coughFigure(!!value)}</div>
         <div class="tracing-device-action">${btn(`${icon(value ? 'undo' : 'air', 22)} ${value ? '가리기 전 보기' : '옷소매로 입·코 가리기'}`, 'lab-set', value ? 'primary small' : 'secondary', `data-id="droplet" data-value="${value ? 0 : 1}"`)}</div>
         ${result(value ? '흔적이 퍼지는 범위가 줄었어요.' : '옷소매로 가리기 전후를 비교해요.', !!value, value ? '흔적 범위가 줄었어요.' : '가리기 전후를 비교해요.')}`;
     case 'air':
@@ -91,7 +92,7 @@ function labDevice(s: State, v: View): string {
       return `${heading('닫힌 교실에서 기침한다면?')}<div class="tracing-device-art tracing-synthesis-scene"><span class="tracing-synthesis-window">${icon('window', 90)}<b>닫힌 창문</b></span>${coughFigure(false)}</div>
         <div class="tracing-device-action tracing-synthesis-choices">${['coughEtiquette', 'ventilation', 'washHands'].map(id => btn(`${icon(s.labs.synthesis.includes(id) ? 'check' : id === 'ventilation' ? 'window' : id === 'coughEtiquette' ? 'air' : 'hand', 25)}<span>${actionName(id)}</span>`, 'synthesis', s.labs.synthesis.includes(id) ? 'small selected' : 'small', `data-id="${id}" aria-pressed="${s.labs.synthesis.includes(id)}"`)).join('')}</div>${result(synthesisReady(s.labs.synthesis) ? '기침 예절과 환기는 각각의 상황을 바꿔요.' : '기침과 닫힌 공간을 각각 바꾸는 두 행동을 골라요.', synthesisReady(s.labs.synthesis))}`;
     default:
-      return `${heading('공용 음식은 어떻게 덜어 먹을까요?')}
+      return `${heading('공용 음식은 어떻게 덜어 먹을까요?', '타액: 입속의 침')}
         <div class="tracing-device-art serving-demo tracing-serving ${value ? 'separated' : ''}"><div class="shared-bowl">${bowlSvg()}<b>공용 음식</b></div><div class="serving-tool" draggable="true" data-drag="serving" data-id="serve">${icon('plate', 38)}<span>덜기 도구</span>${icon('arrow', 24)}</div><button class="personal-plate" data-action="lab-set" data-id="saliva" data-value="1" data-drop="serving">${value ? bowlSvg(true) : '<span class="tracing-empty-plate" aria-hidden="true"></span>'}<b>개인 접시</b></button></div>
         <div class="tracing-device-action">${btn(`${icon(value ? 'check' : 'arrow', 20)} 개인 접시에 덜기`, 'lab-set', 'primary small', 'data-id="saliva" data-value="1"')}</div>
         ${result(value ? '개인 숟가락과 공용 음식의 접촉이 줄었어요.' : '덜기 도구를 접시로 끌어 놓아도 돼요.', !!value, value ? '접촉이 줄었어요.' : '덜기 도구를 써요.')}`;

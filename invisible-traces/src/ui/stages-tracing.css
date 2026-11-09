@@ -41,6 +41,8 @@
 .tracing-device { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto auto; align-items: stretch; justify-items: center; min-height: 0; height: 100%; gap: .45rem; padding: .7rem 1rem; overflow: hidden; }
 .tracing-device-contact, .tracing-device-water { grid-template-rows: auto minmax(0, 1fr) auto; }
 .tracing-device .tracing-device-heading { max-width: 100%; font-size: 1.15rem; line-height: 1.3; }
+.tracing-device-heading .tracing-term { display: block; margin-top: .15rem; color: var(--muted); font-size: .88rem; font-weight: 600; line-height: 1.35; }
+@media (max-height: 520px) { .tracing-device-heading .tracing-term { display: none; } }
 .tracing-device-art { display: flex; flex: 1 1 0; width: 100%; height: 100%; min-height: 0; min-width: 0; align-items: center; justify-content: center; }
 .tracing-device-action { display: flex; align-items: center; justify-content: center; gap: .4rem; max-width: 100%; width: 100%; min-height: 44px; }
 .tracing-device-action > .btn { min-height: 44px; max-width: 100%; padding-block: .35rem; white-space: normal; }
