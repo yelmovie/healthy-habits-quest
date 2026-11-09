@@ -140,3 +140,11 @@ test('콘텐츠: 성취기준·장 구성·필수 단서가 비어 있지 않다
   assert.equal(DATA.pages.length, 10);
   assert.ok(DATA.p02.requiredClues.every(id => DATA.clues.some(c => c.id === id)));
 });
+
+test('콘텐츠: 검수 상태와 출처가 데이터에 남아 있다', () => {
+  // 교사 검수 전에는 needsReview 가 true 여야 한다. 검수 뒤에는 검토자와 날짜가 함께 있어야 한다.
+  assert.equal(typeof DATA.review.needsReview, 'boolean');
+  if (!DATA.review.needsReview) assert.ok(DATA.review.reviewedBy && DATA.review.reviewedAt);
+  assert.ok(DATA.review.scope.length > 0);
+  assert.ok(DATA.sources.curriculum.startsWith('https://') && DATA.sources.prevention.startsWith('https://'));
+});

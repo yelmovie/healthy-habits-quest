@@ -4,6 +4,13 @@
   "status": "implementation-ready-draft",
   "title": "보이지 않는 흔적",
   "targetGrade": 3,
+  "review": {
+    "needsReview": true,
+    "reviewedBy": null,
+    "reviewedAt": null,
+    "scope": "성취기준 문구 원문 대조, 감염 경로·예방 행동 설명의 과학적 정확성, 3학년 어휘",
+    "note": "교사 검수 전 초안이다. 검수를 마치면 needsReview를 false로 바꾸고 검토자와 날짜를 적는다."
+  },
   "screenPolicy": {
     "common": [
       "C00",
