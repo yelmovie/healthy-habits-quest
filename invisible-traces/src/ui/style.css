@@ -3,13 +3,14 @@
 :root {
   --ink: #103e43;
   --ink-2: #3a6266;
-  --muted: #5f7f82;
+  --muted: #557477; /* 흰 바탕 5.0:1 (이전 #5f7f82 는 4.3:1) */
   --bg: #eef8f8;
   --surface: #ffffff;
   --surface-2: #f6fbfb;
   --line: #cfe5e4;
   --teal: #12a097;
-  --teal-strong: #0b7a74;
+  --teal-strong: #0a7069; /* 연청록 바탕 위 글자 4.5:1 이상 */
+  --teal-action: #0d8079; /* 흰 글자 버튼 바탕 4.8:1 (--teal 은 3.2:1) */
   --teal-soft: #d8f2ef;
   --sky: #e2f2fb;
   --sky-strong: #2f95cf;
@@ -17,6 +18,7 @@
   --purple-soft: #efeafd;
   --orange: #e57c14;
   --orange-soft: #fff0e0;
+  --orange-strong: #a85400; /* 주황 글자·흰 글자 바탕 5.3:1 (--orange 는 2.9:1) */
   --radius: 18px;
   --radius-sm: 12px;
   --shadow: 0 10px 30px rgba(16, 62, 67, .10);
@@ -69,13 +71,13 @@ button:disabled, button[disabled] { cursor: not-allowed; }
 }
 .btn:active:not(:disabled) { transform: translateY(1px) scale(.98); }
 .btn:disabled { opacity: .45; }
-.btn.primary { background: var(--teal); color: #fff; box-shadow: 0 6px 16px rgba(18, 160, 151, .3); }
+.btn.primary { background: var(--teal-action); color: #fff; box-shadow: 0 6px 16px rgba(18, 160, 151, .3); }
 .btn.primary:hover:not(:disabled) { background: var(--teal-strong); }
 .btn.secondary { background: var(--surface); border-color: var(--line); color: var(--ink); }
 .btn.secondary:hover:not(:disabled) { border-color: var(--teal); }
 .btn.text { background: transparent; color: var(--teal-strong); text-decoration: underline; text-underline-offset: 4px; }
 .btn.small { min-height: 46px; padding: .45rem 1rem; font-size: .92rem; background: var(--surface); border-color: var(--line); }
-.btn.small.primary { background: var(--teal); border-color: var(--teal); color: #fff; }
+.btn.small.primary { background: var(--teal-action); border-color: var(--teal-action); color: #fff; }
 .btn.tiny { min-height: 44px; padding: .35rem .8rem; font-size: .88rem; background: var(--teal-soft); color: var(--teal-strong); }
 .btn.selected, .btn.small.selected { background: var(--teal-soft); border-color: var(--teal); color: var(--teal-strong); }
 .btn.tab, .btn.lab-tab { min-height: 48px; background: var(--surface); border-color: var(--line); font-size: .92rem; }
@@ -172,7 +174,7 @@ body.on-home .brand, body.on-home .header-center, body.on-home [data-action="rec
 .title-bottom { position: absolute; left: 50%; bottom: .9rem; z-index: 3; display: flex; flex-direction: column; align-items: center; gap: .7rem; width: min(700px, calc(100% - 2rem)); transform: translateX(-50%); }
 .title-actions { display: flex; justify-content: center; gap: .8rem; width: 100%; }
 .title-actions .btn { flex: 1 1 0; max-width: 280px; min-height: 64px; border-radius: 20px; font-size: 1.2rem; font-weight: 800; }
-.title-actions .btn.primary { border-color: #fff; background: linear-gradient(#1cb8ad, var(--teal)); box-shadow: 0 5px 0 var(--teal-strong), 0 12px 22px rgba(16, 62, 67, .28); }
+.title-actions .btn.primary { border-color: #fff; background: linear-gradient(var(--teal), var(--teal-action)); box-shadow: 0 5px 0 var(--teal-strong), 0 12px 22px rgba(16, 62, 67, .28); }
 .title-actions .btn.secondary { border-color: #fff; background: rgba(255, 255, 255, .96); box-shadow: 0 5px 0 rgba(16, 62, 67, .28), 0 12px 22px rgba(16, 62, 67, .2); }
 .title-actions .btn:active:not(:disabled) { transform: translateY(4px); }
 .title-foot { display: flex; align-items: center; justify-content: center; gap: .6rem; }
@@ -209,8 +211,8 @@ body.on-map, body.on-home { --map-shadow: 0 3px 0 rgba(16, 62, 67, .28), 0 8px 1
 .map-place.done small { color: var(--teal-strong); }
 .map-place.next { border-color: var(--orange); background: var(--orange-soft); }
 .map-place.next::after { border-color: var(--orange); }
-.map-place.next .map-place-mark { background: var(--orange); color: #fff; animation: map-pulse 1.6s ease-in-out infinite; }
-.map-place.next small { color: #a85400; }
+.map-place.next .map-place-mark { background: var(--orange-strong); color: #fff; animation: map-pulse 1.6s ease-in-out infinite; }
+.map-place.next small { color: var(--orange-strong); }
 .map-place.open .map-place-mark { background: var(--teal-soft); color: var(--teal-strong); }
 .map-place.locked { background: rgba(240, 245, 245, .94); color: var(--ink-2); }
 @keyframes map-pulse { 50% { transform: scale(1.1); } }
@@ -236,7 +238,7 @@ body.on-map, body.on-home { --map-shadow: 0 3px 0 rgba(16, 62, 67, .28), 0 8px 1
 .map-pips { display: flex; justify-content: space-between; gap: .3rem; margin-top: .3rem; }
 .map-pip { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 2px solid var(--line); border-radius: 50%; background: var(--surface); color: var(--ink-2); font-weight: 800; }
 .map-pip.done { border-color: var(--teal); background: var(--teal); color: #fff; }
-.map-pip.next { border-color: var(--orange); color: #a85400; }
+.map-pip.next { border-color: var(--orange); color: var(--orange-strong); }
 .map-pip:disabled { background: #e8f0f0; color: var(--muted); }
 
 /* ---------- 학습 화면 틀 ---------- */
@@ -305,7 +307,7 @@ body.on-map, body.on-home { --map-shadow: 0 3px 0 rgba(16, 62, 67, .28), 0 8px 1
   border: 3px solid transparent; border-radius: var(--radius); background: var(--sky); box-shadow: var(--shadow-sm);
   transition: transform .2s, border-color .2s;
 }
-.site-scene:hover { transform: translateY(-3px); }
+@media (hover: hover) and (pointer: fine) { .site-scene:hover { transform: translateY(-3px); } } /* 터치 기기의 가짜 hover 들림 방지 */
 .site-scene.discovered { border-color: var(--purple); }
 .site-image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .site-code { position: absolute; top: .7rem; left: .7rem; padding: .2rem .6rem; border-radius: 999px; background: rgba(16, 62, 67, .8); color: #fff; font-size: .75rem; font-weight: 800; letter-spacing: .08em; }
@@ -338,7 +340,7 @@ body.on-map, body.on-home { --map-shadow: 0 3px 0 rgba(16, 62, 67, .28), 0 8px 1
   border: 2px solid transparent; border-radius: var(--radius-sm); background: rgba(255, 255, 255, .96);
   transition: transform .15s, border-color .15s;
 }
-.clue-card:hover { transform: translateY(-2px); }
+@media (hover: hover) and (pointer: fine) { .clue-card:hover { transform: translateY(-2px); } } /* 터치 기기의 가짜 hover 들림 방지 */
 .clue-card > span:last-of-type { color: var(--ink-2); font-size: .88rem; }
 .clue-card i { position: absolute; top: .6rem; right: .6rem; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--teal-soft); color: var(--teal-strong); font-style: normal; font-weight: 800; }
 .clue-card.selected { border-color: var(--purple); background: #fbf9ff; }
@@ -566,11 +568,11 @@ select { min-height: 48px; padding: .4rem 2.2rem .4rem .9rem; border: 2px solid 
   border: 2px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); color: var(--teal-strong); text-align: center; touch-action: manipulation;
 }
 .action-card b { color: var(--ink); font-size: .88rem; }
-.action-card small { display: inline-flex; align-items: center; gap: .15rem; color: var(--orange); font-weight: 800; }
+.action-card small { display: inline-flex; align-items: center; gap: .15rem; color: var(--orange-strong); font-weight: 800; }
 .action-card.selected { border-color: var(--purple); box-shadow: 0 0 0 4px var(--purple-soft); }
 .plan-strip { display: flex; align-items: center; gap: .9rem; padding: .7rem .9rem; border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow-sm); }
 .energy { display: flex; align-items: center; gap: .4rem; }
-.energy b { font-size: 1.8rem; color: var(--orange); line-height: 1; }
+.energy b { font-size: 1.8rem; color: var(--orange-strong); line-height: 1; }
 .energy span { color: var(--muted); font-size: .88rem; line-height: 1.2; max-width: 4.5rem; }
 .plan-items { flex: 1; display: flex; flex-wrap: wrap; gap: .4rem; color: var(--muted); font-size: .88rem; }
 .strategy-feedback { display: flex; align-items: flex-start; gap: .5rem; padding: .8rem 1rem; border-radius: var(--radius-sm); background: var(--orange-soft); color: #7a4510; font-size: .9rem; }
