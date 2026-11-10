@@ -94,3 +94,16 @@
 - 대체 응답으로 915×412와 1280×800에서 오답을 포함한 P01~P10·인증서·복구 작업대를 진행했다. 1280의 마지막 재검증에서는 접힌 작업대가 새로고침 때 말하지 않고 펼칠 때만 읽는 것도 확인했다. 페이지 오류와 음성 동시 재생은 0건이었다.
 - 별도 브라우저 검사에서 재생 시간 진행, 중단·다시 듣기, 닫기, 음소거와 새로고침 저장, 탭 숨김 이벤트(모의), 화면 이동 중단을 확인했다. 주요 모바일·태블릿 스크린샷을 직접 열어 추가 버튼 때문에 학습 카드가 밀리지 않는지 확인했다.
 - 남은 필수 작업: 생성 MP3 40개·provenance manifest 수신, 정확한 target에 복사, 실제 파일 디코딩·음량·끝까지 재생·화면별 연결 재검증. 이 단계가 끝나기 전에는 배포하지 않는다.
+
+
+## Codex 최종 음성 통합 및 검증
+
+- 생성된 40개 MP3를 계획의 target에 적용하고 `docs/VOICE-PROVENANCE-20261110.json`, `docs/VOICE-QC-20261110.json`을 함께 보존했다. 최종 manifest SHA-256은 `8fcaa1754a06e7cf91a7b08b819265ae318f295fa77c26ee4abfc073f0cdfa1e`이며 모든 파일의 SHA·원문·target을 대조했다.
+- ending-2는 발음 전사 검토 후 교정본으로 교체했다. 최종 SHA-256은 `ebf3656016909d311de478b94248429045d05dce8811bef151c5e21a4c317bc1`, ASR 일치도 1.0, 길이 6.09초, -16.3 LUFS, peak -1.8 dBFS이다. 나머지 39개 파일은 변경하지 않았다.
+- 40개 실물 파일의 HTTP 로드·Web Audio 디코딩·재생 시간 진행·ended 도달을 확인했다. 종료 검사에서는 검사 시간을 줄이기 위해 4배속을 사용했으며, 화면 흐름 검사는 원래 속도다.
+- 915×412·1280×800에서 실제 파일로 정답/오답·P01~P10·인증서·연구 기록·창문 복구·새로고침을 진행했다. 추가 현장 질문 3개와 엔딩 대기 경로를 포함해 화면에서 실제 재생된 ID는 40/40이며 아래 목록과 같다. 주요 화면을 직접 열어 글자와 버튼 배치를 확인했다.
+- 실제 음원으로 다시 듣기/중단/대화창 닫기/음소거 및 새로고침 저장/탭 숨김 이벤트(모의)/화면 이동을 검증했다. 중복 음성 재생 0건, 페이지·HTTP 오류 0건이었다. 교정 ending-2를 받은 뒤 정식 교사용 시연으로 P09~P10을 다시 진행해 `p10-applied → ending-1 → ending-2` 순서의 ended 도달과 겹침 0건을 확인했다.
+- 최종 `npm run check`, `npm test` 46개, `npm run build` 통과. 기존 Phaser 청크 크기 경고만 남는다. 배포 dry-run 통과, 기존 Worker는 bindings가 없으며 compatibility_date 2026-11-08 및 assets의 HTML/404 처리 설정을 유지한다.
+- ASR·LUFS·피크·브라우저 재생은 객관 검사다. 물리 스피커로 실제 청취하거나 실기기 터치를 검사했다는 보장은 아니다. 이전 이미지·지도 표시 등 잔여 한계는 앞 목록을 유지한다. 추가 폰트 변경이나 기존 폰트 커밋 롤백은 하지 않았다.
+
+실제 화면 재생 ID: ending-1, ending-2, evidence, intro-1, p01-found, p01-q, p02-q, p02-replace, p02-retry, p03-q, p03-retry, p04-q, p04-retry, p05-late, p05-q, p05-retry, p06-air, p06-droplet, p06-retry, p06-saliva, p06-synthesis, p06-water, p08-retry, p09-a1, p09-a2, p09-a3, p09-a4, p09-a5, p09-a6, p09-budget, p09-done, p09-guide, p09-wrong-site, p10-applied, p10-start, p10-wash, restore-1, restore-2, restore-3, title-1.

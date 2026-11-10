@@ -1,0 +1,2145 @@
+{
+ "intro-1": {
+  "spoken": "보이지 않는 흔적을 함께 찾아보자. 증거를 살펴 감염이 퍼지는 경로를 생각하고, 생활 속에서 실천할 예방 방법을 골라 보자.",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/0953b46d-d39c-401e-9feb-306eb9b31ebe.wav",
+   "heard": "보이지 않는 흔적을 함께 찾아보자! 증거를 살펴 감염이 퍼지는 경로를 생각하고 생활 속에서 실천할 예방 방법을 골라보자!",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 4.98,
+   "score": 1.0,
+   "duration": 9.84,
+   "lufs": -20.7,
+   "peak": -5.0,
+   "longest_inner_silence": 0.67
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/0953b46d-d39c-401e-9feb-306eb9b31ebe.wav",
+    "heard": "보이지 않는 흔적을 함께 찾아보자! 증거를 살펴 감염이 퍼지는 경로를 생각하고 생활 속에서 실천할 예방 방법을 골라보자!",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 4.98,
+    "score": 1.0,
+    "duration": 9.84,
+    "lufs": -20.7,
+    "peak": -5.0,
+    "longest_inner_silence": 0.67
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/f707a8af-d79e-4b3c-ab95-bd0ac9e11ab7.wav",
+    "heard": "보이지 않는 흔적을 함께 찾아보자! 증거를 살펴 감염이 퍼지는 경로를 생각하고 생활 속에서 실천할 예방 방법을 골라보자!",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 5.06,
+    "score": 1.0,
+    "duration": 9.68,
+    "lufs": -20.7,
+    "peak": -5.4,
+    "longest_inner_silence": 0.53
+   }
+  ],
+  "final": {
+   "duration": 9.82,
+   "lufs": -16.0,
+   "peak": -1.8,
+   "longest_inner_silence": 0.67,
+   "inner_silences": [
+    [
+     2.49773,
+     3.16646
+    ]
+   ]
+  }
+ },
+ "title-1": {
+  "spoken": "우리 학교에 남은 흔적을 찾아 줘!",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/5e1589c2-0cb6-4667-9046-c3ed5d799164.wav",
+   "heard": "우리 학교에 남은 흔적을 찾아줘!",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 5.08,
+   "score": 1.0,
+   "duration": 2.56,
+   "lufs": -19.7,
+   "peak": -6.2,
+   "longest_inner_silence": 0
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/5e1589c2-0cb6-4667-9046-c3ed5d799164.wav",
+    "heard": "우리 학교에 남은 흔적을 찾아줘!",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 5.08,
+    "score": 1.0,
+    "duration": 2.56,
+    "lufs": -19.7,
+    "peak": -6.2,
+    "longest_inner_silence": 0
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/d297a1a8-819b-4143-a833-96c8c802fc7f.wav",
+    "heard": "우리 학교의 남은 흔적을 찾아줘!",
+    "requiredMissing": [],
+    "similarity": 0.923,
+    "chars_per_sec": 5.24,
+    "score": 0.923,
+    "duration": 2.48,
+    "lufs": -19.1,
+    "peak": -4.8,
+    "longest_inner_silence": 0
+   }
+  ],
+  "final": {
+   "duration": 2.4,
+   "lufs": -16.4,
+   "peak": -3.1,
+   "longest_inner_silence": 0,
+   "inner_silences": []
+  }
+ },
+ "p01-q": {
+  "spoken": "어디에 신호가 있을까요?",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/7e7c5181-0e2c-4039-9aea-6a6ab6ae65df.wav",
+   "heard": "어디에 신호가 있을까요?",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 5.21,
+   "score": 1.0,
+   "duration": 1.92,
+   "lufs": -19.7,
+   "peak": -5.2,
+   "longest_inner_silence": 0
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/7e7c5181-0e2c-4039-9aea-6a6ab6ae65df.wav",
+    "heard": "어디에 신호가 있을까요?",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 5.21,
+    "score": 1.0,
+    "duration": 1.92,
+    "lufs": -19.7,
+    "peak": -5.2,
+    "longest_inner_silence": 0
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/5b81a9bb-1df3-4e36-8a7f-e650fdc64047.wav",
+    "heard": "어디에 신호가 있을까요?",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 5.0,
+    "score": 1.0,
+    "duration": 2.0,
+    "lufs": -19.5,
+    "peak": -6.9,
+    "longest_inner_silence": 0
+   }
+  ],
+  "final": {
+   "duration": 1.91,
+   "lufs": -16.0,
+   "peak": -1.9,
+   "longest_inner_silence": 0,
+   "inner_silences": []
+  }
+ },
+ "p01-found": {
+  "spoken": "신호 위치를 기록했어요.",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/55cea6a7-0f3c-4f4d-bbf2-41996acab8a3.wav",
+   "heard": "신호 위치를 기록했어요.",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 4.81,
+   "score": 1.0,
+   "duration": 2.08,
+   "lufs": -20.0,
+   "peak": -3.7,
+   "longest_inner_silence": 0
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/55cea6a7-0f3c-4f4d-bbf2-41996acab8a3.wav",
+    "heard": "신호 위치를 기록했어요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 4.81,
+    "score": 1.0,
+    "duration": 2.08,
+    "lufs": -20.0,
+    "peak": -3.7,
+    "longest_inner_silence": 0
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/ad593d77-a86f-456b-ad70-e14bd0615e85.wav",
+    "heard": "신호 위치를 기록했어요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 5.0,
+    "score": 1.0,
+    "duration": 2.0,
+    "lufs": -19.5,
+    "peak": -4.9,
+    "longest_inner_silence": 0
+   }
+  ],
+  "final": {
+   "duration": 1.96,
+   "lufs": -16.0,
+   "peak": -1.7,
+   "longest_inner_silence": 0,
+   "inner_silences": []
+  }
+ },
+ "p02-q": {
+  "spoken": "사건을 설명할 단서 다섯 개를 골라요.",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/4b52d853-153c-47d3-a70d-8da6d34d1c43.wav",
+   "heard": "사건을 설명할 단서 5개를 골라요.",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 4.26,
+   "score": 1.0,
+   "duration": 3.52,
+   "lufs": -20.8,
+   "peak": -6.8,
+   "longest_inner_silence": 0
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/4b52d853-153c-47d3-a70d-8da6d34d1c43.wav",
+    "heard": "사건을 설명할 단서 5개를 골라요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 4.26,
+    "score": 1.0,
+    "duration": 3.52,
+    "lufs": -20.8,
+    "peak": -6.8,
+    "longest_inner_silence": 0
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/ea1a153e-c4b1-485e-9e0e-01d9dac07b16.wav",
+    "heard": "사건을 설명할 단서 5개를 골라요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 5.07,
+    "score": 1.0,
+    "duration": 2.96,
+    "lufs": -20.2,
+    "peak": -6.5,
+    "longest_inner_silence": 0
+   }
+  ],
+  "final": {
+   "duration": 3.55,
+   "lufs": -16.4,
+   "peak": -2.4,
+   "longest_inner_silence": 0,
+   "inner_silences": []
+  }
+ },
+ "p02-retry": {
+  "spoken": "사건과 관계가 먼 단서가 섞여 있어요. 다시 비교해 바꿔보세요.",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/aa0d0169-e72a-4258-b681-224c2a5166cc.wav",
+   "heard": "사건과 관계가 먼 단서가 섞여 있어요, 다시 비교해 바꿔 보세요.",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 4.28,
+   "score": 1.0,
+   "duration": 5.84,
+   "lufs": -20.7,
+   "peak": -4.4,
+   "longest_inner_silence": 0.67
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/aa0d0169-e72a-4258-b681-224c2a5166cc.wav",
+    "heard": "사건과 관계가 먼 단서가 섞여 있어요, 다시 비교해 바꿔 보세요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 4.28,
+    "score": 1.0,
+    "duration": 5.84,
+    "lufs": -20.7,
+    "peak": -4.4,
+    "longest_inner_silence": 0.67
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/85271439-acbf-4a54-a91d-c8fc4a4ead1a.wav",
+    "heard": "사건과 관계가 먼 단서가 섞여 있어요, 다시 비교해 바꿔보세요!",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 4.22,
+    "score": 1.0,
+    "duration": 5.92,
+    "lufs": -20.2,
+    "peak": -5.4,
+    "longest_inner_silence": 0.37
+   }
+  ],
+  "final": {
+   "duration": 5.64,
+   "lufs": -16.0,
+   "peak": -1.8,
+   "longest_inner_silence": 0.43,
+   "inner_silences": [
+    [
+     3.28575,
+     3.71167
+    ]
+   ]
+  }
+ },
+ "p02-replace": {
+  "spoken": "바꿀 기존 단서를 골라주세요.",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/e4d5f12f-1ed3-4c4c-ac42-4e156785e699.wav",
+   "heard": "바꿀 기존 단서를 골라주세요.",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 6.52,
+   "score": 1.0,
+   "duration": 1.84,
+   "lufs": -19.8,
+   "peak": -5.1,
+   "longest_inner_silence": 0
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/e4d5f12f-1ed3-4c4c-ac42-4e156785e699.wav",
+    "heard": "바꿀 기존 단서를 골라주세요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 6.52,
+    "score": 1.0,
+    "duration": 1.84,
+    "lufs": -19.8,
+    "peak": -5.1,
+    "longest_inner_silence": 0
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/ea4bf264-81ed-4561-a4ec-891a8242829b.wav",
+    "heard": "바쿨 기존 단서를 골라주세요.",
+    "requiredMissing": [],
+    "similarity": 0.917,
+    "chars_per_sec": 5.56,
+    "score": 0.917,
+    "duration": 2.16,
+    "lufs": -20.5,
+    "peak": -5.2,
+    "longest_inner_silence": 0
+   }
+  ],
+  "final": {
+   "duration": 1.83,
+   "lufs": -16.0,
+   "peak": -2.0,
+   "longest_inner_silence": 0,
+   "inner_silences": []
+  }
+ },
+ "evidence": {
+  "spoken": "새 연구 기록이 자동으로 정리됐어요.",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/08afe877-bce5-482f-8dfd-1fefccaac196.wav",
+   "heard": "새 연구 기록이 자동으로 정리됐어요.",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 6.05,
+   "score": 1.0,
+   "duration": 2.48,
+   "lufs": -20.2,
+   "peak": -7.1,
+   "longest_inner_silence": 0
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/08afe877-bce5-482f-8dfd-1fefccaac196.wav",
+    "heard": "새 연구 기록이 자동으로 정리됐어요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 6.05,
+    "score": 1.0,
+    "duration": 2.48,
+    "lufs": -20.2,
+    "peak": -7.1,
+    "longest_inner_silence": 0
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/d9e1305c-e39e-4e42-82fe-2bd0ea4ff338.wav",
+    "heard": "새 연구기록이 자동으로 정리됐어요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 5.51,
+    "score": 1.0,
+    "duration": 2.72,
+    "lufs": -20.4,
+    "peak": -6.7,
+    "longest_inner_silence": 0
+   }
+  ],
+  "final": {
+   "duration": 2.43,
+   "lufs": -16.4,
+   "peak": -3.3,
+   "longest_inner_silence": 0,
+   "inner_silences": []
+  }
+ },
+ "p03-q": {
+  "spoken": "단서를 어떤 생활 상황에 연결할까요?",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/47c441b4-08eb-4f03-8acd-03f68f3c9f1e.wav",
+   "heard": "단서를 어떤 생활 상황에 연결할까요?",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 4.93,
+   "score": 1.0,
+   "duration": 3.04,
+   "lufs": -20.0,
+   "peak": -6.9,
+   "longest_inner_silence": 0
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/47c441b4-08eb-4f03-8acd-03f68f3c9f1e.wav",
+    "heard": "단서를 어떤 생활 상황에 연결할까요?",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 4.93,
+    "score": 1.0,
+    "duration": 3.04,
+    "lufs": -20.0,
+    "peak": -6.9,
+    "longest_inner_silence": 0
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/0bf85541-7e55-4ba1-b6d5-3e90a7b35b5b.wav",
+    "heard": "단서를 어떤 생활 상황에 연결할까요?",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 3.41,
+    "score": 1.0,
+    "duration": 4.4,
+    "lufs": -20.5,
+    "peak": -7.0,
+    "longest_inner_silence": 0
+   }
+  ],
+  "final": {
+   "duration": 3.03,
+   "lufs": -16.4,
+   "peak": -3.1,
+   "longest_inner_silence": 0,
+   "inner_silences": []
+  }
+ },
+ "p03-retry": {
+  "spoken": "이 단서와 더 직접 이어지는 생활 상황을 다시 골라 봐요.",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/f83e3872-d8c0-4654-9a33-cd910bac6c9a.wav",
+   "heard": "이 단서와 더 직접 이어지는 생활 상황을 다시 골라봐요.",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 4.82,
+   "score": 1.0,
+   "duration": 4.56,
+   "lufs": -20.3,
+   "peak": -5.4,
+   "longest_inner_silence": 0
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/f83e3872-d8c0-4654-9a33-cd910bac6c9a.wav",
+    "heard": "이 단서와 더 직접 이어지는 생활 상황을 다시 골라봐요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 4.82,
+    "score": 1.0,
+    "duration": 4.56,
+    "lufs": -20.3,
+    "peak": -5.4,
+    "longest_inner_silence": 0
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/e48ea923-14cd-4ae0-99e8-e706fbfac419.wav",
+    "heard": "이 단서와 더 직접 이어지는 생활 상황을 다시 골라봐요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 4.51,
+    "score": 1.0,
+    "duration": 4.88,
+    "lufs": -20.4,
+    "peak": -3.5,
+    "longest_inner_silence": 0
+   }
+  ],
+  "final": {
+   "duration": 4.57,
+   "lufs": -16.1,
+   "peak": -1.5,
+   "longest_inner_silence": 0,
+   "inner_silences": []
+  }
+ },
+ "p04-q": {
+  "spoken": "누구의 생활에 영향을 줄까요?",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/9f63ed2f-46dc-4026-b804-4ff46c1ee85f.wav",
+   "heard": "누구의 생활에 영향을 줄까요?",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 5.36,
+   "score": 1.0,
+   "duration": 2.24,
+   "lufs": -19.5,
+   "peak": -5.1,
+   "longest_inner_silence": 0
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/9f63ed2f-46dc-4026-b804-4ff46c1ee85f.wav",
+    "heard": "누구의 생활에 영향을 줄까요?",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 5.36,
+    "score": 1.0,
+    "duration": 2.24,
+    "lufs": -19.5,
+    "peak": -5.1,
+    "longest_inner_silence": 0
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/57513c64-909b-4871-9e11-779a39db9aa8.wav",
+    "heard": "누구의 생활에 영향을 줄까요?",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 5.56,
+    "score": 1.0,
+    "duration": 2.16,
+    "lufs": -20.3,
+    "peak": -6.5,
+    "longest_inner_silence": 0
+   }
+  ],
+  "final": {
+   "duration": 2.19,
+   "lufs": -16.4,
+   "peak": -2.1,
+   "longest_inner_silence": 0,
+   "inner_silences": []
+  }
+ },
+ "p04-retry": {
+  "spoken": "이 영향은 누구의 생활과 더 직접 이어질까요?",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/6dc9e903-029b-4bfa-ae15-8dd5268276ad.wav",
+   "heard": "이 영향은 누구의 생활과 더 직접 이어질까요?",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 4.69,
+   "score": 1.0,
+   "duration": 3.84,
+   "lufs": -21.3,
+   "peak": -5.3,
+   "longest_inner_silence": 0.52
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/6dc9e903-029b-4bfa-ae15-8dd5268276ad.wav",
+    "heard": "이 영향은 누구의 생활과 더 직접 이어질까요?",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 4.69,
+    "score": 1.0,
+    "duration": 3.84,
+    "lufs": -21.3,
+    "peak": -5.3,
+    "longest_inner_silence": 0.52
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/b9ca1ebc-b427-43bc-b761-d69a9d6d57e4.wav",
+    "heard": "이 영향은 누구의 생활과 더 직접 이어질까요?",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 4.09,
+    "score": 1.0,
+    "duration": 4.4,
+    "lufs": -20.5,
+    "peak": -4.2,
+    "longest_inner_silence": 0.46
+   }
+  ],
+  "final": {
+   "duration": 3.63,
+   "lufs": -16.1,
+   "peak": -1.9,
+   "longest_inner_silence": 0.51,
+   "inner_silences": [
+    [
+     0.895,
+     1.40742
+    ]
+   ]
+  }
+ },
+ "p05-q": {
+  "spoken": "흔적이 시작된 곳을 고르고, 손 씻을 때를 바꿔요.",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/cc1e74f9-5da0-48ff-99f8-bc9cf4283073.wav",
+   "heard": "흔적이 시작된 곳을 고르고 손 씻을 때를 바꿔요.",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 4.48,
+   "score": 1.0,
+   "duration": 4.24,
+   "lufs": -20.7,
+   "peak": -3.2,
+   "longest_inner_silence": 0
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/cc1e74f9-5da0-48ff-99f8-bc9cf4283073.wav",
+    "heard": "흔적이 시작된 곳을 고르고 손 씻을 때를 바꿔요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 4.48,
+    "score": 1.0,
+    "duration": 4.24,
+    "lufs": -20.7,
+    "peak": -3.2,
+    "longest_inner_silence": 0
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/a28dfa48-bbe2-40bc-bb28-5d5d41c59afa.wav",
+    "heard": "흔적이 시작된 것을 고르고 손 씻을 때를 바꿔요.",
+    "requiredMissing": [],
+    "similarity": 0.947,
+    "chars_per_sec": 4.48,
+    "score": 0.947,
+    "duration": 4.24,
+    "lufs": -20.6,
+    "peak": -4.9,
+    "longest_inner_silence": 0.67
+   }
+  ],
+  "final": {
+   "duration": 4.23,
+   "lufs": -16.1,
+   "peak": -1.8,
+   "longest_inner_silence": 0,
+   "inner_silences": []
+  }
+ },
+ "p05-retry": {
+  "spoken": "시간을 처음으로 되감아 가장 먼저 빛난 물체를 살펴보세요.",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/382644cc-f64e-42d7-bfd1-5947863a3bee.wav",
+   "heard": "시간을 처음으로 되감아 가장 먼저 빛난 물체를 살펴보세요.",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 3.9,
+   "score": 1.0,
+   "duration": 6.16,
+   "lufs": -20.3,
+   "peak": -5.1,
+   "longest_inner_silence": 0.42
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/91b9c378-f4e8-47fa-ab99-a48cff3bb745.wav",
+    "heard": "시간을 처음으로 되감아 가장 먼저 빛나 물체를 살펴보세요!",
+    "requiredMissing": [],
+    "similarity": 0.958,
+    "chars_per_sec": 5.66,
+    "score": 0.958,
+    "duration": 4.24,
+    "lufs": -19.7,
+    "peak": -4.0,
+    "longest_inner_silence": 0
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/382644cc-f64e-42d7-bfd1-5947863a3bee.wav",
+    "heard": "시간을 처음으로 되감아 가장 먼저 빛난 물체를 살펴보세요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 3.9,
+    "score": 1.0,
+    "duration": 6.16,
+    "lufs": -20.3,
+    "peak": -5.1,
+    "longest_inner_silence": 0.42
+   }
+  ],
+  "final": {
+   "duration": 6.03,
+   "lufs": -16.4,
+   "peak": -2.0,
+   "longest_inner_silence": 0,
+   "inner_silences": []
+  }
+ },
+ "p05-late": {
+  "spoken": "이미 옮겨진 흔적은 남아요.",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/bc78cc31-2e44-43c8-9f69-31e934a9f300.wav",
+   "heard": "이미 옮겨진 흔적은 남아요!",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 3.35,
+   "score": 1.0,
+   "duration": 3.28,
+   "lufs": -20.3,
+   "peak": -6.1,
+   "longest_inner_silence": 0
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/bc78cc31-2e44-43c8-9f69-31e934a9f300.wav",
+    "heard": "이미 옮겨진 흔적은 남아요!",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 3.35,
+    "score": 1.0,
+    "duration": 3.28,
+    "lufs": -20.3,
+    "peak": -6.1,
+    "longest_inner_silence": 0
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/3042cde8-0fab-452b-a546-bcd206ae46ec.wav",
+    "heard": "이미 옮겨진 흔적은 남아요",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 3.62,
+    "score": 1.0,
+    "duration": 3.04,
+    "lufs": -19.6,
+    "peak": -3.6,
+    "longest_inner_silence": 0
+   }
+  ],
+  "final": {
+   "duration": 2.27,
+   "lufs": -16.4,
+   "peak": -2.5,
+   "longest_inner_silence": 0,
+   "inner_silences": []
+  }
+ },
+ "p06-droplet": {
+  "spoken": "옷소매로 입과 코를 가리면?",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/5f824281-f7f0-4d57-9fd4-a99e854361b0.wav",
+   "heard": "옷 소매로 입과 코를 가리면",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 4.17,
+   "score": 1.0,
+   "duration": 2.64,
+   "lufs": -20.6,
+   "peak": -7.5,
+   "longest_inner_silence": 0
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/5f824281-f7f0-4d57-9fd4-a99e854361b0.wav",
+    "heard": "옷 소매로 입과 코를 가리면",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 4.17,
+    "score": 1.0,
+    "duration": 2.64,
+    "lufs": -20.6,
+    "peak": -7.5,
+    "longest_inner_silence": 0
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/0031e672-990e-477e-92de-5f727de763b7.wav",
+    "heard": "옷 소매로 입과 코를 가리면",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 5.29,
+    "score": 1.0,
+    "duration": 2.08,
+    "lufs": -20.3,
+    "peak": -7.9,
+    "longest_inner_silence": 0
+   }
+  ],
+  "final": {
+   "duration": 2.43,
+   "lufs": -16.4,
+   "peak": -3.3,
+   "longest_inner_silence": 0,
+   "inner_silences": []
+  }
+ },
+ "p06-air": {
+  "spoken": "창문을 열면 무엇이 달라질까요?",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/ff516a33-d895-47c2-a46d-5fe727d8857f.wav",
+   "heard": "창문을 열면 무엇이 달라질까요?",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 4.64,
+   "score": 1.0,
+   "duration": 2.8,
+   "lufs": -20.3,
+   "peak": -7.3,
+   "longest_inner_silence": 0
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/ff516a33-d895-47c2-a46d-5fe727d8857f.wav",
+    "heard": "창문을 열면 무엇이 달라질까요?",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 4.64,
+    "score": 1.0,
+    "duration": 2.8,
+    "lufs": -20.3,
+    "peak": -7.3,
+    "longest_inner_silence": 0
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/8a7db860-596d-4530-9007-5e1d2cda0058.wav",
+    "heard": "창문을 열면 무엇이 달라질까요?",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 5.6,
+    "score": 1.0,
+    "duration": 2.32,
+    "lufs": -19.9,
+    "peak": -7.1,
+    "longest_inner_silence": 0
+   }
+  ],
+  "final": {
+   "duration": 2.66,
+   "lufs": -16.0,
+   "peak": -3.2,
+   "longest_inner_silence": 0,
+   "inner_silences": []
+  }
+ },
+ "p06-water": {
+  "spoken": "맑아 보이면 모두 괜찮을까요?",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/b0e16642-7e8a-436e-bd60-5f0cba5abe36.wav",
+   "heard": "맑아보이면 모두 괜찮을까요?",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 5.48,
+   "score": 1.0,
+   "duration": 2.19,
+   "lufs": -20.0,
+   "peak": -5.0,
+   "longest_inner_silence": 0
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/704693c2-8b87-4876-a0e5-1d3aff2f283f.wav",
+    "heard": "멀가 보이면 모두 괜찮을까요?",
+    "requiredMissing": [],
+    "similarity": 0.833,
+    "chars_per_sec": 5.17,
+    "score": 0.833,
+    "duration": 2.32,
+    "lufs": -20.4,
+    "peak": -5.2,
+    "longest_inner_silence": 0
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/7ce45c05-2559-4135-be7a-f460f54b7688.wav",
+    "heard": "맑아보이면 모두 괜찮을까요? 어... 야년찬...",
+    "requiredMissing": [],
+    "similarity": 0.857,
+    "chars_per_sec": 1.49,
+    "score": 0.707,
+    "duration": 8.08,
+    "lufs": -20.2,
+    "peak": -5.5,
+    "longest_inner_silence": 1.11
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/b0e16642-7e8a-436e-bd60-5f0cba5abe36.wav",
+    "heard": "맑아보이면 모두 괜찮을까요?",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 5.48,
+    "score": 1.0,
+    "duration": 2.19,
+    "lufs": -20.0,
+    "peak": -5.0,
+    "longest_inner_silence": 0
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/34d20ebc-5c4e-44bf-b02f-9d438bb462ef.wav",
+    "heard": "맑아보이면 모두 괜찮을까요?",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 5.08,
+    "score": 1.0,
+    "duration": 2.36,
+    "lufs": -20.1,
+    "peak": -5.5,
+    "longest_inner_silence": 0
+   }
+  ],
+  "final": {
+   "duration": 2.22,
+   "lufs": -16.4,
+   "peak": -1.9,
+   "longest_inner_silence": 0,
+   "inner_silences": []
+  }
+ },
+ "p06-saliva": {
+  "spoken": "공용 음식은 어떻게 덜어 먹을까요?",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/5d01f4f8-19af-496f-b6b9-bac34cb97718.wav",
+   "heard": "공용 음식은 어떻게 덜어먹을까요?",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 5.47,
+   "score": 1.0,
+   "duration": 2.56,
+   "lufs": -20.2,
+   "peak": -6.1,
+   "longest_inner_silence": 0
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/5d01f4f8-19af-496f-b6b9-bac34cb97718.wav",
+    "heard": "공용 음식은 어떻게 덜어먹을까요?",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 5.47,
+    "score": 1.0,
+    "duration": 2.56,
+    "lufs": -20.2,
+    "peak": -6.1,
+    "longest_inner_silence": 0
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/d5cc4bc8-0463-4611-b2f8-249672a22183.wav",
+    "heard": "공용 음식은 어떻게 덜어먹을까요?",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 5.65,
+    "score": 1.0,
+    "duration": 2.48,
+    "lufs": -19.3,
+    "peak": -4.8,
+    "longest_inner_silence": 0
+   }
+  ],
+  "final": {
+   "duration": 2.48,
+   "lufs": -16.0,
+   "peak": -1.9,
+   "longest_inner_silence": 0,
+   "inner_silences": []
+  }
+ },
+ "p06-synthesis": {
+  "spoken": "닫힌 교실에서 기침한다면?",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/b99567df-1768-425a-b1ad-913d063d0219.wav",
+   "heard": "다친 교실에서 기침한다면?",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 4.91,
+   "score": 1.0,
+   "duration": 2.24,
+   "lufs": -20.1,
+   "peak": -5.3,
+   "longest_inner_silence": 0
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/b99567df-1768-425a-b1ad-913d063d0219.wav",
+    "heard": "다친 교실에서 기침한다면?",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 4.91,
+    "score": 1.0,
+    "duration": 2.24,
+    "lufs": -20.1,
+    "peak": -5.3,
+    "longest_inner_silence": 0
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/bd84e0d7-29af-4789-be0b-113f7f2c2df7.wav",
+    "heard": "다친 교실에서 기침한다면?",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 4.44,
+    "score": 1.0,
+    "duration": 2.48,
+    "lufs": -19.7,
+    "peak": -4.6,
+    "longest_inner_silence": 0
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/22ab8730-2ce5-4cc0-bcb4-ef8ae015d587.wav",
+    "heard": "다친 교실에서 기침한다뇨?",
+    "requiredMissing": [],
+    "similarity": 0.909,
+    "chars_per_sec": 5.02,
+    "score": 0.909,
+    "duration": 2.19,
+    "lufs": -20.3,
+    "peak": -3.6,
+    "longest_inner_silence": 0
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/1bf6a6c8-fa1d-42bc-b9cb-fbc975bd294e.wav",
+    "heard": "다친 교실에서 기침한다면?",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 4.85,
+    "score": 1.0,
+    "duration": 2.27,
+    "lufs": -19.9,
+    "peak": -4.5,
+    "longest_inner_silence": 0
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/f0c825f8-6741-4280-bc4a-de6e2292a57b.wav",
+    "heard": "닫힌 교실에서 기침한다며?",
+    "requiredMissing": [],
+    "similarity": 0.909,
+    "chars_per_sec": 4.66,
+    "score": 0.909,
+    "duration": 2.36,
+    "lufs": -20.1,
+    "peak": -2.3,
+    "longest_inner_silence": 0
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/2f55bcaf-6976-40e4-9614-72d8080a48c1.wav",
+    "heard": "닫힌 교실에서 기침한다면?",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 3.44,
+    "score": 1.0,
+    "duration": 3.2,
+    "lufs": -19.9,
+    "peak": -4.8,
+    "longest_inner_silence": 0
+   }
+  ],
+  "final": {
+   "duration": 2.25,
+   "lufs": -16.0,
+   "peak": -1.8,
+   "longest_inner_silence": 0,
+   "inner_silences": []
+  }
+ },
+ "p06-retry": {
+  "spoken": "손 씻기도 중요해요. 지금은 기침과 닫힌 공간을 각각 바꾸는 행동을 생각해 보세요.",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/41351871-1a8f-4e5e-b72d-2c8a87abbe54.wav",
+   "heard": "손 씻기도 중요해요. 지금은 기침과 닫힌 공간을 각각 바꾸는 행동을 생각해보세요.",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 5.81,
+   "score": 1.0,
+   "duration": 5.68,
+   "lufs": -20.5,
+   "peak": -4.0,
+   "longest_inner_silence": 0.38
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/41351871-1a8f-4e5e-b72d-2c8a87abbe54.wav",
+    "heard": "손 씻기도 중요해요. 지금은 기침과 닫힌 공간을 각각 바꾸는 행동을 생각해보세요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 5.81,
+    "score": 1.0,
+    "duration": 5.68,
+    "lufs": -20.5,
+    "peak": -4.0,
+    "longest_inner_silence": 0.38
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/0f6e7518-d271-4aac-b1d8-1c558137ae00.wav",
+    "heard": "손 씻기도 중요해요. 지금은 기침과 닫힌 공간을 각각 바꾸는 행동을 생각해보세요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 5.16,
+    "score": 1.0,
+    "duration": 6.4,
+    "lufs": -21.3,
+    "peak": -3.8,
+    "longest_inner_silence": 0.72
+   }
+  ],
+  "final": {
+   "duration": 5.69,
+   "lufs": -16.1,
+   "peak": -1.7,
+   "longest_inner_silence": 0,
+   "inner_silences": []
+  }
+ },
+ "p08-retry": {
+  "spoken": "이 행동과 직접 관련된 변화인지 두 장면을 다시 살펴봐요.",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/4029ba9b-616e-4ead-b47a-f2163080bebe.wav",
+   "heard": "이 행동과 직접 관련된 변화인지 두 장면을 다시 살펴봐요.",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 4.87,
+   "score": 1.0,
+   "duration": 4.72,
+   "lufs": -20.0,
+   "peak": -5.9,
+   "longest_inner_silence": 0
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/4029ba9b-616e-4ead-b47a-f2163080bebe.wav",
+    "heard": "이 행동과 직접 관련된 변화인지 두 장면을 다시 살펴봐요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 4.87,
+    "score": 1.0,
+    "duration": 4.72,
+    "lufs": -20.0,
+    "peak": -5.9,
+    "longest_inner_silence": 0
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/6d54df1c-0e1e-4c99-92a5-3b5c04c87216.wav",
+    "heard": "이 행동과 직접 관련된 변화인지 두 장면을 다시 살펴봐요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 5.04,
+    "score": 1.0,
+    "duration": 4.56,
+    "lufs": -20.8,
+    "peak": -7.0,
+    "longest_inner_silence": 0
+   }
+  ],
+  "final": {
+   "duration": 4.68,
+   "lufs": -16.4,
+   "peak": -2.4,
+   "longest_inner_silence": 0,
+   "inner_silences": []
+  }
+ },
+ "p09-guide": {
+  "spoken": "행동을 고른 뒤 장소를 눌러 배치해요.",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/364a954d-f917-4903-ac4c-55dacf65ec2c.wav",
+   "heard": "행동을 고른 뒤 장소를 눌러 배치해요.",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 5.36,
+   "score": 1.0,
+   "duration": 2.8,
+   "lufs": -20.4,
+   "peak": -7.4,
+   "longest_inner_silence": 0
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/364a954d-f917-4903-ac4c-55dacf65ec2c.wav",
+    "heard": "행동을 고른 뒤 장소를 눌러 배치해요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 5.36,
+    "score": 1.0,
+    "duration": 2.8,
+    "lufs": -20.4,
+    "peak": -7.4,
+    "longest_inner_silence": 0
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/3825d2cf-d385-4e7d-aa18-536feee98ad0.wav",
+    "heard": "행동을 고른 뒤 장소를 눌러 배치해요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 4.57,
+    "score": 1.0,
+    "duration": 3.28,
+    "lufs": -20.0,
+    "peak": -5.4,
+    "longest_inner_silence": 0
+   }
+  ],
+  "final": {
+   "duration": 2.66,
+   "lufs": -16.0,
+   "peak": -2.9,
+   "longest_inner_silence": 0,
+   "inner_silences": []
+  }
+ },
+ "p09-a1": {
+  "spoken": "여럿이 활동하는 동안 닫혀 있었어요.",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/7fcadd7d-de5f-4418-88f6-30284d3e466c.wav",
+   "heard": "여럿이 활동하는 동안 닫혀 있었어요.",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 3.63,
+   "score": 1.0,
+   "duration": 4.13,
+   "lufs": -21.5,
+   "peak": -5.9,
+   "longest_inner_silence": 0
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/7fcadd7d-de5f-4418-88f6-30284d3e466c.wav",
+    "heard": "여럿이 활동하는 동안 닫혀 있었어요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 3.63,
+    "score": 1.0,
+    "duration": 4.13,
+    "lufs": -21.5,
+    "peak": -5.9,
+    "longest_inner_silence": 0
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/d3940a4f-a269-4ccc-bc1c-c41b0c9361f0.wav",
+    "heard": "여럿이 활동하는 동안 닫혀 있었어요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 4.04,
+    "score": 1.0,
+    "duration": 3.71,
+    "lufs": -20.3,
+    "peak": -5.7,
+    "longest_inner_silence": 0
+   }
+  ],
+  "final": {
+   "duration": 3.08,
+   "lufs": -16.4,
+   "peak": -1.9,
+   "longest_inner_silence": 0,
+   "inner_silences": []
+  }
+ },
+ "p09-a2": {
+  "spoken": "자기 숟가락으로 공용 음식을 바로 떠먹었어요.",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/f7d85f5e-e121-4663-9cd4-d6b4f4b7f02b.wav",
+   "heard": "자기 숟가락으로 공용 음식을 바로 떠먹었어요.",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 3.89,
+   "score": 1.0,
+   "duration": 4.88,
+   "lufs": -21.2,
+   "peak": -8.3,
+   "longest_inner_silence": 0
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/f7d85f5e-e121-4663-9cd4-d6b4f4b7f02b.wav",
+    "heard": "자기 숟가락으로 공용 음식을 바로 떠먹었어요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 3.89,
+    "score": 1.0,
+    "duration": 4.88,
+    "lufs": -21.2,
+    "peak": -8.3,
+    "longest_inner_silence": 0
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/d9930721-b661-4682-8ab4-1f4223a5ed8d.wav",
+    "heard": "자기 숟가락으로 공용 음식을 바로 떠먹었어요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 5.94,
+    "score": 1.0,
+    "duration": 3.2,
+    "lufs": -20.9,
+    "peak": -4.7,
+    "longest_inner_silence": 0
+   }
+  ],
+  "final": {
+   "duration": 3.84,
+   "lufs": -16.4,
+   "peak": -3.6,
+   "longest_inner_silence": 0,
+   "inner_silences": []
+  }
+ },
+ "p09-a3": {
+  "spoken": "공을 함께 사용한 뒤 손을 씻지 않고 간식을 먹으려 했어요.",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/2fe6026a-906c-445c-a697-6e9c7da0765a.wav",
+   "heard": "공을 함께 사용한 뒤 손을 씻지 않고 간식을 먹으려 했어요.",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 3.9,
+   "score": 1.0,
+   "duration": 5.89,
+   "lufs": -21.2,
+   "peak": -6.7,
+   "longest_inner_silence": 0.43
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/2fe6026a-906c-445c-a697-6e9c7da0765a.wav",
+    "heard": "공을 함께 사용한 뒤 손을 씻지 않고 간식을 먹으려 했어요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 3.9,
+    "score": 1.0,
+    "duration": 5.89,
+    "lufs": -21.2,
+    "peak": -6.7,
+    "longest_inner_silence": 0.43
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/805390d9-b4b3-4385-ad32-6a4ec80efbbf.wav",
+    "heard": "곰을 함께 사용한 뒤 손을 씻지 않고 간식을 먹으려 했어요.",
+    "requiredMissing": [],
+    "similarity": 0.957,
+    "chars_per_sec": 3.9,
+    "score": 0.957,
+    "duration": 5.89,
+    "lufs": -21.2,
+    "peak": -4.5,
+    "longest_inner_silence": 0
+   }
+  ],
+  "final": {
+   "duration": 5.04,
+   "lufs": -16.4,
+   "peak": -1.9,
+   "longest_inner_silence": 0.4,
+   "inner_silences": [
+    [
+     2.93333,
+     3.3379
+    ]
+   ]
+  }
+ },
+ "p09-a4": {
+  "spoken": "입과 코를 가리지 않은 장면이 있었어요.",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/cf3a2b15-e45b-4d81-ad5d-9afbc3e7ae10.wav",
+   "heard": "입과 코를 가리지 않은 장면이 있었어요.",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 5.28,
+   "score": 1.0,
+   "duration": 3.03,
+   "lufs": -21.5,
+   "peak": -6.4,
+   "longest_inner_silence": 0
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/cf3a2b15-e45b-4d81-ad5d-9afbc3e7ae10.wav",
+    "heard": "입과 코를 가리지 않은 장면이 있었어요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 5.28,
+    "score": 1.0,
+    "duration": 3.03,
+    "lufs": -21.5,
+    "peak": -6.4,
+    "longest_inner_silence": 0
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/a46b44fe-4b43-46d7-ada5-b478ea6bbd65.wav",
+    "heard": "입과 코를 가리지 않은 장면이 있었어요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 5.13,
+    "score": 1.0,
+    "duration": 3.12,
+    "lufs": -20.5,
+    "peak": -6.8,
+    "longest_inner_silence": 0
+   }
+  ],
+  "final": {
+   "duration": 2.98,
+   "lufs": -16.0,
+   "peak": -1.9,
+   "longest_inner_silence": 0,
+   "inner_silences": []
+  }
+ },
+ "p09-a5": {
+  "spoken": "한 사람만 쓰지 않고 여러 친구가 차례로 만졌어요.",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/54006d4f-665a-4216-afc8-52652f91b64e.wav",
+   "heard": "한 사람만 쓰지 않고 여러 친구가 차례로 만졌어요.",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 4.02,
+   "score": 1.0,
+   "duration": 4.97,
+   "lufs": -20.8,
+   "peak": -2.7,
+   "longest_inner_silence": 0
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/54006d4f-665a-4216-afc8-52652f91b64e.wav",
+    "heard": "한 사람만 쓰지 않고 여러 친구가 차례로 만졌어요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 4.02,
+    "score": 1.0,
+    "duration": 4.97,
+    "lufs": -20.8,
+    "peak": -2.7,
+    "longest_inner_silence": 0
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/59896c50-2687-4014-8972-7edf2f34991d.wav",
+    "heard": "한 사람만 쓰지 않고 여러 친구가 차례로 만졌어요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 3.83,
+    "score": 1.0,
+    "duration": 5.22,
+    "lufs": -21.3,
+    "peak": -1.4,
+    "longest_inner_silence": 0
+   }
+  ],
+  "final": {
+   "duration": 3.92,
+   "lufs": -16.0,
+   "peak": -1.9,
+   "longest_inner_silence": 0,
+   "inner_silences": []
+  }
+ },
+ "p09-a6": {
+  "spoken": "종이 모서리가 접혔어요.",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/2ca3c2a0-eec3-450c-b1c2-fc8e7d7b44a5.wav",
+   "heard": "종이 모서리가 접혔어요.",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 3.12,
+   "score": 1.0,
+   "duration": 3.2,
+   "lufs": -21.5,
+   "peak": -6.8,
+   "longest_inner_silence": 0
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/2ca3c2a0-eec3-450c-b1c2-fc8e7d7b44a5.wav",
+    "heard": "종이 모서리가 접혔어요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 3.12,
+    "score": 1.0,
+    "duration": 3.2,
+    "lufs": -21.5,
+    "peak": -6.8,
+    "longest_inner_silence": 0
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/74e1eea2-16ae-4584-b0ad-6b7f2e5ec7be.wav",
+    "heard": "종이 모서리가 접혔어요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 2.7,
+    "score": 0.9,
+    "duration": 3.71,
+    "lufs": -20.9,
+    "peak": -9.7,
+    "longest_inner_silence": 0
+   }
+  ],
+  "final": {
+   "duration": 2.09,
+   "lufs": -16.4,
+   "peak": -1.9,
+   "longest_inner_silence": 0,
+   "inner_silences": []
+  }
+ },
+ "p09-wrong-site": {
+  "spoken": "이 행동과 관련된 장소에 놓아주세요.",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/dc165d52-2d97-4483-950c-8ea8ef77354b.wav",
+   "heard": "이 행동과 관련된 장소에 놓아주세요.",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 3.99,
+   "score": 1.0,
+   "duration": 3.76,
+   "lufs": -20.8,
+   "peak": -7.7,
+   "longest_inner_silence": 0
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/dc165d52-2d97-4483-950c-8ea8ef77354b.wav",
+    "heard": "이 행동과 관련된 장소에 놓아주세요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 3.99,
+    "score": 1.0,
+    "duration": 3.76,
+    "lufs": -20.8,
+    "peak": -7.7,
+    "longest_inner_silence": 0
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/6d3cd449-97ae-47f0-b662-716bd17ed875.wav",
+    "heard": "이 행동과 관련된 장소에 놓아주세요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 5.86,
+    "score": 1.0,
+    "duration": 2.56,
+    "lufs": -20.5,
+    "peak": -5.7,
+    "longest_inner_silence": 0
+   }
+  ],
+  "final": {
+   "duration": 2.64,
+   "lufs": -16.4,
+   "peak": -3.6,
+   "longest_inner_silence": 0,
+   "inner_silences": []
+  }
+ },
+ "p09-budget": {
+  "spoken": "에너지가 부족해요. 기존 행동을 빼거나 바꿔보세요.",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/0f5aaf57-68c6-4c37-a54e-6690bf9dc163.wav",
+   "heard": "에너지가 부족해요, 기존 행동을 빼거나 바꿔보세요.",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 5.25,
+   "score": 1.0,
+   "duration": 4.0,
+   "lufs": -20.6,
+   "peak": -6.6,
+   "longest_inner_silence": 0.38
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/0f5aaf57-68c6-4c37-a54e-6690bf9dc163.wav",
+    "heard": "에너지가 부족해요, 기존 행동을 빼거나 바꿔보세요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 5.25,
+    "score": 1.0,
+    "duration": 4.0,
+    "lufs": -20.6,
+    "peak": -6.6,
+    "longest_inner_silence": 0.38
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/b82b5125-c209-44d6-bf55-b142f3e34f68.wav",
+    "heard": "에너지가 부족해요, 기존 행동을 빼거나 바꿔보세요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 4.69,
+    "score": 1.0,
+    "duration": 4.48,
+    "lufs": -21.0,
+    "peak": -6.2,
+    "longest_inner_silence": 0.5
+   }
+  ],
+  "final": {
+   "duration": 3.94,
+   "lufs": -16.4,
+   "peak": -2.6,
+   "longest_inner_silence": 0.37,
+   "inner_silences": [
+    [
+     1.50165,
+     1.87192
+    ]
+   ]
+  }
+ },
+ "p09-done": {
+  "spoken": "대응안 완성! 에너지는 계획 놀이의 규칙이에요. 생활에서는 기침 예절과 개인 물품 사용도 함께 지켜요.",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/5e2a4c12-c474-44b3-b976-2ddbdaaa5390.wav",
+   "heard": "대응안 완성! 에너지는 계획놀이의 규칙이에요. 생활에서는 기침 예절과 개인 물품 사용도 함께 지켜요.",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 4.98,
+   "score": 1.0,
+   "duration": 8.24,
+   "lufs": -20.3,
+   "peak": -3.5,
+   "longest_inner_silence": 0.68
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/5e2a4c12-c474-44b3-b976-2ddbdaaa5390.wav",
+    "heard": "대응안 완성! 에너지는 계획놀이의 규칙이에요. 생활에서는 기침 예절과 개인 물품 사용도 함께 지켜요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 4.98,
+    "score": 1.0,
+    "duration": 8.24,
+    "lufs": -20.3,
+    "peak": -3.5,
+    "longest_inner_silence": 0.68
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/aae95690-bd3c-4ea8-af05-e0b5b2deb15e.wav",
+    "heard": "대응함 완성! 에너지는 계획 놀이의 규칙이에요. 생활에서는 기침 예절과 개인 물품 사용도 합기 지켜요.",
+    "requiredMissing": [],
+    "similarity": 0.927,
+    "chars_per_sec": 5.02,
+    "score": 0.927,
+    "duration": 8.16,
+    "lufs": -20.1,
+    "peak": -5.1,
+    "longest_inner_silence": 0.47
+   }
+  ],
+  "final": {
+   "duration": 8.2,
+   "lufs": -16.2,
+   "peak": -1.7,
+   "longest_inner_silence": 0.68,
+   "inner_silences": [
+    [
+     0.942146,
+     1.55769
+    ],
+    [
+     3.62006,
+     4.29783
+    ]
+   ]
+  }
+ },
+ "p10-start": {
+  "spoken": "내가 설계한 계획을 실천해요",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/1184b8b7-b5ac-4667-91a0-7ffa7146dd0c.wav",
+   "heard": "내가 설계한 계획을 실천해요.",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 5.0,
+   "score": 1.0,
+   "duration": 2.4,
+   "lufs": -19.8,
+   "peak": -6.6,
+   "longest_inner_silence": 0
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/1184b8b7-b5ac-4667-91a0-7ffa7146dd0c.wav",
+    "heard": "내가 설계한 계획을 실천해요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 5.0,
+    "score": 1.0,
+    "duration": 2.4,
+    "lufs": -19.8,
+    "peak": -6.6,
+    "longest_inner_silence": 0
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/ec2455b6-d330-47e6-9215-98a60dd34b26.wav",
+    "heard": "내가 설계한 계획을 실천해요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 5.17,
+    "score": 1.0,
+    "duration": 2.32,
+    "lufs": -20.0,
+    "peak": -7.4,
+    "longest_inner_silence": 0
+   }
+  ],
+  "final": {
+   "duration": 2.4,
+   "lufs": -16.0,
+   "peak": -2.8,
+   "longest_inner_silence": 0,
+   "inner_silences": []
+  }
+ },
+ "p10-wash": {
+  "spoken": "흐르는 물에 비누로 삼십 초 이상 손바닥, 손등, 손가락 사이를 문질러요. 차례대로 눌러 보세요.",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/9fef185f-38a2-4b8a-8bfe-293bdcd3be21.wav",
+   "heard": "흐르는 물에 비누로 30초 이상 손바닥, 손등, 손가락 사이를 문질러요. 차례대로 눌러보세요.",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 4.28,
+   "score": 1.0,
+   "duration": 8.64,
+   "lufs": -20.0,
+   "peak": -5.8,
+   "longest_inner_silence": 0.51
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/9fef185f-38a2-4b8a-8bfe-293bdcd3be21.wav",
+    "heard": "흐르는 물에 비누로 30초 이상 손바닥, 손등, 손가락 사이를 문질러요. 차례대로 눌러보세요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 4.28,
+    "score": 1.0,
+    "duration": 8.64,
+    "lufs": -20.0,
+    "peak": -5.8,
+    "longest_inner_silence": 0.51
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/2dbc36a6-5764-4473-93d1-ed7b471bc097.wav",
+    "heard": "흐르는 물에 비누로 30초 이상 손바닥, 손등, 손가락 사이를 문질러요. 차례대로 눌러보세요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 4.62,
+    "score": 1.0,
+    "duration": 8.0,
+    "lufs": -21.3,
+    "peak": -2.3,
+    "longest_inner_silence": 0.69
+   }
+  ],
+  "final": {
+   "duration": 8.54,
+   "lufs": -16.0,
+   "peak": -1.8,
+   "longest_inner_silence": 0.5,
+   "inner_silences": [
+    [
+     3.52879,
+     4.02702
+    ],
+    [
+     6.48094,
+     6.92025
+    ]
+   ]
+  }
+ },
+ "p10-applied": {
+  "spoken": "계획을 직접 실천했어요.",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/c6cb2626-c353-4667-bc8d-dad96c927835.wav",
+   "heard": "계획을 직접 실천했어요.",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 2.98,
+   "score": 0.9,
+   "duration": 3.36,
+   "lufs": -20.0,
+   "peak": -6.7,
+   "longest_inner_silence": 0.96
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/8151f859-312c-4a17-b006-4c279e442d59.wav",
+    "heard": "계획을 직접 시천했어요.",
+    "requiredMissing": [
+     "실천"
+    ],
+    "similarity": 0.9,
+    "chars_per_sec": 5.21,
+    "score": -1.1,
+    "duration": 1.92,
+    "lufs": -19.5,
+    "peak": -4.6,
+    "longest_inner_silence": 0
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/c6cb2626-c353-4667-bc8d-dad96c927835.wav",
+    "heard": "계획을 직접 실천했어요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 2.98,
+    "score": 0.9,
+    "duration": 3.36,
+    "lufs": -20.0,
+    "peak": -6.7,
+    "longest_inner_silence": 0.96
+   }
+  ],
+  "final": {
+   "duration": 3.24,
+   "lufs": -16.4,
+   "peak": -3.1,
+   "longest_inner_silence": 0.96,
+   "inner_silences": [
+    [
+     1.90392,
+     2.85938
+    ]
+   ]
+  }
+ },
+ "ending-1": {
+  "spoken": "우리의 발견이 학교를 바꿨어요.",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/4bb161a8-2b45-4089-b49e-115ec605befb.wav",
+   "heard": "우리의 발견이 학교를 바꿨어요.",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 3.53,
+   "score": 1.0,
+   "duration": 3.68,
+   "lufs": -20.1,
+   "peak": -5.0,
+   "longest_inner_silence": 0
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/4bb161a8-2b45-4089-b49e-115ec605befb.wav",
+    "heard": "우리의 발견이 학교를 바꿨어요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 3.53,
+    "score": 1.0,
+    "duration": 3.68,
+    "lufs": -20.1,
+    "peak": -5.0,
+    "longest_inner_silence": 0
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/394fe312-7e4d-4c6b-92d0-3be9e70fbd5c.wav",
+    "heard": "우리의 발견이 학교를 바꿨어요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 5.08,
+    "score": 1.0,
+    "duration": 2.56,
+    "lufs": -21.1,
+    "peak": -7.3,
+    "longest_inner_silence": 0
+   }
+  ],
+  "final": {
+   "duration": 2.53,
+   "lufs": -16.4,
+   "peak": -1.9,
+   "longest_inner_silence": 0,
+   "inner_silences": []
+  }
+ },
+ "ending-2": {
+  "spoken": "손 씻기, 기침 예절, 환기, 덜어 먹기는 생활에서 모두 함께 실천해요.",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/4d49e606-e437-480a-b57f-bac2912b0c8d.wav",
+   "heard": "손 씻기 기침 예절 환기 덜어먹기는 생활에서 모두 함께 실천해요",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 4.12,
+   "score": 1.0,
+   "duration": 6.31,
+   "lufs": -20.2,
+   "peak": -2.2,
+   "longest_inner_silence": 0,
+   "inner_silences": []
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/5e717c0e-509d-449d-9027-b39bcf07b762.wav",
+    "heard": "손 씻기, 기침 위절, 환기, 덜어먹기는 생활에서 모두 함께 실천해요.",
+    "requiredMissing": [
+     "기침예절"
+    ],
+    "similarity": 0.962,
+    "chars_per_sec": 4.11,
+    "score": -1.038,
+    "duration": 6.32,
+    "lufs": -20.6,
+    "peak": -2.9,
+    "longest_inner_silence": 0
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/f8b4c342-f944-4ec1-99e6-a32a7c1c8a98.wav",
+    "heard": "손 씻기, 기침 예절, 환기, 덜어먹히는 생활에서 모두 함께 실천해요.",
+    "requiredMissing": [
+     "덜어먹기는"
+    ],
+    "similarity": 0.962,
+    "chars_per_sec": 4.71,
+    "score": -1.038,
+    "duration": 5.52,
+    "lufs": -21.5,
+    "peak": -7.2,
+    "longest_inner_silence": 0
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/9f929791-1229-43fa-9359-40370f013702.wav",
+    "heard": "손 씻기, 기침 예절, 환기. 달아 막히는 생활에서 모두 함께 실천해요.",
+    "requiredMissing": [
+     "덜어먹기는"
+    ],
+    "similarity": 0.846,
+    "chars_per_sec": 3.25,
+    "score": -1.154,
+    "duration": 8.0,
+    "lufs": -20.4,
+    "peak": -4.6,
+    "longest_inner_silence": 0.58
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/72a5177d-1e0f-41e3-b47a-14bc0534a822.wav",
+    "heard": "손 씻기, 기침 예절, 환기, 덜어먹히는 생활에서 모두 함께 실천해요.",
+    "requiredMissing": [
+     "덜어먹기는"
+    ],
+    "similarity": 0.962,
+    "chars_per_sec": 2.95,
+    "score": -1.138,
+    "duration": 8.8,
+    "lufs": -21.0,
+    "peak": -4.0,
+    "longest_inner_silence": 0.43
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/4d4bb6f7-24fd-4778-bb5c-65d4acd7fec1.wav",
+    "heard": "손 씻기, 기침 예절, 환기, 털어먹히는 생활에서 모두 함께 실천해요!",
+    "requiredMissing": [
+     "덜어먹기는"
+    ],
+    "similarity": 0.923,
+    "chars_per_sec": 3.95,
+    "score": -1.077,
+    "duration": 6.58,
+    "lufs": -19.9,
+    "peak": -4.7,
+    "longest_inner_silence": 0,
+    "inner_silences": []
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/4d49e606-e437-480a-b57f-bac2912b0c8d.wav",
+    "heard": "손 씻기 기침 예절 환기 덜어먹기는 생활에서 모두 함께 실천해요",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 4.12,
+    "score": 1.0,
+    "duration": 6.31,
+    "lufs": -20.2,
+    "peak": -2.2,
+    "longest_inner_silence": 0,
+    "inner_silences": []
+   }
+  ],
+  "final": {
+   "duration": 6.09,
+   "lufs": -16.3,
+   "peak": -1.8,
+   "longest_inner_silence": 0,
+   "inner_silences": []
+  }
+ },
+ "restore-1": {
+  "spoken": "창문을 열어 공기가 드나들게 해 주세요.",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/3097a6f4-6107-4c0b-886d-298c5f61b8a8.wav",
+   "heard": "창문을 열어 공기가 드나들게 해주세요.",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 4.44,
+   "score": 1.0,
+   "duration": 3.6,
+   "lufs": -20.4,
+   "peak": -6.8,
+   "longest_inner_silence": 0
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/3097a6f4-6107-4c0b-886d-298c5f61b8a8.wav",
+    "heard": "창문을 열어 공기가 드나들게 해주세요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 4.44,
+    "score": 1.0,
+    "duration": 3.6,
+    "lufs": -20.4,
+    "peak": -6.8,
+    "longest_inner_silence": 0
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/b8ac382c-c59f-4d88-9970-f537b5e2842d.wav",
+    "heard": "창문을 열어 공기가 드나들게 해주세요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 6.67,
+    "score": 1.0,
+    "duration": 2.4,
+    "lufs": -19.9,
+    "peak": -5.2,
+    "longest_inner_silence": 0
+   }
+  ],
+  "final": {
+   "duration": 3.55,
+   "lufs": -16.4,
+   "peak": -2.8,
+   "longest_inner_silence": 0,
+   "inner_silences": []
+  }
+ },
+ "restore-2": {
+  "spoken": "환기는 감염병 예방에 도움이 되는 실천이에요. 표지를 붙여 친구들에게 알려 주세요.",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/15b60478-fcdd-4044-8f65-2eaec03facef.wav",
+   "heard": "환기는 감염병 예방에 도움이 되는 실천이에요. 표지를 붙여 친구들에게 알려주세요.",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 5.38,
+   "score": 1.0,
+   "duration": 6.32,
+   "lufs": -19.7,
+   "peak": -5.8,
+   "longest_inner_silence": 0.55
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/15b60478-fcdd-4044-8f65-2eaec03facef.wav",
+    "heard": "환기는 감염병 예방에 도움이 되는 실천이에요. 표지를 붙여 친구들에게 알려주세요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 5.38,
+    "score": 1.0,
+    "duration": 6.32,
+    "lufs": -19.7,
+    "peak": -5.8,
+    "longest_inner_silence": 0.55
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/6f9966eb-faf3-4af8-97a8-ceec47c6ea46.wav",
+    "heard": "환기는 감염병 예방에 도움이 되는 실천이에요. 표지를 붙여 친구들에게 알려주세요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 5.12,
+    "score": 1.0,
+    "duration": 6.64,
+    "lufs": -20.1,
+    "peak": -4.9,
+    "longest_inner_silence": 0.5
+   }
+  ],
+  "final": {
+   "duration": 6.3,
+   "lufs": -16.4,
+   "peak": -2.4,
+   "longest_inner_silence": 0,
+   "inner_silences": []
+  }
+ },
+ "restore-3": {
+  "spoken": "실천 표지를 완성했어요. 손 씻기와 기침 예절도 함께 실천해요.",
+  "ok": true,
+  "best": {
+   "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/3a6ebb21-d465-48ba-a814-bd6475378b6e.wav",
+   "heard": "실천 표지를 완성했어요. 손 씻기와 기침 예절도 함께 실천해요.",
+   "requiredMissing": [],
+   "similarity": 1.0,
+   "chars_per_sec": 4.53,
+   "score": 1.0,
+   "duration": 5.52,
+   "lufs": -20.5,
+   "peak": -7.0,
+   "longest_inner_silence": 0
+  },
+  "candidates": [
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/3a6ebb21-d465-48ba-a814-bd6475378b6e.wav",
+    "heard": "실천 표지를 완성했어요. 손 씻기와 기침 예절도 함께 실천해요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 4.53,
+    "score": 1.0,
+    "duration": 5.52,
+    "lufs": -20.5,
+    "peak": -7.0,
+    "longest_inner_silence": 0
+   },
+   {
+    "file": "/Volumes/T7 Shield/connectai_yel/pink-jarvis/data/media/763e455d-849c-43a6-bc00-463a57b63153.wav",
+    "heard": "실천 표지를 완성했어요. 손 씻기와 기침 예절도 함께 실천해요.",
+    "requiredMissing": [],
+    "similarity": 1.0,
+    "chars_per_sec": 3.47,
+    "score": 1.0,
+    "duration": 7.2,
+    "lufs": -20.3,
+    "peak": -6.7,
+    "longest_inner_silence": 0.72
+   }
+  ],
+  "final": {
+   "duration": 5.43,
+   "lufs": -16.0,
+   "peak": -2.7,
+   "longest_inner_silence": 0,
+   "inner_silences": []
+  }
+ }
+}
