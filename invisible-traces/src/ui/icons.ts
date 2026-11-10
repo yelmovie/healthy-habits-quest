@@ -1,4 +1,5 @@
 const paths:Record<string,string>={
+door:'<path d="M4 21V3h16v18M2 21h20M15 10v5"/><path d="M15 12h-5"/><circle cx="15" cy="12" r="1"/>',
 search:'<circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/>',
 arrow:'<path d="M4 12h15m-6-6 6 6-6 6"/>',back:'<path d="M20 12H5m6-6-6 6 6 6"/>',check:'<path d="m5 12 4 4L19 6"/>',lock:'<rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 5v2"/>',
 home:'<path d="m3 11 9-8 9 8v9H3zM9 20v-7h6v7"/>',map:'<path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3zm6-3v15m6-12v15"/>',

@@ -61,3 +61,19 @@ body.on-activity { height: var(--app-h); min-height: 0; overflow: hidden; }
  .activity-topbar { display: none; }
  .activity-layout, .activity-layout .play-main, .activity-layout .page-content { display: block; height: auto; overflow: visible; }
 }
+
+/* Very short landscape screens retain readable controls through a scrollable
+   activity region; the navigation stays outside it. Do not shrink the font. */
+@media (max-height: 340px) and (min-width: 641px) {
+ .activity-layout .page-content { overflow-y: auto; }
+ .activity-layout .page-content > :is(.observation-page,.strategy-activity) { min-height: 380px; flex-shrink: 0; }
+}
+@media (max-height: 380px) and (min-width: 641px) {
+ .large-text .activity-layout .page-content { overflow-y: auto; }
+ .large-text .activity-layout .page-content > :is(.observation-page,.strategy-activity) { min-height: 380px; flex-shrink: 0; }
+}
+@media (max-height: 380px) and (min-width: 641px) and (max-width: 800px) {
+ .large-text .tracing-sequence { column-gap: .2rem; }
+ .large-text .tracing-stage { padding: .35rem; }
+ .large-text .tracing-sequence .trace-node > b { max-width: 100%; overflow-wrap: anywhere; }
+}

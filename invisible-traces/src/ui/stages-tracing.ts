@@ -8,7 +8,7 @@ import type { View } from './render';
 
 export const synthesisReady = (actions: string[]) => ['coughEtiquette', 'ventilation'].every(id => actions.includes(id));
 
-const nodeIcons = ['book', 'hand', 'ball', 'hand', 'lock', 'hand'];
+const nodeIcons = ['book', 'hand', 'ball', 'hand', 'door', 'hand'];
 const interventionNames = ['공을 만지기 전', '공을 만진 뒤', '다른 친구가 쓴 뒤', '문손잡이에 옮겨진 뒤'];
 
 export function tracingPages(s: State, v: View): string {
@@ -48,13 +48,13 @@ export function tracingPages(s: State, v: View): string {
   return '';
 }
 
-function learnerFigure(covered = false): string {
-  const art = covered ? labAssets.coughCovered : labAssets.coughBefore;
+function learnerFigure(covered = false, coughing = false): string {
+  const art = covered ? labAssets.coughCovered : coughing ? labAssets.coughUncovered : labAssets.coughBefore;
   return `<img class="tracing-learner" src="${art.src}" width="${art.width}" height="${art.height}" alt="" aria-hidden="true" data-cough-state="${covered ? 'covered' : 'uncovered'}" decoding="async" draggable="false">`;
 }
 
 function coughFigure(covered: boolean): string {
-  return `<div class="tracing-cough-view ${covered ? 'is-covered' : ''}"><div class="tracing-cough-people"><div class="tracing-cough-person">${learnerFigure(covered)}<b>${covered ? '옷소매로 가린 기침' : '가리지 않은 기침'}</b></div><div class="tracing-cough-path" aria-hidden="true"><span></span><i></i><i></i><i></i><i></i><i></i></div><div class="tracing-cough-person tracing-cough-friend">${learnerFigure()}<b>함께 있는 친구</b></div></div></div>`;
+  return `<div class="tracing-cough-view ${covered ? 'is-covered' : ''}"><div class="tracing-cough-people"><div class="tracing-cough-person">${learnerFigure(covered, true)}<b>${covered ? '옷소매로 가린 기침' : '가리지 않은 기침'}</b></div><div class="tracing-cough-path" aria-hidden="true"><span></span><i></i><i></i><i></i><i></i><i></i></div><div class="tracing-cough-person tracing-cough-friend">${learnerFigure()}<b>함께 있는 친구</b></div></div></div>`;
 }
 
 function waterGlass(): string {

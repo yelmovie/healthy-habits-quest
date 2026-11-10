@@ -1,0 +1,17 @@
+[
+  {
+    "file": "public/assets/gym-20261110.webp",
+    "bytes": 137886,
+    "sha256": "aafa9e535311a5cfaf9249c069a66a46f0bac6dfced26eee7ed0ffd244a12421"
+  },
+  {
+    "file": "public/assets/meal-20261110.webp",
+    "bytes": 168916,
+    "sha256": "ceff7b694d1bd542767fd25655cc135a62273b4ce2769182690888d03a1d689b"
+  },
+  {
+    "file": "public/assets/cough-uncovered-20261110.webp",
+    "bytes": 35866,
+    "sha256": "81d70dc23aae6387ce8e329739346a070c141ada74d65a76eeb0634b5e604277"
+  }
+]

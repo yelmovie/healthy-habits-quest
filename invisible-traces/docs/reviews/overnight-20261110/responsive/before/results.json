@@ -1,0 +1,552 @@
+{
+  "phase": "before",
+  "errors": [],
+  "results": [
+    {
+      "width": 1280,
+      "height": 800,
+      "large": false,
+      "name": "P01",
+      "issues": []
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "large": false,
+      "name": "P02",
+      "issues": []
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "large": false,
+      "name": "P03",
+      "issues": []
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "large": false,
+      "name": "P04",
+      "issues": []
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "large": false,
+      "name": "P05",
+      "issues": []
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "large": false,
+      "name": "P06",
+      "issues": []
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "large": false,
+      "name": "P07",
+      "issues": []
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "large": false,
+      "name": "P08",
+      "issues": []
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "large": false,
+      "name": "P09",
+      "issues": []
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "large": false,
+      "name": "P10",
+      "issues": []
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "large": false,
+      "name": "P06-droplet-0",
+      "issues": []
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "large": false,
+      "name": "P06-droplet-1",
+      "issues": []
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "large": false,
+      "name": "P06-air-0",
+      "issues": []
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "large": false,
+      "name": "P06-air-1",
+      "issues": []
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "large": false,
+      "name": "P06-water-0",
+      "issues": []
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "large": false,
+      "name": "P06-water-1",
+      "issues": []
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "large": false,
+      "name": "P06-saliva-0",
+      "issues": []
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "large": false,
+      "name": "P06-saliva-1",
+      "issues": []
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "large": false,
+      "name": "P08-coughEtiquette",
+      "issues": []
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "large": false,
+      "name": "P08-ventilation",
+      "issues": []
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "large": false,
+      "name": "P08-personalItems",
+      "issues": []
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "large": false,
+      "name": "P08-portionFood",
+      "issues": []
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "large": false,
+      "name": "P10-ventilation",
+      "issues": []
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "large": false,
+      "name": "P10-portionFood",
+      "issues": []
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "large": false,
+      "name": "P10-washHands",
+      "issues": []
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "large": false,
+      "name": "P10-certificate",
+      "issues": []
+    },
+    {
+      "width": 915,
+      "height": 412,
+      "large": false,
+      "name": "P01",
+      "issues": []
+    },
+    {
+      "width": 915,
+      "height": 412,
+      "large": false,
+      "name": "P02",
+      "issues": []
+    },
+    {
+      "width": 915,
+      "height": 412,
+      "large": false,
+      "name": "P03",
+      "issues": []
+    },
+    {
+      "width": 915,
+      "height": 412,
+      "large": false,
+      "name": "P04",
+      "issues": []
+    },
+    {
+      "width": 915,
+      "height": 412,
+      "large": false,
+      "name": "P05",
+      "issues": []
+    },
+    {
+      "width": 915,
+      "height": 412,
+      "large": false,
+      "name": "P06",
+      "issues": []
+    },
+    {
+      "width": 915,
+      "height": 412,
+      "large": false,
+      "name": "P07",
+      "issues": []
+    },
+    {
+      "width": 915,
+      "height": 412,
+      "large": false,
+      "name": "P08",
+      "issues": []
+    },
+    {
+      "width": 915,
+      "height": 412,
+      "large": false,
+      "name": "P09",
+      "issues": []
+    },
+    {
+      "width": 915,
+      "height": 412,
+      "large": false,
+      "name": "P10",
+      "issues": []
+    },
+    {
+      "width": 915,
+      "height": 412,
+      "large": false,
+      "name": "P06-droplet-0",
+      "issues": []
+    },
+    {
+      "width": 915,
+      "height": 412,
+      "large": false,
+      "name": "P06-droplet-1",
+      "issues": []
+    },
+    {
+      "width": 915,
+      "height": 412,
+      "large": false,
+      "name": "P06-air-0",
+      "issues": []
+    },
+    {
+      "width": 915,
+      "height": 412,
+      "large": false,
+      "name": "P06-air-1",
+      "issues": []
+    },
+    {
+      "width": 915,
+      "height": 412,
+      "large": false,
+      "name": "P06-water-0",
+      "issues": []
+    },
+    {
+      "width": 915,
+      "height": 412,
+      "large": false,
+      "name": "P06-water-1",
+      "issues": []
+    },
+    {
+      "width": 915,
+      "height": 412,
+      "large": false,
+      "name": "P06-saliva-0",
+      "issues": []
+    },
+    {
+      "width": 915,
+      "height": 412,
+      "large": false,
+      "name": "P06-saliva-1",
+      "issues": []
+    },
+    {
+      "width": 915,
+      "height": 412,
+      "large": false,
+      "name": "P08-coughEtiquette",
+      "issues": []
+    },
+    {
+      "width": 915,
+      "height": 412,
+      "large": false,
+      "name": "P08-ventilation",
+      "issues": []
+    },
+    {
+      "width": 915,
+      "height": 412,
+      "large": false,
+      "name": "P08-personalItems",
+      "issues": []
+    },
+    {
+      "width": 915,
+      "height": 412,
+      "large": false,
+      "name": "P08-portionFood",
+      "issues": []
+    },
+    {
+      "width": 915,
+      "height": 412,
+      "large": false,
+      "name": "P10-ventilation",
+      "issues": []
+    },
+    {
+      "width": 915,
+      "height": 412,
+      "large": false,
+      "name": "P10-portionFood",
+      "issues": []
+    },
+    {
+      "width": 915,
+      "height": 412,
+      "large": false,
+      "name": "P10-washHands",
+      "issues": []
+    },
+    {
+      "width": 915,
+      "height": 412,
+      "large": false,
+      "name": "P10-certificate",
+      "issues": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "large": false,
+      "name": "P01",
+      "issues": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "large": false,
+      "name": "P02",
+      "issues": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "large": false,
+      "name": "P03",
+      "issues": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "large": false,
+      "name": "P04",
+      "issues": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "large": false,
+      "name": "P05",
+      "issues": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "large": false,
+      "name": "P06",
+      "issues": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "large": false,
+      "name": "P07",
+      "issues": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "large": false,
+      "name": "P08",
+      "issues": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "large": false,
+      "name": "P09",
+      "issues": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "large": false,
+      "name": "P10",
+      "issues": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "large": false,
+      "name": "P06-droplet-0",
+      "issues": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "large": false,
+      "name": "P06-droplet-1",
+      "issues": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "large": false,
+      "name": "P06-air-0",
+      "issues": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "large": false,
+      "name": "P06-air-1",
+      "issues": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "large": false,
+      "name": "P06-water-0",
+      "issues": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "large": false,
+      "name": "P06-water-1",
+      "issues": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "large": false,
+      "name": "P06-saliva-0",
+      "issues": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "large": false,
+      "name": "P06-saliva-1",
+      "issues": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "large": false,
+      "name": "P08-coughEtiquette",
+      "issues": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "large": false,
+      "name": "P08-ventilation",
+      "issues": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "large": false,
+      "name": "P08-personalItems",
+      "issues": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "large": false,
+      "name": "P08-portionFood",
+      "issues": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "large": false,
+      "name": "P10-ventilation",
+      "issues": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "large": false,
+      "name": "P10-portionFood",
+      "issues": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "large": false,
+      "name": "P10-washHands",
+      "issues": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "large": false,
+      "name": "P10-certificate",
+      "issues": []
+    }
+  ]
+}

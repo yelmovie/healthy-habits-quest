@@ -4,8 +4,8 @@ export const STAGES = DATA.stages;
 export const PAGES = DATA.pages;
 export const SITES = [
  { id: 'classroom', name: '교실', icon: 'window', image: 'classroom', subtitle: '함께 지내는 공간' },
- { id: 'cafeteria', name: '급식 공간', icon: 'plate', image: 'condition', subtitle: '같이 먹는 시간' },
- { id: 'gym', name: '체육 활동 공간', icon: 'ball', image: 'field', subtitle: '물건을 함께 쓴 뒤' },
+ { id: 'cafeteria', name: '급식 공간', icon: 'plate', image: 'meal-20261110', subtitle: '같이 먹는 시간' },
+ { id: 'gym', name: '체육 활동 공간', icon: 'ball', image: 'gym-20261110', subtitle: '물건을 함께 쓴 뒤' },
 ];
 export const CLUE_ICONS: Record<string,string> = { CL01:'window',CL02:'ball',CL03:'hand',CL04:'plate',CL05:'air',CL06:'clock',CL07:'walk',CL08:'file' };
 export const CLUE_NAMES: Record<string,string> = { CL01:'닫힌 창문',CL02:'함께 쓴 공',CL03:'간식 먹기 전',CL04:'공용 음식과 숟가락',CL05:'기침하는 순간',CL06:'느린 시계',CL07:'풀린 운동화 끈',CL08:'접힌 급식표' };

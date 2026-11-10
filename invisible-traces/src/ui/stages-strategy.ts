@@ -10,7 +10,7 @@ const actionLabel=(id:string,label:string)=>`<span class="action-full">${label}<
 export function strategyPages(s:State,v:View):string {
  switch(s.route){
  case 'P07': return `<div class="strategy-activity condition-activity"><div class="condition-workspace"><section class="condition-study">
-  <div class="condition-picture">${image('condition','condition-photo')}<span class="scene-tag">교실 · 점심시간</span></div>
+  <div class="condition-picture">${image('meal-20261110','condition-photo')}<span class="scene-tag">급식 공간 · 점심시간</span></div>
   <div class="condition-constants">${chip('lock','장소 · 친구 · 시간 · 순서는 같아요')}</div>
  </section><aside class="prediction-panel"><div class="condition-step"><b>1</b><span>행동 하나 고르기</span></div>
   <div class="action-choices">${DATA.p07.actionPool.map(a=>btn(`${icon(ACTION_ICONS[a.id],24)}${actionLabel(a.id,a.name)}`,'experiment-action',s.experiment.action===a.id?'choice selected':s.experiment.action?'choice':'choice next-target',`data-id="${a.id}" aria-label="${a.name}" aria-pressed="${s.experiment.action===a.id}"`)).join('')}</div>
@@ -53,7 +53,7 @@ function compareScene(s:State,changed:boolean){
  const a=DATA.p07.actionPool.find(a=>a.id===s.experiment.action)!;
  const after=s.experiment.tick>=DATA.p07.events.find(e=>e.id===a.differenceEvent)!.time;
  const labels=MODEL_LABELS[a.id];
- return `<div class="compare-scene experiment-scene ${changed&&after?'calmer':''}">${image(a.id==='portionFood'?'condition':'classroom','compare-image')}${experimentDrawing(a.id,changed,after)}<div class="experiment-object-labels"><span>${labels[0]}</span><span>${labels[1]}</span></div></div>`;
+ return `<div class="compare-scene experiment-scene ${changed&&after?'calmer':''}">${image(a.id==='portionFood'?'meal-20261110':'classroom','compare-image')}${experimentDrawing(a.id,changed,after)}<div class="experiment-object-labels"><span>${labels[0]}</span><span>${labels[1]}</span></div></div>`;
 }
 
 export function comparisonBoard(s:State){

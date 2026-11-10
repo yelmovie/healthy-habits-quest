@@ -20,6 +20,8 @@ test('기침 두 상태는 독립 그림을 바꾸고 비말은 DOM 모형으로
   const before = tracingPages(s, { lab: 'droplet', labPreview: 0 } as View);
   const after = tracingPages(s, { lab: 'droplet', labPreview: 1 } as View);
   assert.match(before, /cough-before-20261108.webp/);
+  assert.match(before, /cough-uncovered-20261110.webp/);
+  assert.doesNotMatch(after, /cough-uncovered-20261110.webp/);
   assert.doesNotMatch(before, /cough-covered-20261108.webp/);
   assert.match(after, /cough-covered-20261108.webp/);
   for (const html of [before, after]) {
@@ -28,4 +30,13 @@ test('기침 두 상태는 독립 그림을 바꾸고 비말은 DOM 모형으로
     assert.match(html, /data-action="lab-set"/);
     assert.match(html, /함께 있는 친구/);
   }
+});
+
+// The contact target is a lever handle, not a lock or a security control.
+test('접촉 경로의 문손잡이는 전용 손잡이 아이콘을 쓴다', async () => {
+  const { readFileSync } = await import('node:fs');
+  const source = readFileSync(new URL('../src/ui/stages-tracing.ts', import.meta.url), 'utf8');
+  assert.match(source, /'ball', 'hand', 'door', 'hand'/);
+  const { icon } = await import('../src/ui/icons');
+  assert.notEqual(icon('door'), icon('lock'));
 });
