@@ -1,0 +1,202 @@
+[
+  {
+    "id": "intro-1",
+    "text": "보이지 않는 흔적을 함께 찾아보자. 증거를 살펴 감염이 퍼지는 경로를 생각하고, 생활 속에서 실천할 예방 방법을 골라 보자.",
+    "src": "assets/audio/voices/intro-1.mp3"
+  },
+  {
+    "id": "title-1",
+    "text": "우리 학교에 남은 흔적을 찾아 줘!",
+    "src": "assets/audio/voices/title-1.mp3"
+  },
+  {
+    "id": "p01-q",
+    "text": "어디에 신호가 있을까요?",
+    "src": "assets/audio/voices/p01-q.mp3"
+  },
+  {
+    "id": "p01-found",
+    "text": "신호 위치를 기록했어요.",
+    "src": "assets/audio/voices/p01-found.mp3"
+  },
+  {
+    "id": "p02-q",
+    "text": "사건을 설명할 단서 5개를 골라요.",
+    "src": "assets/audio/voices/p02-q.mp3"
+  },
+  {
+    "id": "p02-retry",
+    "text": "사건과 관계가 먼 단서가 섞여 있어요. 다시 비교해 바꿔보세요.",
+    "src": "assets/audio/voices/p02-retry.mp3"
+  },
+  {
+    "id": "p02-replace",
+    "text": "바꿀 기존 단서를 골라주세요.",
+    "src": "assets/audio/voices/p02-replace.mp3"
+  },
+  {
+    "id": "evidence",
+    "text": "새 연구 기록이 자동으로 정리됐어요.",
+    "src": "assets/audio/voices/evidence.mp3"
+  },
+  {
+    "id": "p03-q",
+    "text": "단서를 어떤 생활 상황에 연결할까요?",
+    "src": "assets/audio/voices/p03-q.mp3"
+  },
+  {
+    "id": "p03-retry",
+    "text": "이 단서와 더 직접 이어지는 생활 상황을 다시 골라 봐요.",
+    "src": "assets/audio/voices/p03-retry.mp3"
+  },
+  {
+    "id": "p04-q",
+    "text": "누구의 생활에 영향을 줄까요?",
+    "src": "assets/audio/voices/p04-q.mp3"
+  },
+  {
+    "id": "p04-retry",
+    "text": "이 영향은 누구의 생활과 더 직접 이어질까요?",
+    "src": "assets/audio/voices/p04-retry.mp3"
+  },
+  {
+    "id": "p05-q",
+    "text": "흔적이 시작된 곳을 고르고, 손 씻을 때를 바꿔요.",
+    "src": "assets/audio/voices/p05-q.mp3"
+  },
+  {
+    "id": "p05-retry",
+    "text": "시간을 처음으로 되감아 가장 먼저 빛난 물체를 살펴보세요.",
+    "src": "assets/audio/voices/p05-retry.mp3"
+  },
+  {
+    "id": "p05-late",
+    "text": "이미 옮겨진 흔적은 남아요.",
+    "src": "assets/audio/voices/p05-late.mp3"
+  },
+  {
+    "id": "p06-droplet",
+    "text": "옷소매로 입과 코를 가리면?",
+    "src": "assets/audio/voices/p06-droplet.mp3"
+  },
+  {
+    "id": "p06-air",
+    "text": "창문을 열면 무엇이 달라질까요?",
+    "src": "assets/audio/voices/p06-air.mp3"
+  },
+  {
+    "id": "p06-water",
+    "text": "맑아 보이면 모두 괜찮을까요?",
+    "src": "assets/audio/voices/p06-water.mp3"
+  },
+  {
+    "id": "p06-saliva",
+    "text": "공용 음식은 어떻게 덜어 먹을까요?",
+    "src": "assets/audio/voices/p06-saliva.mp3"
+  },
+  {
+    "id": "p06-synthesis",
+    "text": "닫힌 교실에서 기침한다면?",
+    "src": "assets/audio/voices/p06-synthesis.mp3"
+  },
+  {
+    "id": "p06-retry",
+    "text": "손 씻기도 중요해요. 지금은 기침과 닫힌 공간을 각각 바꾸는 행동을 생각해 보세요.",
+    "src": "assets/audio/voices/p06-retry.mp3"
+  },
+  {
+    "id": "p08-retry",
+    "text": "이 행동과 직접 관련된 변화인지 두 장면을 다시 살펴봐요.",
+    "src": "assets/audio/voices/p08-retry.mp3"
+  },
+  {
+    "id": "p09-guide",
+    "text": "행동을 고른 뒤 장소를 눌러 배치해요.",
+    "src": "assets/audio/voices/p09-guide.mp3"
+  },
+  {
+    "id": "p09-a1",
+    "text": "여럿이 활동하는 동안 닫혀 있었어요.",
+    "src": "assets/audio/voices/p09-a1.mp3"
+  },
+  {
+    "id": "p09-a2",
+    "text": "자기 숟가락으로 공용 음식을 바로 떠먹었어요.",
+    "src": "assets/audio/voices/p09-a2.mp3"
+  },
+  {
+    "id": "p09-a3",
+    "text": "공을 함께 사용한 뒤 손을 씻지 않고 간식을 먹으려 했어요.",
+    "src": "assets/audio/voices/p09-a3.mp3"
+  },
+  {
+    "id": "p09-a4",
+    "text": "입과 코를 가리지 않은 장면이 있었어요.",
+    "src": "assets/audio/voices/p09-a4.mp3"
+  },
+  {
+    "id": "p09-a5",
+    "text": "한 사람만 쓰지 않고 여러 친구가 차례로 만졌어요.",
+    "src": "assets/audio/voices/p09-a5.mp3"
+  },
+  {
+    "id": "p09-a6",
+    "text": "종이 모서리가 접혔어요.",
+    "src": "assets/audio/voices/p09-a6.mp3"
+  },
+  {
+    "id": "p09-wrong-site",
+    "text": "이 행동과 관련된 장소에 놓아주세요.",
+    "src": "assets/audio/voices/p09-wrong-site.mp3"
+  },
+  {
+    "id": "p09-budget",
+    "text": "에너지가 부족해요. 기존 행동을 빼거나 바꿔보세요.",
+    "src": "assets/audio/voices/p09-budget.mp3"
+  },
+  {
+    "id": "p09-done",
+    "text": "대응안 완성! 에너지는 계획 놀이의 규칙이에요. 생활에서는 기침 예절과 개인 물품 사용도 함께 지켜요.",
+    "src": "assets/audio/voices/p09-done.mp3"
+  },
+  {
+    "id": "p10-start",
+    "text": "내가 설계한 계획을 실천해요",
+    "src": "assets/audio/voices/p10-start.mp3"
+  },
+  {
+    "id": "p10-wash",
+    "text": "흐르는 물에 비누로 30초 이상 손바닥·손등·손가락 사이를 문질러요. 차례대로 눌러 보세요.",
+    "src": "assets/audio/voices/p10-wash.mp3"
+  },
+  {
+    "id": "p10-applied",
+    "text": "계획을 직접 실천했어요.",
+    "src": "assets/audio/voices/p10-applied.mp3"
+  },
+  {
+    "id": "ending-1",
+    "text": "우리의 발견이 학교를 바꿨어요.",
+    "src": "assets/audio/voices/ending-1.mp3"
+  },
+  {
+    "id": "ending-2",
+    "text": "손 씻기·기침 예절·환기·덜어 먹기는 생활에서 모두 함께 실천해요.",
+    "src": "assets/audio/voices/ending-2.mp3"
+  },
+  {
+    "id": "restore-1",
+    "text": "창문을 열어 공기가 드나들게 해 주세요.",
+    "src": "assets/audio/voices/restore-1.mp3"
+  },
+  {
+    "id": "restore-2",
+    "text": "환기는 감염병 예방에 도움이 되는 실천이에요. 표지를 붙여 친구들에게 알려 주세요.",
+    "src": "assets/audio/voices/restore-2.mp3"
+  },
+  {
+    "id": "restore-3",
+    "text": "실천 표지를 완성했어요. 손 씻기와 기침 예절도 함께 실천해요.",
+    "src": "assets/audio/voices/restore-3.mp3"
+  }
+]
