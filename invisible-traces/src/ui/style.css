@@ -1,3 +1,18 @@
+@font-face {
+  font-family: "NanumSquareNeo";
+  src: url("/fonts/NanumSquareNeoTTF-bRg.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: "NanumSquareNeo";
+  src: url("/fonts/NanumSquareNeoTTF-cBd.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 600 900;
+  font-display: swap;
+}
+
 /* 보이지 않는 흔적 · 공통 스타일
    PRD 7장: 밝은 청록·하늘색·흰색 중심, 보라 흔적·주황 주의는 절제. 본문 18px+, 터치 44px+. */
 :root {
@@ -25,7 +40,7 @@
   --shadow-sm: 0 3px 10px rgba(16, 62, 67, .08);
   --topbar-h: 68px;
   --app-h: var(--app-height, 100dvh);
-  --font: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", system-ui, sans-serif;
+  --font: "NanumSquareNeo", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", system-ui, sans-serif;
   color-scheme: light;
 }
 
