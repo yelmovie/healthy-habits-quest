@@ -9,6 +9,7 @@ import './ui/stages-observation.css';
 import './ui/stages-tracing.css';
 import './ui/stages-strategy.css';
 import './ui/activity-fit.css';
+import './ui/scenery-surfaces.css';
 import {DATA,PAGES,STAGES,LABS,SITES,EFFECTS} from './data/game';
 import {fresh,derive,canEnter,fixtureFor,addPlacement,planResult,placementKey,contactAt,applyPlacement,type State,type Route} from './simulation/model';
 import {demonstrationSteps,playbackDelay,playbackSpeed,type PlaybackKind,type DemoStep} from './simulation/playback';

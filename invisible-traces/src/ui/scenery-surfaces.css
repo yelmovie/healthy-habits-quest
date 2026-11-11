@@ -1,0 +1,13 @@
+/* Scenery-first surfaces. Opacity applies to fills, never text or icons. */
+
+:root {--surface:rgba(255,255,255,.84);--surface-2:rgba(246,251,251,.82);--shadow:0 8px 24px rgba(16,62,67,.10)}
+.icon-btn,.btn.secondary,.btn.text,.btn.small:not(.primary):not(.selected),.btn.tiny,.map-view-tools .btn {background:rgba(248,255,253,.78);border-color:rgba(255,255,255,.88);box-shadow:0 3px 12px rgba(16,62,67,.12);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.topbar,.actionbar,.evidence-tray,.intervention-panel,.lab-notebook,.prediction-panel,.question-panel,.lab-device,.report-card,.final-plan {background:rgba(248,255,253,.82);border-color:rgba(215,236,232,.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.modal {background:rgba(255,255,255,.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+@media(prefers-reduced-transparency:reduce){:root{--surface:#fff;--surface-2:#f6fbfb}.icon-btn,.btn.secondary,.topbar,.actionbar,.modal{background:#f8fffd;backdrop-filter:none}}
+/* Keep playback speed and next experiment separate with enlarged text. */
+@media(max-width:420px){.tracing-lab-play .playback-controls{flex:1 0 100%;justify-content:space-between}.tracing-lab-play>.btn{margin-left:auto}.tracing-lab-play{row-gap:8px}}
+
+.map-next,.map-place,.window-restoration {background:rgba(248,255,246,.86);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+body.on-map .rotate-hint{display:none}
+@media(max-width:1180px),(max-height:560px){body.on-map .map-status{display:none}}

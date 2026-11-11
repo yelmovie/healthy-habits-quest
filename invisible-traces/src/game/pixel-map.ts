@@ -136,7 +136,12 @@ export async function createMap(parent:HTMLElement,options:MapOptions):Promise<M
   syncLabels(){
    const cam=this.cameras.main,cx=cam.midPoint.x,cy=cam.midPoint.y,w=this.scale.width/2,h=this.scale.height/2;
    // 위쪽 도구 줄 아래로만 내려오게 해서 이름표가 버튼에 가리지 않게 한다.
-   labels.forEach((label,i)=>{const p=PLACES[i].label,x=Math.round((p.x-cx)*cam.zoom+w),y=Math.max(LABEL_TOP,Math.round((p.y-cy)*cam.zoom+h));label.style.transform=`translate(${x}px,${y}px) translate(-50%,-100%)`;});
+   const blocked=[...document.querySelectorAll<HTMLElement>('.topbar,.map-controls,.map-next,.window-restoration,.map-status')].filter(e=>getComputedStyle(e).display!=='none').map(e=>e.getBoundingClientRect());
+   const placed:DOMRect[]=[];
+   const overlaps=(a:DOMRect,b:DOMRect)=>a.left<b.right+6&&a.right>b.left-6&&a.top<b.bottom+6&&a.bottom>b.top-6;
+   labels.forEach((label,i)=>{const p=PLACES[i].label,x=Math.round((p.x-cx)*cam.zoom+w),y=Math.max(LABEL_TOP,Math.round((p.y-cy)*cam.zoom+h));label.style.transform=`translate(${x}px,${y}px) translate(-50%,-100%)`;const r=label.getBoundingClientRect();const clear=r.left>=8&&r.right<=innerWidth-8&&r.top>=8&&r.bottom<=innerHeight-8&&!blocked.some(b=>overlaps(r,b))&&!placed.some(b=>overlaps(r,b));label.style.visibility=clear?'visible':'hidden';if(clear)placed.push(r);});
+   // Off-camera or HUD-covered destinations remain available in the numbered map-pips.
+
   }
  }
 
