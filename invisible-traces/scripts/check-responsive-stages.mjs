@@ -57,7 +57,7 @@ function audit() {
     const hit = document.elementFromPoint(x, y);
     if (hit && !el.contains(hit) && hit !== el && !el.disabled && !canScroll(el)) issues.push({ type: 'covered-control', label: label(el), by: label(hit) });
   }
-  const walker = document.createTreeWalker(document.querySelector('.page-content'), NodeFilter.SHOW_TEXT);
+  const walker = document.createTreeWalker(document.querySelector('.play-main'), NodeFilter.SHOW_TEXT);
   let node;
   while ((node = walker.nextNode())) {
     if (!node.textContent.trim() || node.parentElement.closest('svg') || !visible(node.parentElement)) continue;
@@ -79,7 +79,7 @@ function audit() {
         }
       }
     }
-    for (let parent = node.parentElement; parent && !parent.classList.contains('page-content'); parent = parent.parentElement) {
+    for (let parent = node.parentElement; parent && !parent.classList.contains('play-main'); parent = parent.parentElement) {
       const s = getComputedStyle(parent), pr = parent.getBoundingClientRect();
       if (['hidden', 'clip'].includes(s.overflowX) && rects.some(r => r.left < pr.left - 2 || r.right > pr.right + 2)) issues.push({ type: 'clipped-text-x', label: node.textContent.trim().slice(0, 55) });
       if (['hidden', 'clip'].includes(s.overflowY) && rects.some(r => r.top < pr.top - 2 || r.bottom > pr.bottom + 2)) issues.push({ type: 'clipped-text-y', label: node.textContent.trim().slice(0, 55) });

@@ -13,5 +13,5 @@ export const TARGETS = [ {id:'contact',name:'손·물건의 접촉',icon:'hand'}
 export const LABS = [ {id:'contact',name:'접촉',icon:'hand'}, {id:'droplet',name:'비말',icon:'air'}, {id:'air',name:'공기',icon:'window'}, {id:'water',name:'물',icon:'drop'}, {id:'saliva',name:'타액',icon:'plate'} ];
 export const NODE_NAMES: Record<string,string> = {book:'책',studentA:'학생 A의 손',ball:'공',studentB:'학생 B의 손',door:'문손잡이',studentC:'학생 C의 손'};
 export const ACTION_ICONS: Record<string,string> = {washHands:'hand',ventilation:'window',portionFood:'plate',coughEtiquette:'air',personalItems:'bag'};
-export const EFFECTS: Record<string,string> = {washHands:'손에서 물건으로 이어지는 흔적이 줄었어요.',coughEtiquette:'가리지 않은 기침의 흔적 범위가 줄었어요.',ventilation:'공기 흐름이 생기며 주의 신호가 달라졌어요.',personalItems:'같은 컵을 통해 이어지는 접촉이 줄었어요.',portionFood:'개인 식기와 공용 음식의 접촉이 줄었어요.'};
-export const asset = (name:string) => `${import.meta.env.BASE_URL}assets/${name}.webp`;
+export const EFFECTS: Record<string,string> = {washHands:'손에서 물건으로 이어지는 흔적이 줄었어요.',coughEtiquette:'가리지 않은 기침의 흔적 범위가 줄었어요.',ventilation:'바깥 공기와 바뀌며 공기 중 흔적이 줄었어요.',personalItems:'같은 컵을 통해 이어지는 접촉이 줄었어요.',portionFood:'개인 식기와 공용 음식의 접촉이 줄었어요.'};
+export const asset = (name:string) => `${import.meta.env?.BASE_URL ?? '/'}assets/${name}.webp`;

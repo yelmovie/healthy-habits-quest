@@ -1,0 +1,149 @@
+{
+  "date": "2026-11-12",
+  "method": "AI generated and edited. Pillow used only for proportional resize and WebP encoding.",
+  "visualChecks": [
+    "Palm-facing hand with visible nails rejected and corrected.",
+    "Open-window grey matte rejected and background removed with imagegen.",
+    "Final illustrations inspected in game at tablet viewport."
+  ],
+  "assets": [
+    {
+      "file": "public/assets/window-closed-20261112.webp",
+      "original": "asset-bank/original/education-20261112/window-closed.png",
+      "source": "imagegen built-in",
+      "promptSummary": "A closed horizontal sliding classroom window, front view, two glass panels, ivory frame and sill, left panel handle at the middle seam. Pale sky and trees inside the frame. Fine navy outlines, subtle cel shading, neutral daylight, transparent outside. One object, no text, arrows, particles or UI.",
+      "usage": "P06 공기 실험, P08 환기 비교, P10 창문 실천",
+      "dimensions": [
+        720,
+        480
+      ],
+      "bytes": 27472,
+      "sha256": "3dd1b8402771c0e82c3a831538a4e1816958475d967cfeb76a57cbbf4133eb1e",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "file": "public/assets/window-open-20261112.webp",
+      "original": "asset-bank/original/education-20261112/window-open-clean.png",
+      "source": "imagegen built-in",
+      "promptSummary": "Edit the closed window by sliding only the left panel fully to the right, preserving frame, sill, camera, scale, sky and trees. Then remove all grey haze, glow, shadows and gradients outside the frame and sill, requiring alpha 0 outside. Keep the left half open and the right panels overlapped.",
+      "usage": "P06 공기 실험, P08 환기 비교, P10 창문 실천",
+      "dimensions": [
+        720,
+        480
+      ],
+      "bytes": 34562,
+      "sha256": "e7cee8887854a74b210585a45fdfd744e0226cd0972185f2226003fa57c946f4",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "file": "public/assets/serving-bowl-20261112.webp",
+      "original": "asset-bank/original/education-20261112/serving-bowl.png",
+      "source": "imagegen built-in",
+      "promptSummary": "One turquoise communal bowl of cooked broccoli, carrot and corn with one dedicated silver serving spoon resting across the rear rim. Three-quarter view, navy contours, cel shading, neutral daylight, transparent background, no other dish, text, arrows or UI.",
+      "usage": "P06 타액 실험, P08 음식 덜기 비교, P10 계획과 실천",
+      "dimensions": [
+        720,
+        480
+      ],
+      "bytes": 59776,
+      "sha256": "e3cdf5e519fcd34a67ebb8071e36fa62f7c778a9ab2f8675e2fa991e569c9752",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "file": "public/assets/personal-plate-20261112.webp",
+      "original": "asset-bank/original/education-20261112/personal-plate.png",
+      "source": "imagegen built-in",
+      "promptSummary": "One small white personal plate with pale blue rim, containing two broccoli florets, three carrot slices and a few corn kernels. Three-quarter view, navy contours, cel shading, neutral daylight. No utensils, text, arrows or UI, transparent background.",
+      "usage": "P06 타액 실험, P08 음식 덜기 비교, P10 계획과 실천",
+      "dimensions": [
+        720,
+        480
+      ],
+      "bytes": 42240,
+      "sha256": "ace5abe9cb31cefa59e9fcc4419a26f874e70c22605d227dc2b3cb0a5967ab93",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "file": "public/assets/handwashing-20261112.webp",
+      "original": "asset-bank/original/education-20261112/handwashing.png",
+      "source": "imagegen built-in",
+      "promptSummary": "One integrated public-health illustration of two human hands rubbing with soap lather under running water from a silver faucet into a white ceramic basin. Turquoise sleeves, fine navy outlines, subtle cel shading, neutral daylight. Natural anatomy, no face, body, text, arrows, microbes or UI. Transparent background.",
+      "usage": "P10 손 씻기 실천 방법",
+      "dimensions": [
+        720,
+        480
+      ],
+      "bytes": 53842,
+      "sha256": "1deb6f0eb226738b04b94c27a865d05e710a1a1e2f55aa3330ce3f93462082c7",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "file": "public/assets/hand-palm-20261112.webp",
+      "original": "asset-bank/original/education-20261112/hand-palm.png",
+      "source": "imagegen built-in",
+      "promptSummary": "One palm-facing left hand, relaxed separated fingers, exactly four fingers and one thumb, turquoise cuff, fine navy outline and neutral light, transparent background. Correction pass removed all visible fingernails from the palm-facing fingertips, retaining fleshy finger pads, creases, silhouette, cuff and colors.",
+      "usage": "P08 손 씻기 전후의 동일한 손",
+      "dimensions": [
+        658,
+        720
+      ],
+      "bytes": 42288,
+      "sha256": "249e0fda9466ed24e1343aa625649bf9d6b760d1fe6e46bb17b87fb717321402",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}

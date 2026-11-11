@@ -1,4 +1,5 @@
 import {conceptRecall} from './concept-recall';
+import {learningFocus,nextInstruction} from './learning-guidance';
 import {DATA,STAGES,PAGES,LABS,SITES,CLUE_NAMES,asset} from '../data/game';
 import {branches,type State} from '../simulation/model';
 import {icon} from './icons';
@@ -53,7 +54,7 @@ function progressLabel(s:State):string {
  case 'P05':return s.timeline.source==='book'&&s.timeline.intervention===1.5?'시간 추적 완료':`시작점 ${s.timeline.source==='book'?'찾음':s.timeline.source?'다시 찾기':'미선택'} · 시점 ${s.timeline.intervention===null?'미선택':'선택함'}`;
  case 'P06':return `실험 ${s.labs.done.length} / 5 · 종합 ${synthesisReady(s.labs.synthesis)?'완료':'확인 중'}`;
  case 'P07':return s.experiment.action?'행동 선택함 · 예측 대기':'행동 · 예측 미선택';
- case 'P08':return `관찰 기록 ${Number(!!s.experiment.pinned)+Number(!!s.experiment.explanation)} / 2`;
+ case 'P08':{const action=DATA.p07.actionPool.find(a=>a.id===s.experiment.action);return `관찰 기록 ${Number(!!action&&s.experiment.pinned===action.differenceEvent)+Number(!!action&&s.experiment.explanation===action.metric)} / 2`;}
  case 'P09':return `대응 행동 ${s.strategy.placements.length}개 배치`;
  case 'P10':return s.final.phase==='report'?`연구 기록 ${s.evidence.length} / 5`:`실천 ${s.final.applied.length} / ${s.strategy.placements.length}`;
  default:return '';
@@ -61,7 +62,7 @@ function progressLabel(s:State):string {
 }
 export function shell(s:State,v:View,content:string){
  const done=s.completed.includes(s.route);
- return `<main class="play-layout activity-layout" data-page="${s.route}" data-focus="${v.focus}"><section class="play-main"><div id="page-content" class="page-content">${content}</div><footer class="actionbar"><div class="activity-status"><button class="icon-btn activity-info" data-action="model-info" aria-label="학습 모형 안내">${icon('info',20)}</button><span class="status-line ${done?'success':''}" role="status">${icon(done?'check':'file',18)}<span>${done&&s.route!=='P10'?'활동 완료':s.route==='P02'&&s.clues.length===5?gateHint(s):progressLabel(s)}</span></span></div>${s.route==='P10'?btn(`${icon('file',19)} 연구 기록`,'records','small'):btn(`계속 ${icon('arrow',20)}`,'next',`primary ${done?'next-target':''}`,done?'':'disabled')}</footer></section></main>`;
+ return `<main class="play-layout activity-layout" data-page="${s.route}" data-focus="${v.focus}"><section class="play-main">${learningFocus(s,v)}<div id="page-content" class="page-content">${content}</div><footer class="actionbar"><div class="activity-status"><button class="icon-btn activity-info" data-action="model-info" aria-label="학습 모형 안내">${icon('info',20)}</button><span class="status-line ${done?'success':''}" role="status"><span><small class="activity-progress">${progressLabel(s)}</small><b class="next-instruction">${nextInstruction(s,v)}</b></span></span></div>${s.route==='P10'?btn(`${icon('file',19)} 연구 기록`,'records','small'):btn(`${PAGES.find(p=>p.id===s.route)?.next==='C01'?'조사 지도':'다음 조사'} ${icon('arrow',20)}`,'next',`primary ${done?'next-target':''}`,done?'':'disabled')}</footer></section></main>`;
 }
 export function pageContent(s:State,v:View):string {
  const page=Number(s.route.slice(1));

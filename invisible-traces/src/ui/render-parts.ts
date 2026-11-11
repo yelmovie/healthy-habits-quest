@@ -1,4 +1,5 @@
 import { DATA, asset } from '../data/game';
+import { labAssets } from '../data/lab-assets';
 import { icon } from './icons';
 import type { View } from './render';
 
@@ -11,6 +12,11 @@ export const image = (name: string, cls = '', alt = '') =>
 export const note = (text: string) =>
   `<div class="note">${icon('info', 19)}<span>${text}</span></div>`;
 export const actionName = (id: string) => DATA.p07.actionPool.find(a => a.id === id)?.name ?? id;
+
+export function windowIllustration(open: boolean): string {
+  const art = open ? labAssets.windowOpen : labAssets.windowClosed;
+  return `<img class="window-illustration" src="${art.src}" width="${art.width}" height="${art.height}" alt="${open ? '왼쪽 창짝을 오른쪽으로 밀어 연 창문' : '닫힌 창문'}" draggable="false"><div class="air-streams" aria-hidden="true">${icon('arrow',70)}${icon('arrow',70)}</div>`;
+}
 
 export function playbackControls(v: View, kind: string): string {
   const active = v.playing && v.autoMode === kind;
