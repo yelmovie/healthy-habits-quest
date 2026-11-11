@@ -24,14 +24,14 @@ export function tracingPages(s: State, v: View): string {
             ${DATA.p05.nodes.map((node, i) => `<button class="trace-node ${trace.has(node) ? 'has-trace' : ''} ${s.timeline.source === node ? 'source' : ''} ${avoided.includes(node)?'trace-protected':''}" data-node="${node}" data-action="source" data-id="${node}" aria-pressed="${s.timeline.source === node}">
               <span class="trace-step-number">${i}</span>
               <span class="trace-object">${icon(nodeIcons[i], 34)}</span>
-              <b>${NODE_NAMES[node]}</b><span class="prevented-trace" aria-hidden="true">${avoided.includes(node)?"방패로 막은 연결":""}</span>
-              <span class="trace-state"><span class="trace-state-on">${icon('search', 16)} 있음</span><span class="trace-state-off">없음</span></span>
+              <b>${node === 'door' ? '문<wbr>손잡이' : NODE_NAMES[node]}</b>
+              <span class="trace-state"><span class="trace-state-on">${icon('search', 16)} 있음</span><span class="trace-state-off">없음</span><span class="prevented-trace">${avoided.includes(node) ? '연결 차단' : ''}</span></span>
               <em class="trace-source-label">${icon('flag', 16)} 시작</em>
             </button>`).join('')}
           </div>
         </section>
         <aside class="intervention-panel tracing-intervention">
-          <button class="soap-shield" draggable="true" data-drag="wash-point" data-id="wash" aria-label="비누 방패를 아래 시점으로 끌어 놓기. 아래 시점을 눌러도 같아요.">${icon('hand',28)} 비누 방패 <small>끌어 놓기 또는 시점 누르기</small></button><label class="tracing-intervention-label" for="tracing-intervention">${icon('hand', 24)}<b>손 씻을 때</b></label>
+          <button class="soap-shield" draggable="true" data-drag="wash-point" data-id="wash" aria-label="비누 방패를 아래 시점으로 끌어 놓기. 아래 시점을 눌러도 같아요.">${icon('hand',28)} 비누 방패 <small>끌거나 시점을 골라요</small></button><label class="tracing-intervention-label" for="tracing-intervention">${icon('hand', 24)}<b>손 씻을 때</b></label>
           <div class="tracing-choices">${DATA.p05.intervention.allowedTicks.map((tick, i) => btn(`<span>${interventionNames[i]}</span>${s.timeline.intervention === tick ? icon('check', 18) : ''}`, 'intervene', s.timeline.intervention === tick ? 'choice selected' : 'choice', `data-drop="wash-point" data-id="${tick}" aria-pressed="${s.timeline.intervention === tick}"`)).join('')}</div>
           <select id="tracing-intervention" class="tracing-intervention-select" data-select="intervention" aria-label="손 씻을 때 선택"><option value="">시점을 골라요</option>${DATA.p05.intervention.allowedTicks.map((tick, i) => `<option value="${tick}" ${s.timeline.intervention === tick ? 'selected' : ''}>${interventionNames[i]}</option>`).join('')}</select>
           <div class="intervention-result" id="prevention-result">${icon(s.timeline.intervention === 1.5 ? 'check' : 'info', 20)}<span>${s.timeline.intervention === null ? '방패를 놓고 경로를 시험해요.' : `${before.size}곳 → ${trace.size}곳에 모형 흔적. ${avoided.length}곳의 연결이 달라졌어요.`}</span></div>

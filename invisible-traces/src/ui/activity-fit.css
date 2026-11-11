@@ -31,6 +31,11 @@ body.on-activity { height: var(--app-h); min-height: 0; overflow: hidden; }
 .question-dialog { gap: 8px; }
 .question-dialog-card { display: flex; flex-direction: column; align-items: flex-start; border-radius: 12px; text-align: left; padding: 12px; }
 .question-dialog-card > span { font-weight: 500; color: var(--ink-2); }
+@media (min-width: 768px) and (min-height: 600px) {
+ .activity-topbar { grid-template-columns: 48px minmax(0, 1fr) auto; }
+ .activity-topbar .icon-btn, .activity-layout .activity-info { width: 48px; height: 48px; }
+ .activity-layout :is(button, select, input[type="range"]) { min-height: 48px; }
+}
 @media (max-width:700px) {
  .activity-topbar { padding-inline: 8px; gap: 8px; height: 56px; }
  .activity-heading h1 { font-size: 1.15rem; }

@@ -17,4 +17,8 @@ test-results/
 .env.*
 !.env.example
 .DS_Store
+._*
+.tmp/
+.wrangler/
+graphify-out/
 Thumbs.db

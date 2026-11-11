@@ -18,12 +18,16 @@ const errors = [];
 const context = await browser.newContext({ reducedMotion: 'reduce' });
 const page = await context.newPage();
 page.on('pageerror', e => errors.push(e.message));
-page.setDefaultTimeout(10000);
-await page.goto(`http://127.0.0.1:${process.env.PORT || 5342}`);
+page.setDefaultTimeout(30000);
+page.setDefaultNavigationTimeout(120000);
+const seedURL = `http://127.0.0.1:${process.env.PORT || 5342}`;
+const baseURL = process.env.BASE_URL || seedURL;
+await page.goto(seedURL);
 const sizes = phase === 'before'
   ? [[1280, 800], [915, 412], [390, 844]]
-  : [[1920, 1080], [1366, 768], [1280, 800], [1024, 768], [1024, 600], [915, 412], [740, 360], [800, 270], [390, 844], [360, 740]];
+  : [[1920, 1080], [1366, 768], [1280, 800], [1280, 720], [1024, 768], [1024, 600], [768, 1024], [830, 515], [915, 412], [740, 360], [800, 270], [390, 844], [360, 740]];
 const cases = Array.from({ length: 10 }, (_, i) => ({ route: `P${String(i + 1).padStart(2, '0')}` }));
+cases.push({ route: 'P05', intervention: 1.5 }, { route: 'P05', intervention: 4.5 }, { route: 'P05', intervention: 1.5, tick: 0 });
 for (const lab of ['droplet', 'air', 'water', 'saliva']) for (const value of [0, 1]) cases.push({ route: 'P06', lab, value });
 for (const action of ['coughEtiquette', 'ventilation', 'personalItems', 'portionFood']) cases.push({ route: 'P08', action });
 cases.push({ route: 'P10', apply: 'ventilation' }, { route: 'P10', apply: 'portionFood' }, { route: 'P10', apply: 'washHands' }, { route: 'P10', certificate: true });
@@ -84,14 +88,11 @@ function audit() {
   return [...new Map(issues.map(i => [JSON.stringify(i), i])).values()];
 }
 
-const results = [];
-try {
-  for (const [width, height] of sizes) {
-    await page.setViewportSize({ width, height });
-    for (const large of phase === 'before' ? [false] : [false, true]) for (const c of cases) {
-      await page.evaluate(async ({ c, large }) => {
-        const { fixtureFor, derive, placementKey } = await import('/src/simulation/model.ts');
-        const { DATA } = await import('/src/data/game.ts');
+const savedStates = await page.evaluate(async cases => {
+  const { fixtureFor, derive, placementKey } = await import('/src/simulation/model.ts');
+  const { DATA } = await import('/src/data/game.ts');
+  return [false, true].map(large => cases.map(c => {
+
         const n = Number(c.route.slice(1));
         const s = fixtureFor(Math.min(5, Math.ceil(n / 2) + (n % 2 === 0 ? 1 : 0)), { sound: false, reduced: true, large });
         if (n === 8) {
@@ -104,9 +105,20 @@ try {
           if (c.certificate) { s.final.applied = s.strategy.placements.map(placementKey); s.final.phase = 'certificate'; }
         }
         if (c.lab) s.labs.values[c.lab] = c.value;
+        if (c.intervention !== undefined) s.timeline = { tick: c.tick ?? 5, source: 'book', intervention: c.intervention };
         derive(s); s.route = c.route; s.lastRoute = c.route;
-        localStorage.setItem('invisible-traces-science-save-v1', JSON.stringify(s));
-      }, { c, large });
+        return s;
+  }));
+}, cases);
+await page.goto(baseURL);
+
+
+const results = [];
+try {
+  for (const [width, height] of sizes) {
+    await page.setViewportSize({ width, height });
+    for (const large of phase === 'before' ? [false] : [false, true]) for (const [caseIndex, c] of cases.entries()) {
+      await page.evaluate(s => localStorage.setItem('invisible-traces-science-save-v1', JSON.stringify(s)), savedStates[large ? 1 : 0][caseIndex]);
       await page.reload();
       await page.locator('.page-content').waitFor();
       if (c.lab) await page.locator(`[data-action="lab"][data-id="${c.lab}"]`).click();
@@ -121,9 +133,9 @@ try {
       const bottomIssues = await page.evaluate(audit);
       const issues = [...new Map([...topIssues, ...bottomIssues].map(i => [JSON.stringify(i), i])).values()];
       await page.evaluate(() => { document.querySelector('.page-content').scrollTop = 0; window.scrollTo(0, 0); });
-      const name = `${c.route}${c.lab ? `-${c.lab}-${c.value}` : ''}${c.action ? `-${c.action}` : ''}${c.apply ? `-${c.apply}` : ''}${c.certificate ? '-certificate' : ''}`;
+      const name = `${c.route}${c.lab ? `-${c.lab}-${c.value}` : ''}${c.action ? `-${c.action}` : ''}${c.apply ? `-${c.apply}` : ''}${c.certificate ? '-certificate' : ''}${c.intervention !== undefined ? `-shield-${c.intervention}-${c.tick ?? 5}` : ''}`;
       results.push({ width, height, large, name, issues });
-      if (!large && (width === 1280 || width === 390) && (!c.lab || c.value === 1)) await page.screenshot({ path: path.join(out, `${width}-${name}.png`), fullPage: true });
+      if (!large && (width === 1280 || width === 1024 || width === 390) && (!c.lab || c.value === 1)) await page.screenshot({ path: path.join(out, `${width}x${height}-${name}.png`), fullPage: true });
     }
     console.log(`${phase} ${width}x${height} done; ${results.reduce((n, r) => n + r.issues.length, 0)} issues so far`);
   }

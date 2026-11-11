@@ -9,10 +9,20 @@
 @media(max-width:420px){.tracing-lab-play .playback-controls{flex:1 0 100%;justify-content:space-between}.tracing-lab-play>.btn{margin-left:auto}.tracing-lab-play{row-gap:8px}}
 
 .map-next,.map-place,.window-restoration {background:rgba(248,255,246,.86);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-body.on-map .rotate-hint{display:none}
+body.on-map .rotate-hint,#modal-root:not(:empty)~.rotate-hint{display:none}
 @media(max-width:1180px),(max-height:560px){body.on-map .map-status{display:none}}
 
 :root{--card-radius:18px;--card-gap:12px}
 :is(.clue-card,.source-card,.target-card,.water-card,.question-card,.action-card,.ending-card,.strategy-zone-card,.final-plan-card){border-radius:var(--card-radius)}
 .site-scenes,.strategy-zones,.water-options{gap:var(--card-gap);align-items:stretch}
 @media(max-width:600px),(max-height:480px){:root{--card-gap:8px}}
+
+/* Keep reading surfaces legible when the browser cannot blur the scenery. */
+@supports not ((backdrop-filter: blur(8px)) or (-webkit-backdrop-filter: blur(8px))) {
+  :root { --surface: #fff; --surface-2: #f6fbfb; }
+  :is(.icon-btn,.btn.secondary,.btn.text,.btn.small:not(.primary):not(.selected),.btn.tiny,
+      .topbar,.actionbar,.evidence-tray,.intervention-panel,.lab-notebook,.prediction-panel,
+      .question-panel,.lab-device,.report-card,.final-plan,.modal,.map-next,.map-place,.window-restoration) {
+    background: #f8fffd;
+  }
+}

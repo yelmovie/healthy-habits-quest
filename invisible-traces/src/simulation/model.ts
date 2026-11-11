@@ -6,13 +6,13 @@ export interface State {
  settings:{sound:boolean;reduced:boolean;large:boolean};
  found:string[]; clues:string[]; relations:Record<string,string>; impacts:Record<string,string>;
  timeline:{tick:number;source:string;intervention:number|null};
- labs:{done:string[];values:Record<string,number>;synthesis:string[]};
+ labs:{active:string;done:string[];values:Record<string,number>;synthesis:string[]};
  experiment:{action:string;prediction:string;tick:number;pinned:string;explanation:string;baselineSeen:boolean};
  strategy:{asked:string[];placements:Placement[];simulated:boolean};
  final:{phase:'report'|'apply'|'restored'|'ending'|'certificate';applied:string[];hands:string[];coreClaimed:boolean};
  restoration:Record<string,number>; completed:string[]; evidence:string[];
 }
-export const fresh = ():State => ({version:1,contentVersion:DATA.contentVersion,route:'C00',lastRoute:'C01',settings:{sound:true,reduced:false,large:false},found:[],clues:[],relations:{},impacts:{},timeline:{tick:5,source:'',intervention:null},labs:{done:[],values:{},synthesis:[]},experiment:{action:'',prediction:'',tick:0,pinned:'',explanation:'',baselineSeen:false},strategy:{asked:[],placements:[],simulated:false},final:{phase:'report',applied:[],hands:[],coreClaimed:false},restoration:{},completed:[],evidence:[]});
+export const fresh = ():State => ({version:1,contentVersion:DATA.contentVersion,route:'C00',lastRoute:'C01',settings:{sound:true,reduced:false,large:false},found:[],clues:[],relations:{},impacts:{},timeline:{tick:5,source:'',intervention:null},labs:{active:'contact',done:[],values:{},synthesis:[]},experiment:{action:'',prediction:'',tick:0,pinned:'',explanation:'',baselineSeen:false},strategy:{asked:[],placements:[],simulated:false},final:{phase:'report',applied:[],hands:[],coreClaimed:false},restoration:{},completed:[],evidence:[]});
 export function contactAt(tick:number,intervention:number|null=null): Set<string> {
  const trace = new Set(DATA.p05.initialTrace);
  const events:({tick:number;id:string;from?:string;to?:string;wash?:boolean})[] = DATA.p05.events.map(e=>({...e}));
@@ -65,6 +65,7 @@ export function sanitize(input:unknown):State {
  for(const [a,b]of Object.entries(record(r.relations)))if(DATA.p03.sourceNodes.includes(a)&&['contact','shared-environment','respiratory','meal'].includes(String(b)))s.relations[a]=String(b);
  for(const [a,b]of Object.entries(record(r.impacts)))if(DATA.p04.links.some(x=>x.domain===a&&x.id===b))s.impacts[a]=String(b);
  s.timeline={tick:num(tl.tick,0,5,5),source:str(tl.source,DATA.p05.nodes),intervention:typeof tl.intervention==='number'&&DATA.p05.intervention.allowedTicks.includes(tl.intervention)?tl.intervention:null};
+ s.labs.active=str(labs.active,[...LABS.map(l=>l.id),'synthesis'],'contact');
  s.labs.done=uniq(labs.done,LABS.map(l=>l.id));for(const [a,b]of Object.entries(record(labs.values)))if(['droplet','air','water','saliva'].includes(a))s.labs.values[a]=num(b,0,1,0);
  s.labs.synthesis=uniq(labs.synthesis,['coughEtiquette','ventilation','washHands']);
  const action=DATA.p07.actionPool.find(a=>a.id===ex.action);s.experiment={action:action?.id??'',prediction:str(ex.prediction,['fewer','same','unsure']),tick:num(ex.tick,0,5,0),pinned:str(ex.pinned,DATA.p07.events.map(e=>e.id)),explanation:str(ex.explanation,DATA.p07.actionPool.map(a=>a.metric)),baselineSeen:ex.baselineSeen===true};
