@@ -14,28 +14,30 @@ const interventionNames = ['공을 만지기 전', '공을 만진 뒤', '다른 
 export function tracingPages(s: State, v: View): string {
   if (s.route === 'P05') {
     const trace = contactAt(s.timeline.tick, s.timeline.intervention);
-    return `<section class="tracing-page tracing-p05"><p class="mission-question">흔적이 시작된 곳을 고르고, <b>손 씻을 때</b>를 바꿔요.</p>
+    const before = contactAt(s.timeline.tick);
+    const avoided = [...before].filter(node => !trace.has(node));
+    return `<section class="tracing-page tracing-p05"><p class="mission-question">시간을 되감아 경로를 찾고, <b>비누 방패</b>를 놓아 연결을 바꿔요.</p>
       <div class="timeline-layout tracing-timeline">
         <section class="timeline-stage tracing-stage" aria-label="접촉 순서 모형">
           ${image('classroom', 'timeline-background')}
           <div class="timeline-scene tracing-sequence">
-            ${DATA.p05.nodes.map((node, i) => `<button class="trace-node ${trace.has(node) ? 'has-trace' : ''} ${s.timeline.source === node ? 'source' : ''}" data-node="${node}" data-action="source" data-id="${node}" aria-pressed="${s.timeline.source === node}">
+            ${DATA.p05.nodes.map((node, i) => `<button class="trace-node ${trace.has(node) ? 'has-trace' : ''} ${s.timeline.source === node ? 'source' : ''} ${avoided.includes(node)?'trace-protected':''}" data-node="${node}" data-action="source" data-id="${node}" aria-pressed="${s.timeline.source === node}">
               <span class="trace-step-number">${i}</span>
               <span class="trace-object">${icon(nodeIcons[i], 34)}</span>
-              <b>${NODE_NAMES[node]}</b>
+              <b>${NODE_NAMES[node]}</b><span class="prevented-trace" aria-hidden="true">${avoided.includes(node)?"방패로 막은 연결":""}</span>
               <span class="trace-state"><span class="trace-state-on">${icon('search', 16)} 있음</span><span class="trace-state-off">없음</span></span>
               <em class="trace-source-label">${icon('flag', 16)} 시작</em>
             </button>`).join('')}
           </div>
         </section>
         <aside class="intervention-panel tracing-intervention">
-          <label class="tracing-intervention-label" for="tracing-intervention">${icon('hand', 24)}<b>손 씻을 때</b></label>
-          <div class="tracing-choices">${DATA.p05.intervention.allowedTicks.map((tick, i) => btn(`<span>${interventionNames[i]}</span>${s.timeline.intervention === tick ? icon('check', 18) : ''}`, 'intervene', s.timeline.intervention === tick ? 'choice selected' : 'choice', `data-id="${tick}" aria-pressed="${s.timeline.intervention === tick}"`)).join('')}</div>
+          <button class="soap-shield" draggable="true" data-drag="wash-point" data-id="wash" aria-label="비누 방패를 아래 시점으로 끌어 놓기. 아래 시점을 눌러도 같아요.">${icon('hand',28)} 비누 방패 <small>끌어 놓기 또는 시점 누르기</small></button><label class="tracing-intervention-label" for="tracing-intervention">${icon('hand', 24)}<b>손 씻을 때</b></label>
+          <div class="tracing-choices">${DATA.p05.intervention.allowedTicks.map((tick, i) => btn(`<span>${interventionNames[i]}</span>${s.timeline.intervention === tick ? icon('check', 18) : ''}`, 'intervene', s.timeline.intervention === tick ? 'choice selected' : 'choice', `data-drop="wash-point" data-id="${tick}" aria-pressed="${s.timeline.intervention === tick}"`)).join('')}</div>
           <select id="tracing-intervention" class="tracing-intervention-select" data-select="intervention" aria-label="손 씻을 때 선택"><option value="">시점을 골라요</option>${DATA.p05.intervention.allowedTicks.map((tick, i) => `<option value="${tick}" ${s.timeline.intervention === tick ? 'selected' : ''}>${interventionNames[i]}</option>`).join('')}</select>
-          <div class="intervention-result">${icon(s.timeline.intervention === 1.5 ? 'check' : 'info', 20)}<span>${s.timeline.intervention === null ? '시점을 골라 전후를 비교해요.' : s.timeline.intervention === 1.5 ? '이후 연결이 달라졌어요.' : '이미 옮겨진 흔적은 남아요.'}</span></div>
+          <div class="intervention-result" id="prevention-result">${icon(s.timeline.intervention === 1.5 ? 'check' : 'info', 20)}<span>${s.timeline.intervention === null ? '방패를 놓고 경로를 시험해요.' : `${before.size}곳 → ${trace.size}곳에 모형 흔적. ${avoided.length}곳의 연결이 달라졌어요.`}</span></div>
         </aside>
       </div>
-      <div class="tracing-play-row">${playbackControls(v, 'timeline')}<div class="tracing-time-controls"><input id="tracing-time" aria-label="사건 시간 되감기" data-range="timeline" type="range" min="0" max="5" step="0.1" value="${s.timeline.tick}"><span id="time-label">사건 ${s.timeline.tick.toFixed(1)} / 5</span></div></div></section>`;
+      <div class="tracing-play-row">${playbackControls(v, 'timeline')}<div class="tracing-time-controls"><input id="tracing-time" aria-label="사건 시간 되감기" data-range="timeline" type="range" min="0" max="5" step="0.1" value="${s.timeline.tick}"><span class="trace-model-note">접촉 경로 학습 모형 · 실제 감염 여부나 모든 감염병의 전파를 나타내지 않아요.</span><span id="time-label">사건 ${s.timeline.tick.toFixed(1)} / 5</span></div></div></section>`;
   }
   if (s.route === 'P06') {
     const next = LABS.find(l => !s.labs.done.includes(l.id))?.id ?? 'synthesis';

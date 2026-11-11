@@ -238,3 +238,6 @@
 @media (prefers-reduced-motion: reduce) {
   .tracing-cough-path i, .tracing-window .window-handle { transition: none; }
 }
+
+/* A prevention move changes the visible contact path; no student is labelled ill. */
+.soap-shield{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;width:100%;border:2px solid #268b82;border-radius:18px;background:#d6fff1bb;min-height:48px;touch-action:none;font:inherit;font-weight:700;cursor:grab}.soap-shield small{font-size:.68em;font-weight:400}.trace-node.trace-protected{border-color:#148b78!important;box-shadow:inset 0 0 0 3px #85e3c8;background:#e6fff3cf!important}.prevented-trace{font-size:10px;color:#08624e;min-height:12px}.trace-model-note{font-size:11px;max-width:32em}.tracing-choices .drop-hover{outline:4px solid #e7b947;outline-offset:2px}@media(max-height:600px){.soap-shield{min-height:40px}.trace-model-note{font-size:10px}.prevented-trace{font-size:9px}}
