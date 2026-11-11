@@ -7,3 +7,5 @@ Translucent background fills, restrained borders/shadows, readable foreground te
 Browser QA uses Chromium and seeded states; physical tablets, Safari, and every natural play route were not tested.
 
 25 home/map/settings/records checks pass. Map labels covered by HUD are omitted while numbered destination buttons remain available; rotating portrait hint no longer covers restoration controls.
+
+Follow-up: card family corners unified at 18px, peer-card gaps 12px (8px compact), equal stretch preserved. Existing single-screen observation layouts retained: artwork is not shrunk or hidden to fit controls.

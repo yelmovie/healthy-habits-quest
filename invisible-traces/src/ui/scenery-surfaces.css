@@ -11,3 +11,8 @@
 .map-next,.map-place,.window-restoration {background:rgba(248,255,246,.86);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 body.on-map .rotate-hint{display:none}
 @media(max-width:1180px),(max-height:560px){body.on-map .map-status{display:none}}
+
+:root{--card-radius:18px;--card-gap:12px}
+:is(.clue-card,.source-card,.target-card,.water-card,.question-card,.action-card,.ending-card,.strategy-zone-card,.final-plan-card){border-radius:var(--card-radius)}
+.site-scenes,.strategy-zones,.water-options{gap:var(--card-gap);align-items:stretch}
+@media(max-width:600px),(max-height:480px){:root{--card-gap:8px}}
