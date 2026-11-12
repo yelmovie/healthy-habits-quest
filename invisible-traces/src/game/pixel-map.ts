@@ -1,3 +1,4 @@
+import {bindDirectionPad,mapKeyDirection} from '../map-controls.js';
 import Phaser from 'phaser';
 import { asset } from '../data/game';
 import { MAP_SIZE, NODES, PLACES, START_NODE, type Point, nearestOnRoad, placeAt, placeHit, pointAlong, routeBetween, routeLength, step } from './school-map';
@@ -13,7 +14,7 @@ type Direction = 'up'|'down'|'left'|'right';
 
 const VECTORS:Record<Direction,Point> = {up:{x:0,y:-1},down:{x:0,y:1},left:{x:-1,y:0},right:{x:1,y:0}};
 const KEYS:Record<string,Direction> = {ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',w:'up',s:'down',a:'left',d:'right'};
-const TAP_MS = 200, LABEL_TOP = 132, ROAD_TAP = 22, PAVEMENT_TAP = 70, WALK_SPEED = 150, TRAVEL_SPEED = 190, TRAVEL_MAX_SECONDS = 1.8, STRIDE = 13, MATE_GAP = 38, DRAG_START = 6;
+const LABEL_TOP = 132, ROAD_TAP = 22, PAVEMENT_TAP = 70, WALK_SPEED = 150, TRAVEL_SPEED = 190, TRAVEL_MAX_SECONDS = 1.8, STRIDE = 13, MATE_GAP = 38, DRAG_START = 6;
 const FRAME = {width:48,height:58}, HERO_STAND = 0, HERO_STEP = [1,2], MATE = 3;
 
 export async function createMap(parent:HTMLElement,options:MapOptions):Promise<MapHandle>{
@@ -24,7 +25,7 @@ export async function createMap(parent:HTMLElement,options:MapOptions):Promise<M
 
  class SchoolMap extends Phaser.Scene {
   hero!:Phaser.GameObjects.Sprite;mate!:Phaser.GameObjects.Sprite;heroShadow!:Phaser.GameObjects.Ellipse;mateShadow!:Phaser.GameObjects.Ellipse;ring!:Phaser.GameObjects.Ellipse;
-  pos:Point=options.start??NODES[START_NODE];held=new Set<Direction>();trail:Point[]=[];walked=0;facing=1;
+  pos:Point=options.start??NODES[START_NODE];held=new Map<string,Direction>();trail:Point[]=[];walked=0;facing=1;
   route:Point[]|null=null;routeDone=0;routeSpeed=TRAVEL_SPEED;arrived:(()=>void)|null=null;
   mode:'follow'|'free'|'overview'=options.overview?'overview':'follow';lastPlace=placeAt(this.pos);grab:{x:number;y:number;scrollX:number;scrollY:number;moved:boolean}|null=null;
   constructor(){super('SchoolMap');}
@@ -92,7 +93,7 @@ export async function createMap(parent:HTMLElement,options:MapOptions):Promise<M
     this.routeDone+=this.routeSpeed*dt;walking=this.moveTo(pointAlong(this.route,this.routeDone));
     if(this.routeDone>=routeLength(this.route)){this.route=null;const done=this.arrived;this.arrived=null;walking=false;this.notePlace(!done);done?.();}
    }else if(this.held.size){
-    const dir=[...this.held].reduce((sum,d)=>({x:sum.x+VECTORS[d].x,y:sum.y+VECTORS[d].y}),{x:0,y:0});
+    const dir=[...this.held.values()].reduce((sum,d)=>({x:sum.x+VECTORS[d].x,y:sum.y+VECTORS[d].y}),{x:0,y:0});
     walking=this.moveTo(step(this.pos,dir,WALK_SPEED*dt));this.notePlace(true);
    }
    // 걸음은 시간이 아니라 간 거리로 바꿔 어떤 화면에서도 발이 미끄러지지 않게 한다.
@@ -112,7 +113,7 @@ export async function createMap(parent:HTMLElement,options:MapOptions):Promise<M
    this.held.clear();this.route=route;this.routeDone=0;this.routeSpeed=options.reduced?length/.03:Math.max(TRAVEL_SPEED,length/seconds);
    if(this.mode!=='follow')this.setMode('follow');
   }
-  press(dir:Direction){if(!this.route)this.held.add(dir);}
+  press(dir:Direction,source:string=dir){if(!this.route)this.held.set(source,dir);}
   nudge(dir:Direction){if(this.route)return;const target=step(this.pos,VECTORS[dir],34);if(target!==this.pos)this.walkTo(target);}
   enter(){const here=placeAt(this.pos);if(here>=0&&options.open[here])options.onSelect(here+1);}
   travel(stage:number){const stop=NODES[PLACES[stage-1].node];if(placeAt(this.pos)===stage-1){this.route=null;return Promise.resolve();}return new Promise<void>(resolve=>{this.arrived?.();this.arrived=resolve;this.walkTo(stop);});}
@@ -150,23 +151,16 @@ export async function createMap(parent:HTMLElement,options:MapOptions):Promise<M
  const destroy=()=>{if(destroyed)return;destroyed=true;controls.abort();active?.stopWalking();game.destroy(true);};
  try{await ready;}catch(error){destroy();throw error;}
  const scene=active!,blocked=()=>!!parent.closest('[inert]');
- page.querySelectorAll<HTMLElement>('[data-map-direction]').forEach(button=>{
-  const dir=button.dataset.mapDirection as Direction;
-  let pressedAt=0;
-  button.addEventListener('pointerdown',e=>{if(e.button>0||blocked())return;e.preventDefault();button.setPointerCapture(e.pointerId);pressedAt=performance.now();scene.press(dir);},{signal});
-  // 짧게 톡 누르면 눈에 보이는 한 걸음을 간다. 길게 누르면 뗄 때 멈춘다.
-  button.addEventListener('lostpointercapture',()=>{scene.held.delete(dir);if(performance.now()-pressedAt<TAP_MS)scene.nudge(dir);},{signal});
-  button.addEventListener('click',e=>{if(e.detail===0&&!blocked())scene.nudge(dir);},{signal});
- });
+ bindDirectionPad(page,'[data-map-direction]',b=>b.dataset.mapDirection as Direction,{signal,blocked:()=>blocked()||document.hidden||!!document.querySelector('dialog[open]'),press:d=>scene.press(d),release:d=>scene.held.delete(d),tap:d=>scene.nudge(d)});
  page.querySelector('[data-action="map-hand"]')?.addEventListener('click',()=>{scene.stopWalking();scene.setMode(scene.mode==='free'?'follow':'free');},{signal});
  page.querySelector('[data-action="map-view"]')?.addEventListener('click',()=>scene.toggleView(),{signal});
  document.addEventListener('keydown',e=>{
-  if(blocked()||e.ctrlKey||e.altKey||e.metaKey)return;
-  const dir=KEYS[e.key]??KEYS[e.key.toLowerCase()];
-  if(dir){e.preventDefault();scene.press(dir);}
+  if(blocked()||e.ctrlKey||e.altKey||e.metaKey||(e.target instanceof HTMLElement&&(e.target.isContentEditable||e.target.closest('input,textarea,select'))))return;
+  const dir=mapKeyDirection(e);
+  if(dir){e.preventDefault();scene.press(dir,e.code||e.key);}
   else if(e.key==='Enter'&&!(e.target as HTMLElement).closest('button,a,input,select')){e.preventDefault();scene.enter();}
  },{signal});
- document.addEventListener('keyup',e=>{const dir=KEYS[e.key]??KEYS[e.key.toLowerCase()];if(dir)scene.held.delete(dir);},{signal});
+ document.addEventListener('keyup',e=>{const dir=mapKeyDirection(e);if(dir)scene.held.delete(e.code||e.key);},{signal});
  addEventListener('blur',()=>scene.held.clear(),{signal});
  document.addEventListener('visibilitychange',()=>{if(document.hidden)scene.held.clear();},{signal});
  page.classList.add('ready');

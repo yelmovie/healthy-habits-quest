@@ -1,3 +1,4 @@
+import {stepAlongRoad} from '../map-controls.js';
 // 조사 지도의 장소와 걸을 수 있는 길. 좌표는 public/assets/school-map.webp의 픽셀 기준이다.
 // Phaser 없이도 쓰도록 계산만 담는다.
 export interface Point { x:number; y:number }
@@ -48,17 +49,9 @@ export function nearestOnRoad(p:Point){
 }
 
 /** 방향 입력으로 길을 따라 한 걸음 옮긴다. 갈 수 없는 방향이면 제자리다. */
+const walkSegments=EDGES.map(([a,b])=>[NODES[a],NODES[b]]);
 export function step(from:Point,dir:Point,length:number):Point{
- const size=Math.hypot(dir.x,dir.y);if(!size)return from;
- const road=nearestOnRoad(from),{a,b}=road;
- const node=[a,b].find(id=>dist(road.point,NODES[id])<.75);
- const point=node?NODES[node]:road.point; // 갈림길에서는 길 밖으로 새지 않게 지점에 붙인다
- const options=(node?neighbours(node):[a,b]).map(id=>NODES[id]);
- let target:Point|null=null,score=node?.3:.12;
- for(const n of options){const d=dist(point,n),dot=((n.x-point.x)*dir.x+(n.y-point.y)*dir.y)/(d*size);if(dot>score){score=dot;target=n;}}
- if(!target)return point;
- const move=Math.min(length,dist(point,target)),d=dist(point,target);
- return {x:point.x+(target.x-point.x)/d*move,y:point.y+(target.y-point.y)/d*move};
+ return stepAlongRoad(from,dir,length,walkSegments,28);
 }
 
 /** from에서 to까지 길을 따라가는 지점 목록. to도 길 위의 점으로 맞춘다. */
