@@ -93,7 +93,7 @@ export async function createMap(parent:HTMLElement,options:MapOptions):Promise<M
     this.routeDone+=this.routeSpeed*dt;walking=this.moveTo(pointAlong(this.route,this.routeDone));
     if(this.routeDone>=routeLength(this.route)){this.route=null;const done=this.arrived;this.arrived=null;walking=false;this.notePlace(!done);done?.();}
    }else if(this.held.size){
-    const dir=[...this.held.values()].reduce((sum,d)=>({x:sum.x+VECTORS[d].x,y:sum.y+VECTORS[d].y}),{x:0,y:0});
+    const dir=[...new Set(this.held.values())].reduce((sum,d)=>({x:sum.x+VECTORS[d].x,y:sum.y+VECTORS[d].y}),{x:0,y:0});
     walking=this.moveTo(step(this.pos,dir,WALK_SPEED*dt));this.notePlace(true);
    }
    // 걸음은 시간이 아니라 간 거리로 바꿔 어떤 화면에서도 발이 미끄러지지 않게 한다.
