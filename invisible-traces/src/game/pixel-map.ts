@@ -1,5 +1,7 @@
 import {bindDirectionPad,mapKeyDirection} from '../map-controls.js';
 import Phaser from 'phaser';
+import { mountMapEncounters,type MapReaction } from '../map-encounters.js';
+import { encounterLook,encounterStage } from '../map-encounter-theme.js';
 import {schoolBuildingPatch,schoolCelebration} from './school-restoration';
 import { asset } from '../data/game';
 import { MAP_SIZE, NODES, PLACES, START_NODE, type Point, nearestOnRoad, placeAt, placeHit, pointAlong, routeBetween, routeLength, step } from './school-map';
@@ -8,6 +10,7 @@ export interface MapOptions {
  start:Point|null;overview:boolean;reduced:boolean;signal?:AbortSignal;
  /** 미션 번호(0부터)별 입장 가능 여부와, 지금 해야 할 미션 번호(없으면 -1). */
  open:boolean[];next:number;done:boolean[];newly:number[];celebration:boolean;
+ mapHits:Record<string,number>;encountersEnabled:boolean;onEncounterSave:(patch:Record<string,number>)=>void;onEncounterSound:(kind:'hit'|'finish'|'contact',hits:number)=>void;
  onSelect:(stage:number)=>void;onMove:(p:Point)=>void;onView:(mode:'follow'|'free'|'overview')=>void;onStop:(place:number)=>void;
 }
 export interface MapHandle { travel:(stage:number)=>Promise<boolean>;cancel:()=>void;destroy:()=>void }
@@ -17,11 +20,35 @@ const VECTORS:Record<Direction,Point> = {up:{x:0,y:-1},down:{x:0,y:1},left:{x:-1
 const KEYS:Record<string,Direction> = {ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',w:'up',s:'down',a:'left',d:'right'};
 const LABEL_TOP = 132, ROAD_TAP = 22, PAVEMENT_TAP = 70, WALK_SPEED = 150, TRAVEL_SPEED = 190, TRAVEL_MAX_SECONDS = 1.8, STRIDE = 13, MATE_GAP = 38, DRAG_START = 6;
 const FRAME = {width:48,height:58}, HERO_STAND = 0, HERO_STEP = [1,2], MATE = 3;
+const TEAM_OUTLINE='team-map-outline', PAD=2;
+function outlineTeam(textures:Phaser.Textures.TextureManager){
+ if(textures.exists(TEAM_OUTLINE))return;
+ const source=textures.get('team').getSourceImage() as HTMLImageElement;
+ const atlas=document.createElement('canvas'),mask=document.createElement('canvas');
+ const width=FRAME.width+PAD*2,height=FRAME.height+PAD*2;
+ atlas.width=width*4;atlas.height=mask.height=height;mask.width=width;
+ const ctx=atlas.getContext('2d'),silhouette=mask.getContext('2d');if(!ctx||!silhouette)return;
+ for(let i=0;i<4;i++){
+  silhouette.clearRect(0,0,width,height);silhouette.globalCompositeOperation='source-over';
+  silhouette.drawImage(source,i*FRAME.width,0,FRAME.width,FRAME.height,PAD,PAD,FRAME.width,FRAME.height);
+  silhouette.globalCompositeOperation='source-in';silhouette.fillStyle='#fff4d2';silhouette.fillRect(0,0,width,height);
+  for(let j=0;j<8;j++){const angle=j*Math.PI/4;ctx.drawImage(mask,i*width+Math.round(Math.cos(angle)),Math.round(Math.sin(angle)));}
+  ctx.drawImage(source,i*FRAME.width,0,FRAME.width,FRAME.height,i*width+PAD,PAD,FRAME.width,FRAME.height);
+ }
+ const texture=textures.addCanvas(TEAM_OUTLINE,atlas);
+ if(texture)for(let i=0;i<4;i++)texture.add(i,0,i*width,0,width,height);
+}
+
 export async function createMap(parent:HTMLElement,options:MapOptions):Promise<MapHandle>{
  const page=parent.parentElement!,labels=[...page.querySelectorAll<HTMLElement>('.map-place')];
  let resolveReady:()=>void=()=>{},rejectReady:(e:Error)=>void=()=>{};
  const ready=new Promise<void>((resolve,reject)=>{resolveReady=resolve;rejectReady=reject;});
  let active:SchoolMap|undefined;
+ const encounters=mountMapEncounters({host:parent,stages:options.encountersEnabled?PLACES.flatMap((place,i)=>{
+  const p=NODES[place.node],toward=NODES['plazaMid'],d=Math.hypot(toward.x-p.x,toward.y-p.y)||1;
+  return options.done[i]?[encounterStage(i,i,place.name,{x:p.x+(toward.x-p.x)/d*18,y:p.y+(toward.y-p.y)/d*18})]:[];
+ }):[],progress:options.mapHits,onSave:options.onEncounterSave,reduced:()=>options.reduced,
+ blocked:()=>!!parent.closest('[inert]')||!!page.querySelector('.window-restoration[open]'),tone:options.onEncounterSound,reach:68,contact:19,...encounterLook});
 
  class SchoolMap extends Phaser.Scene {
   hero!:Phaser.GameObjects.Sprite;mate!:Phaser.GameObjects.Sprite;heroShadow!:Phaser.GameObjects.Ellipse;mateShadow!:Phaser.GameObjects.Ellipse;ring!:Phaser.GameObjects.Ellipse;
@@ -35,7 +62,10 @@ export async function createMap(parent:HTMLElement,options:MapOptions):Promise<M
   constructor(){super('SchoolMap');}
   preload(){
    this.load.image('school',asset('school-map'));this.load.spritesheet('team',asset('map-team'),{frameWidth:FRAME.width,frameHeight:FRAME.height});
-   this.load.on(Phaser.Loader.Events.FILE_LOAD_ERROR,()=>rejectReady(new Error('map asset failed')));
+   if(options.encountersEnabled&&options.done.some(Boolean)){
+    for(const name of ['hero','ally'])this.load.spritesheet('encounter-'+name,asset('map-encounters/'+name).replace(/\.webp$/,'.png'),{frameWidth:112,frameHeight:112});
+   }
+   this.load.on(Phaser.Loader.Events.FILE_LOAD_ERROR,(file:Phaser.Loader.File)=>{if(!file.key.startsWith('encounter-'))rejectReady(new Error('map asset failed'));});
   }
   create(){
    active=this;
@@ -44,7 +74,9 @@ export async function createMap(parent:HTMLElement,options:MapOptions):Promise<M
    this.drawRoad();
    this.ring=this.add.ellipse(0,0,44,20).setStrokeStyle(2,0xffb545).setVisible(false);
    this.heroShadow=this.add.ellipse(0,0,28,9,0x12332f,.3);this.mateShadow=this.add.ellipse(0,0,26,8,0x12332f,.3);
-   this.hero=this.add.sprite(0,0,'team',HERO_STAND).setOrigin(.5,1);this.mate=this.add.sprite(0,0,'team',MATE).setOrigin(.5,1);
+   outlineTeam(this.textures);
+   const art=this.textures.exists(TEAM_OUTLINE)?TEAM_OUTLINE:'team', foot=art===TEAM_OUTLINE?1-PAD/(FRAME.height+2*PAD):1;
+   this.hero=this.add.sprite(0,0,art,HERO_STAND).setOrigin(.5,foot);this.mate=this.add.sprite(0,0,art,MATE).setOrigin(.5,foot);
    this.trail=[{x:this.pos.x-MATE_GAP*.6,y:this.pos.y+6}];
    this.placeTeam();
    if(options.next>=0&&!options.reduced){
@@ -108,11 +140,7 @@ export async function createMap(parent:HTMLElement,options:MapOptions):Promise<M
    else this.paintCamera({x:this.pos.x,y:this.pos.y+this.scale.height*.06/this.followZoom()},this.followZoom(),options.reduced?1:0);
    parent.classList.toggle('hand-on',this.mode==='free');
    page.querySelector('[data-action="map-hand"]')?.setAttribute('aria-pressed',String(this.mode==='free'));
-   const overviewButton=page.querySelector<HTMLButtonElement>('[data-action="map-view"]');
-   const overviewLabel=this.mode==='overview'?'이전 지도 보기로 돌아가기':'지도 전체 보기';
-   overviewButton?.setAttribute('aria-pressed',String(this.mode==='overview'));
-   overviewButton?.setAttribute('aria-label',overviewLabel);
-   if(overviewButton)overviewButton.title=overviewLabel;
+   page.querySelector('[data-action="map-view"]')?.setAttribute('aria-pressed',String(this.mode==='overview'));
    options.onView(this.mode);
   }
   setMode(mode:'follow'|'free'|'overview',restore=false){
@@ -142,6 +170,13 @@ export async function createMap(parent:HTMLElement,options:MapOptions):Promise<M
    this.trail.push(next);while(this.trail.length>2&&routeLength(this.trail)>MATE_GAP)this.trail.shift();
    this.pos=next;this.walked+=moved;options.onMove(next);return true;
   }
+  reaction(sprite:Phaser.GameObjects.Sprite,name:string,pose:MapReaction|null){
+   const key='encounter-'+name,walkArt=this.textures.exists(TEAM_OUTLINE)?TEAM_OUTLINE:'team';
+   if(!pose||!this.textures.exists(key)){if(sprite.texture.key!==walkArt)sprite.setTexture(walkArt).setScale(1).setOrigin(.5,walkArt===TEAM_OUTLINE?1-PAD/(FRAME.height+2*PAD):1);return;}
+   const frame=pose.kind==='attack'?4+Number(pose.frame>0):pose.frame;
+   sprite.setTexture(key,frame).setScale((name==='hero'?61:51)/(.84*112)).setOrigin(.5,.935);
+   sprite.setFlipX(pose.direction<0);sprite.x+=pose.dx;
+  }
   update(_time:number,delta:number){
    if(parent.closest('[inert]'))this.stopWalking(); // 안내창을 열면 지도 이동을 취소한다
    const dt=Math.min(delta,50)/1000;let walking=false;
@@ -154,6 +189,7 @@ export async function createMap(parent:HTMLElement,options:MapOptions):Promise<M
    }
    // 걸음은 시간이 아니라 간 거리로 바꿔 어떤 화면에서도 발이 미끄러지지 않게 한다.
    const stride=Math.floor(this.walked/STRIDE)%2;
+   this.reaction(this.hero,'hero',null);this.reaction(this.mate,'ally',null);
    this.hero.setFrame(walking?HERO_STEP[stride]:HERO_STAND).setFlipX(walking?this.facing>0:this.facing<0);
    this.mate.setFlipX(this.facing<0);
    this.placeTeam();
@@ -162,6 +198,9 @@ export async function createMap(parent:HTMLElement,options:MapOptions):Promise<M
     const zoom=this.followZoom(),ease=options.reduced?1:-Math.expm1(-delta/145);
     this.paintCamera({x:this.pos.x,y:this.pos.y+this.scale.height*.06/zoom},zoom,ease);
    }
+   const cam=this.cameras.main;
+   const reactions=encounters.update({hero:this.pos,ally:this.trail[0],scale:cam.zoom,project:p=>({x:(p.x-this.center.x)*cam.zoom+this.scale.width/2,y:(p.y-this.center.y)*cam.zoom+this.scale.height/2})});
+   if(reactions.hero)this.reaction(this.hero,'hero',reactions.hero);if(reactions.ally)this.reaction(this.mate,'ally',reactions.ally);
   }
   // 다음 미션 장소에 걸어 들어가면 바로 입장한다. 지나온 장소는 멈춰 알려 주기만 한다.
   notePlace(mayEnter:boolean){
@@ -225,7 +264,7 @@ export async function createMap(parent:HTMLElement,options:MapOptions):Promise<M
 
  const game=new Phaser.Game({type:Phaser.AUTO,parent,width:parent.clientWidth||MAP_SIZE.width,height:parent.clientHeight||MAP_SIZE.height,pixelArt:true,backgroundColor:'#103e43',scale:{mode:Phaser.Scale.RESIZE},input:{activePointers:3},scene:[SchoolMap],audio:{noAudio:true},banner:false,render:{antialias:false}});
  const controls=new AbortController(),{signal}=controls;let destroyed=false;
- const destroy=()=>{if(destroyed)return;destroyed=true;controls.abort();active?.stopWalking();game.destroy(true);};
+ const destroy=()=>{if(destroyed)return;destroyed=true;encounters.destroy();controls.abort();active?.stopWalking();game.destroy(true);};
  const cancel=()=>rejectReady(new Error('map cancelled'));
  if(options.signal?.aborted)cancel();
  else options.signal?.addEventListener('abort',cancel,{once:true});
