@@ -1,0 +1,22 @@
+dialog.npc-stage-dialog{inset:0;width:100vw;height:100dvh;max-width:none;max-height:none;margin:0;padding:0;overflow:hidden;border:0;border-radius:0;box-shadow:none;background:transparent;color:inherit}
+.npc-stage-dialog::backdrop{background:#0a202f9c;backdrop-filter:blur(2px)}
+.npc-stage{position:absolute;display:grid;align-items:end;left:50%;bottom:max(22px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(960px,91vw);max-height:95dvh;color:#183849;isolation:isolate;pointer-events:none}
+.npc-stage-art{position:relative;z-index:0;display:flex;justify-content:end;align-items:end;margin:0 clamp(16px,4vw,70px) -10px 0}
+.npc-stage-portrait{display:block;flex:none;width:min(43vw,48dvh,420px);aspect-ratio:1;background-image:var(--npc-portrait);background-repeat:no-repeat;background-size:200% 100%;background-position:0 50%;filter:hue-rotate(var(--npc-hue,0deg)) drop-shadow(0 4px 12px #0217267a);pointer-events:none}
+.npc-stage[data-speaking=true] .npc-stage-portrait,.modal-npc[data-speaking=true] .npc-stage-portrait{animation:npc-mouth-frame .64s steps(1,end) infinite}
+@keyframes npc-mouth-frame{0%,100%{background-position:0 50%}42%,82%{background-position:100% 50%}}
+.npc-stage-panel{position:relative;z-index:1;padding:22px clamp(17px,3vw,35px) 12px;border:2px solid #b99b68;border-radius:14px;background:#fff2d7;box-shadow:0 10px 35px #08152266;pointer-events:auto}
+.npc-stage-panel h2{position:absolute;top:0;left:clamp(16px,3vw,32px);transform:translateY(-69%);margin:0;padding:7px 16px;border:1px solid #ba995d;border-radius:9px;background:#1a4b60;color:#fff0c7;font-size:clamp(15px,2vw,20px);line-height:1.3}
+.npc-stage-panel .npc-stage-caption{margin:0;color:#183849;font-size:clamp(16px,2.2vw,23px);line-height:1.55;word-break:keep-all;overflow-wrap:anywhere;max-height:35dvh;overflow:auto}
+.npc-stage-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:9px}
+.npc-stage-button{min-height:44px;min-width:44px;padding:7px 13px;border:1px solid #b2a887;border-radius:9px;background:#fffbec;color:#234a5b;font:inherit;font-size:15px;cursor:pointer}
+.npc-stage-button:focus-visible{outline:3px solid #08778a;outline-offset:2px}
+.npc-stage-primary{margin-left:auto;background:#f2d493;border-color:#ab8950;font-weight:750}
+.npc-stage-status{font-size:13px;color:#765d38}.npc-stage-status:empty{display:none}
+@media(max-height:550px){.npc-stage{bottom:max(10px,env(safe-area-inset-bottom))}.npc-stage-portrait{width:min(34vw,46dvh,250px)}.npc-stage-panel{padding-top:17px;padding-bottom:7px}.npc-stage-panel .npc-stage-caption{font-size:clamp(15px,2vw,19px);line-height:1.4}.npc-stage-actions{margin-top:5px}}
+@media(max-width:620px) and (min-height:551px){.npc-stage-portrait{width:min(73vw,39dvh,350px)}.npc-stage-art{margin-right:6px}.npc-stage{bottom:max(15px,env(safe-area-inset-bottom))}}
+@media(prefers-reduced-motion:reduce){.npc-stage[data-speaking=true] .npc-stage-portrait,.modal-npc[data-speaking=true] .npc-stage-portrait{animation:none}}
+.npc-stage[data-reduced=true] .npc-stage-portrait,.reduced .modal-npc .npc-stage-portrait{animation:none}
+.npc-stage-actions [data-narration-control]{order:-1;min-height:44px;padding:7px 13px;border:1px solid #b2a887;border-radius:9px;background:#fffbec;color:#234a5b}
+.npc-stage-actions [data-npc-switch]:disabled{opacity:.55;cursor:default}
+body:has(dialog.npc-stage-dialog[open]) .title-person{visibility:hidden}

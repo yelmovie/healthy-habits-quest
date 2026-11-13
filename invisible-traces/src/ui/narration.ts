@@ -8,7 +8,10 @@ export function mountNarration(options:{enabled:()=>boolean;quiet:(value:boolean
  const byId=new Map(lines.map(line=>[line.id,line]));
  const player=createNarrationPlayer({enabled:()=>options.enabled()&&!document.hidden,quiet:options.quiet,create:src=>new Audio(src),changed:paint,finished:next});
  function stop(){queue=[];player.stop();}
- function paint(){if(!button?.isConnected)return;const active=!!player.active,label=active?'안내 목소리 멈추기':'안내 다시 듣기';
+ function paint(){
+  const scene=document.querySelector<HTMLElement>('.npc-stage-dialog[open] .npc-stage');
+  if(scene){scene.dataset.speaking=String(player.playing&&scene.dataset.lineId===current);const change=scene.querySelector<HTMLButtonElement>('[data-npc-switch]');if(change)change.disabled=!!player.active;}
+  if(!button?.isConnected)return;const active=!!player.active,label=active?'안내 목소리 멈추기':'안내 다시 듣기';
   if(button.getAttribute('aria-label')!==label){button.setAttribute('aria-label',label);button.title=label;button.innerHTML=icon(active?'pause':'sound',22);}
   button.setAttribute('aria-pressed',String(active));button.disabled=!current;
  }
@@ -24,7 +27,7 @@ export function mountNarration(options:{enabled:()=>boolean;quiet:(value:boolean
   }
   const added=[...found].filter(id=>!seen.has(id));if(pending&&found.has(pending)){const i=added.indexOf(pending);if(i>=0)added.splice(i,1);added.unshift(pending);}pending=null;if(current&&!found.has(current)){stop();current=null;}
   queue=queue.filter(id=>found.has(id));seen=found;
-  const host=overlay??scope.querySelector('.tools');
+  const host=overlay?.querySelector('[data-narration-host]')??overlay??scope.querySelector('.tools');
   if(host&&found.size){if(!button?.isConnected||!host.contains(button)){button?.remove();button=document.createElement('button');button.type='button';button.dataset.narrationControl='';button.className=overlay?'btn small':'icon-btn';button.style.minWidth='48px';button.style.minHeight='48px';
     button.onclick=e=>{e.preventDefault();e.stopPropagation();if(player.active)stop();else if(current){queue=[];speak(current);}};
     host.append(button);

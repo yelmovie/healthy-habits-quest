@@ -1,0 +1,47 @@
+{
+  "project": 12,
+  "lines": [
+    {
+      "id": "intro-1",
+      "text": "보이지 않는 흔적을 함께 찾아보자. 증거를 살펴 감염이 퍼지는 경로를 생각하고, 생활 속에서 실천할 예방 방법을 골라 보자.",
+      "src": "assets/audio/voices/el-intro-1.mp3",
+      "who": "detective",
+      "generationId": "XmOXpMhQj8wO1ZbXa0UF",
+      "provider": "ElevenLabs",
+      "model": "eleven_v4",
+      "voiceId": "IQt4I2Udet4gAwcFGAlU",
+      "voiceName": "oki",
+      "flowId": "x2diTiyHge7lfyF9WOmx",
+      "asr": "보이지 않는 흔적을 함께 찾아보자 증거를 살펴 감염이 퍼지는 경로를 생각하고 생활 속에서 실천할 예방 방법을 골라보자",
+      "asrScore": 1.0,
+      "endingScore": 1.0,
+      "lufs": -16.5,
+      "peakDbtp": -2.2,
+      "brightnessHz": 2255,
+      "duration": 9.74,
+      "sha256": "10179aa4c92662c8b595f83d7bdee160c95482d1f64ca6b7672a7f5287bd3269",
+      "target": "public/assets/audio/voices/el-intro-1.mp3"
+    },
+    {
+      "id": "title-1",
+      "text": "우리 학교에 남은 흔적을 찾아 줘!",
+      "src": "assets/audio/voices/el-title-1.mp3",
+      "who": "recorder",
+      "generationId": "9SGycYyZj9KYooxc7JQq",
+      "provider": "ElevenLabs",
+      "model": "eleven_v4",
+      "voiceId": "R57C1ECBzXRSHUbNYPYx",
+      "voiceName": "Sora - versatile",
+      "flowId": "x2diTiyHge7lfyF9WOmx",
+      "asr": "우리 학교에 남은 흔적을 찾아줘.",
+      "asrScore": 1.0,
+      "endingScore": 1.0,
+      "lufs": -16.5,
+      "peakDbtp": -5.9,
+      "brightnessHz": 2598,
+      "duration": 2.94,
+      "sha256": "cf14943d834f35c0b579a65599b60b939f1d06436cf866724cf2a0668ff2ef56",
+      "target": "public/assets/audio/voices/el-title-1.mp3"
+    }
+  ]
+}
