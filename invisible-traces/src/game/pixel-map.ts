@@ -5,7 +5,7 @@ import { asset } from '../data/game';
 import { MAP_SIZE, NODES, PLACES, START_NODE, type Point, nearestOnRoad, placeAt, placeHit, pointAlong, routeBetween, routeLength, step } from './school-map';
 
 export interface MapOptions {
- start:Point|null;overview:boolean;reduced:boolean;
+ start:Point|null;overview:boolean;reduced:boolean;signal?:AbortSignal;
  /** 미션 번호(0부터)별 입장 가능 여부와, 지금 해야 할 미션 번호(없으면 -1). */
  open:boolean[];next:number;done:boolean[];newly:number[];celebration:boolean;
  onSelect:(stage:number)=>void;onMove:(p:Point)=>void;onView:(mode:'follow'|'free'|'overview')=>void;onStop:(place:number)=>void;
@@ -226,7 +226,11 @@ export async function createMap(parent:HTMLElement,options:MapOptions):Promise<M
  const game=new Phaser.Game({type:Phaser.AUTO,parent,width:parent.clientWidth||MAP_SIZE.width,height:parent.clientHeight||MAP_SIZE.height,pixelArt:true,backgroundColor:'#103e43',scale:{mode:Phaser.Scale.RESIZE},input:{activePointers:3},scene:[SchoolMap],audio:{noAudio:true},banner:false,render:{antialias:false}});
  const controls=new AbortController(),{signal}=controls;let destroyed=false;
  const destroy=()=>{if(destroyed)return;destroyed=true;controls.abort();active?.stopWalking();game.destroy(true);};
+ const cancel=()=>rejectReady(new Error('map cancelled'));
+ if(options.signal?.aborted)cancel();
+ else options.signal?.addEventListener('abort',cancel,{once:true});
  try{await ready;}catch(error){destroy();throw error;}
+ finally{options.signal?.removeEventListener('abort',cancel);}
  const scene=active!,blocked=()=>!!parent.closest('[inert]');
  bindDirectionPad(page,'[data-map-direction]',b=>b.dataset.mapDirection as Direction,{signal,blocked:()=>blocked()||document.hidden||!!document.querySelector('dialog[open]'),press:d=>scene.press(d),release:d=>scene.held.delete(d),tap:d=>scene.nudge(d)});
  page.querySelector('[data-action="map-hand"]')?.addEventListener('click',()=>{scene.stopWalking();scene.setMode(scene.mode==='free'?'follow':'free');},{signal});

@@ -21,7 +21,7 @@ import {header,home,map,mapStatus,mapViewLabel,shell,pageContent,records,viewFre
 import type {MapHandle} from './game/pixel-map';
 import {NODES,PLACES} from './game/school-map';
 const root=document.querySelector<HTMLDivElement>('#app')!,modalRoot=document.querySelector<HTMLDivElement>('#modal-root')!,toastRoot=document.querySelector<HTMLDivElement>('#toast')!;
-const loaded=readSave();let state=loaded.state,protectedSave=!!loaded.error;let archive:State|null=null;let view:View={...viewFresh(),lab:state.labs.active};let epoch=0,mapHandle:MapHandle|null=null;let mapLoading:Promise<MapHandle|null>|null=null;let travelRequest=0,travellingStage=0;let timer:ReturnType<typeof setInterval>|null=null,toastTimer:ReturnType<typeof setTimeout>|null=null;let focusBefore:HTMLElement|null=null;let saveWarning=false;let transitioning=false;
+const loaded=readSave();let state=loaded.state,protectedSave=!!loaded.error;let archive:State|null=null;let view:View={...viewFresh(),lab:state.labs.active};let epoch=0,mapHandle:MapHandle|null=null;let travelRequest=0,travellingStage=0;let timer:ReturnType<typeof setInterval>|null=null,toastTimer:ReturnType<typeof setTimeout>|null=null;let focusBefore:HTMLElement|null=null;let saveWarning=false;let transitioning=false;
 function hideToast(){toastRoot.className='';if(toastTimer)clearTimeout(toastTimer);toastTimer=null;}
 function notify(text:string,tone=''){toastRoot.textContent=text;toastRoot.className=`visible ${tone}`;narration.announce(text);if(toastTimer)clearTimeout(toastTimer);const finish=()=>{if(narration.isToastPlaying())toastTimer=setTimeout(finish,250);else toastRoot.className='';};toastTimer=setTimeout(finish,3700);}
 const researchAudio=createResearchAudio(()=>state.settings.sound);
@@ -29,26 +29,43 @@ const narration=mountNarration({enabled:()=>state.settings.sound,quiet:v=>resear
 function sound(kind:Cue='tap'){void researchAudio.play(kind);}
 function persist(){if(archive||protectedSave)return;if(!writeSave(state)&&!saveWarning){saveWarning=true;notify(saveError()??'이 기기에 저장하지 못했어요. 창을 닫으면 기록이 사라질 수 있어요.');}}
 let pendingMapRestore:number[]=[];
+let mapRequest:AbortController|null=null;
 let playbackSession:{kind:PlaybackKind;route:Route;steps:DemoStep[];index:number}|null=null;let playbackToken=0;
 function stop(){if(timer)clearTimeout(timer);timer=null;view.playing=false;view.autoMode='';playbackToken++;}
 function update(fn:(s:State)=>void,redraw=true){const before=new Set(state.evidence),pages=new Set(state.completed);fn(state);derive(state);persist();const newEvidence=state.evidence.filter(e=>!before.has(e)),evidence=newEvidence.length>0;
  if(!archive){pendingMapRestore.push(...newEvidence.map(e=>Number(e.slice(1))-1));if(state.completed.includes('P10')&&!pages.has('P10'))pendingMapRestore.push(5);}// 활동을 마친 순간에도 기록 완성과 같은 성공 소리를 한 번만 낸다.
  if(evidence||state.completed.some(p=>!pages.has(p)))sound('success');if(evidence)notify('새 연구 기록이 자동으로 정리됐어요.','success');if(redraw)render();}
 function navigate(route:Route){if(!canEnter(state,route)){notify('앞선 조사 기록을 먼저 완성해 주세요.');return;}narration.stop();stop();if(route!==state.route)hideToast();state.route=route;if(route!=='C00'&&route!=='C01')state.lastRoute=route;view.clue='';view.effect='';view.replacement='';view.action='';view.focus='';view.index=0;view.lab=state.labs.active;view.labPreview=null;view.demoStep=0;playbackSession=null;derive(state);persist();render();}
-function render(keepTimer=false){disposeNpc?.();if(!keepTimer){stop();playbackSession=null;}epoch++;travelRequest++;travellingStage=0;mapHandle?.destroy();mapHandle=null;mapLoading=null;document.body.classList.toggle('reduced',state.settings.reduced||matchMedia('(prefers-reduced-motion: reduce)').matches);document.body.classList.toggle('large-text',state.settings.large);document.body.classList.toggle('on-map',state.route==='C01');document.body.classList.toggle('on-home',state.route==='C00');document.body.classList.toggle('on-activity',state.route.startsWith('P'));
+function render(keepTimer=false){disposeNpc?.();if(!keepTimer){stop();playbackSession=null;}epoch++;travelRequest++;travellingStage=0;mapRequest?.abort();mapRequest=null;mapHandle?.destroy();mapHandle=null;document.body.classList.toggle('reduced',state.settings.reduced||matchMedia('(prefers-reduced-motion: reduce)').matches);document.body.classList.toggle('large-text',state.settings.large);document.body.classList.toggle('on-map',state.route==='C01');document.body.classList.toggle('on-home',state.route==='C00');document.body.classList.toggle('on-activity',state.route.startsWith('P'));
  if(state.route==='P06'&&state.completed.includes('P05')&&!state.labs.done.includes('contact')){state.labs.done.push('contact');derive(state);persist();}
  if(state.route==='P07'&&!state.experiment.baselineSeen){state.experiment.baselineSeen=true;persist();}
  root.innerHTML=header(state,!!archive)+(state.route==='C00'?home(state):state.route==='C01'?map(state,view):shell(state,view,pageContent(state,view)));
  if(state.route==='C00')disposeNpc=mountNpcGuide(root.querySelector('.title-actions'),{text:'보이지 않는 흔적을 함께 찾아보자. 증거를 살펴 감염이 퍼지는 경로를 생각하고, 생활 속에서 실천할 예방 방법을 골라 보자.',stop:()=>narration.stop(),reduced:()=>state.settings.reduced});
  if(protectedSave||saveWarning){const warning=document.createElement('div');warning.className='storage-warning';warning.setAttribute('role','status');warning.textContent=saveError()??'현재 탐구는 임시 상태예요. 창을 닫기 전에 연구 기록을 확인해 주세요.';root.prepend(warning);}
- if(state.route==='C01'){mapLoading=mountMap();mountWindowRestoration(root.querySelector('.map-page')!,state,persist,()=>sound('success'));}
+ if(state.route==='C01'){void mountMap();mountWindowRestoration(root.querySelector('.map-page')!,state,persist,()=>sound('success'));}
  root.querySelectorAll<HTMLImageElement>('img').forEach(img=>{img.addEventListener('error',()=>{img.classList.add('failed-image');img.alt='배경 그림을 불러오지 못했어요.';const scene=img.parentElement;if(scene&&!scene.querySelector('.image-retry')){const button=document.createElement('button');button.className='image-retry btn small';button.textContent='그림 다시 읽기';button.onclick=()=>{img.classList.remove('failed-image');img.src=img.src;button.remove();};scene.append(button);}}, {once:true});});
 }
 function mapHint(place:number){const {open,done}=mapStatus(state,view),status=root.querySelector('.map-status');if(!status)return;const p=PLACES[place];status.textContent=p&&!open[place]?`${p.name}은 앞선 미션을 마치면 열려요.`:p&&done[place]?`${p.name}: 이름표를 누르면 다시 실험해요.`:'';}
-async function mountMap(){const currentEpoch=epoch,{open,next,done}=mapStatus(state,view),newly=[...pendingMapRestore],last=PLACES[state.evidence.length-1];try{const {createMap}=await import('./game/pixel-map');if(epoch!==currentEpoch)return null;const parent=document.getElementById('pixel-map');if(!parent)return null;
- const h=await createMap(parent,{start:view.mapSpot??(last?NODES[last.node]:null),overview:view.mapOverview,reduced:state.settings.reduced||matchMedia('(prefers-reduced-motion: reduce)').matches,open,next,done,newly,celebration:state.completed.includes('P10'),onSelect:n=>void startStage(n),onMove:p=>{view.mapSpot=p;},onStop:mapHint,onView:mode=>{view.mapOverview=mode==='overview';const button=root.querySelector('[data-action=map-view]');if(button){const label=mapViewLabel(mode);button.setAttribute('aria-label',label);button.setAttribute('title',label);}}});
+async function mountMap(){const currentEpoch=epoch,{open,next,done}=mapStatus(state,view),newly=[...pendingMapRestore],last=PLACES[state.evidence.length-1];
+ const request=mapRequest=new AbortController(),{signal}=request;
+ let loadingCode=true,timer:ReturnType<typeof setTimeout>|undefined;
+ const deadline=new Promise<never>((_,reject)=>{timer=setTimeout(()=>{reject(Error('map timeout'));request.abort();},10000);});
+ const load=async()=>{const {createMap}=await import('./game/pixel-map');if(signal.aborted||epoch!==currentEpoch)return null;loadingCode=false;const parent=document.getElementById('pixel-map');if(!parent)return null;
+ return createMap(parent,{signal,start:view.mapSpot??(last?NODES[last.node]:null),overview:view.mapOverview,reduced:state.settings.reduced||matchMedia('(prefers-reduced-motion: reduce)').matches,open,next,done,newly,celebration:state.completed.includes('P10'),onSelect:n=>void startStage(n),onMove:p=>{view.mapSpot=p;},onStop:mapHint,onView:mode=>{view.mapOverview=mode==='overview';const button=root.querySelector('[data-action=map-view]');if(button){const label=mapViewLabel(mode);button.setAttribute('aria-label',label);button.setAttribute('title',label);}}});
+ };
+ try{const h=await Promise.race([load(),deadline]);if(!h)return null;
  if(epoch!==currentEpoch){h.destroy();return null;}pendingMapRestore=pendingMapRestore.filter(i=>!newly.includes(i));mapHandle=h;return h;
- }catch{if(epoch===currentEpoch){const parent=document.getElementById('pixel-map');if(parent)parent.innerHTML='<div class="map-fallback">지도를 읽지 못했어요.<br>오른쪽 아래 버튼으로 조사를 시작할 수 있어요.</div>';}return null;}}
+ }catch{
+  if(epoch===currentEpoch){
+   const parent=document.getElementById('pixel-map');
+   if(parent){
+    parent.innerHTML='<div class="map-fallback" role="status"><p>지도를 읽지 못했어요. 기록은 그대로예요.</p><button class="btn secondary" type="button">다시 열기</button></div>';
+    parent.querySelector('button')!.onclick=()=>loadingCode?location.reload():render();
+   }
+  }
+  return null;
+ }finally{clearTimeout(timer);}
+}
 function cancelMapTravel(){travelRequest++;travellingStage=0;mapHandle?.cancel();const b=root.querySelector<HTMLButtonElement>('.map-next [data-action="stage"]');if(b){b.disabled=false;b.removeAttribute('aria-busy');}}
 async function startStage(n:number){
  const stage=STAGES[n-1],unlocked=n===1||state.evidence.includes(`E${n-1}`);
@@ -56,7 +73,7 @@ async function startStage(n:number){
  cancelMapTravel();travellingStage=n;const request=travelRequest,current=epoch,button=root.querySelector<HTMLButtonElement>('.map-next [data-action="stage"]');
  if(button){button.disabled=true;button.setAttribute('aria-busy','true');}
  try{
- const map=mapHandle??await mapLoading;
+ const map=mapHandle;
  if(current!==epoch||request!==travelRequest||root.inert)return;
  if(map&&!await map.travel(n))return;
  if(current!==epoch||request!==travelRequest||root.inert)return;
