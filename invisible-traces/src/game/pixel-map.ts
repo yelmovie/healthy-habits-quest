@@ -44,7 +44,7 @@ export async function createMap(parent:HTMLElement,options:MapOptions):Promise<M
  let resolveReady:()=>void=()=>{},rejectReady:(e:Error)=>void=()=>{};
  const ready=new Promise<void>((resolve,reject)=>{resolveReady=resolve;rejectReady=reject;});
  let active:SchoolMap|undefined;
- const encounters=mountMapEncounters({host:parent,stages:options.encountersEnabled?PLACES.flatMap((place,i)=>{
+ const encounters=mountMapEncounters({requiredFoes:5,host:parent,clearStage:()=>options.newly.filter(i=>i<PLACES.length).at(-1),stages:options.encountersEnabled?PLACES.flatMap((place,i)=>{
   const p=NODES[place.node],toward=NODES['plazaMid'],d=Math.hypot(toward.x-p.x,toward.y-p.y)||1;
   return options.done[i]?[encounterStage(i,i,place.name,{x:p.x+(toward.x-p.x)/d*18,y:p.y+(toward.y-p.y)/d*18})]:[];
  }):[],progress:options.mapHits,onSave:options.onEncounterSave,reduced:()=>options.reduced,
