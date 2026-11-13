@@ -27,7 +27,7 @@ const story = [
   ]
 ];
 const hit = ["앗, 장갑이 미끄러졌어!", "형광 자국이 흐려졌잖아!"], finish = "내 표식이 다 지워졌네!";
-export const encounterLook = {palette:'#e5ff83', effect:'handprint', art:{left:base+'villain-left.png',frames:6}};
+export const encounterLook = {palette:'#e5ff83', effect:'handprint', art:{left:base+'villain-redraw.png',frames:6}};
 export function encounterStage(index,id,name,point){
   const [one,two,prop]=story[index];
   return {id:String(id),name,x:point.x,y:point.y,lines:[one,two],prop,hit,finish};

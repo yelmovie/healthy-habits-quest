@@ -63,7 +63,7 @@ export async function createMap(parent:HTMLElement,options:MapOptions):Promise<M
   preload(){
    this.load.image('school',asset('school-map'));this.load.spritesheet('team',asset('map-team'),{frameWidth:FRAME.width,frameHeight:FRAME.height});
    if(options.encountersEnabled&&options.done.some(Boolean)){
-    for(const name of ['hero','ally'])this.load.spritesheet('encounter-'+name,asset('map-encounters/'+name).replace(/\.webp$/,'.png'),{frameWidth:112,frameHeight:112});
+    for(const name of ['hero','ally'])this.load.spritesheet('encounter-'+name,asset('map-encounters/'+name+'-redraw').replace(/\.webp$/,'.png'),{frameWidth:112,frameHeight:112});
    }
    this.load.on(Phaser.Loader.Events.FILE_LOAD_ERROR,(file:Phaser.Loader.File)=>{if(!file.key.startsWith('encounter-'))rejectReady(new Error('map asset failed'));});
   }
@@ -175,7 +175,7 @@ export async function createMap(parent:HTMLElement,options:MapOptions):Promise<M
    if(!pose||!this.textures.exists(key)){if(sprite.texture.key!==walkArt)sprite.setTexture(walkArt).setScale(1).setOrigin(.5,walkArt===TEAM_OUTLINE?1-PAD/(FRAME.height+2*PAD):1);return;}
    const frame=pose.kind==='attack'?4+Number(pose.frame>0):pose.frame;
    sprite.setTexture(key,frame).setScale((name==='hero'?61:51)/(.84*112)).setOrigin(.5,.935);
-   sprite.setFlipX(pose.direction<0);sprite.x+=pose.dx;
+   sprite.setFlipX(pose.direction>0);sprite.x+=pose.dx;
   }
   update(_time:number,delta:number){
    if(parent.closest('[inert]'))this.stopWalking(); // 안내창을 열면 지도 이동을 취소한다
