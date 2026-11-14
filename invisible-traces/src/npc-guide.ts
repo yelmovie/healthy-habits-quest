@@ -25,7 +25,8 @@ export function mountNpcGuide(host:Element|null,{text,stop,reduced}:GuideOptions
   function showLine(){
     stage.dataset.lineId=lineIds[i];stage.dataset.speaking='false';
     name.textContent=names[i];caption.textContent=texts[i];
-    portrait.style.setProperty('--npc-portrait','url("'+import.meta.env.BASE_URL+'assets/dialogue/'+sheets[i]+'.webp")');
+    const sheet = new URL(`${import.meta.env.BASE_URL}assets/dialogue/${sheets[i]}.webp`, document.baseURI);
+    portrait.style.setProperty('--npc-portrait', `url("${sheet.href}")`);
     change.textContent=(i===0?'기록 파트너':'과학 조사원')+'에게 묻기';
   }
   trigger.onclick=()=>{i=0;stage.dataset.reduced=String(reduced());showLine();dialog.showModal();close.focus({preventScroll:true});};
