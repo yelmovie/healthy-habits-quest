@@ -21,7 +21,7 @@ import {header,home,map,mapStatus,mapViewLabel,shell,pageContent,records,viewFre
 import type {MapHandle} from './game/pixel-map';
 import {NODES,PLACES} from './game/school-map';
 const root=document.querySelector<HTMLDivElement>('#app')!,modalRoot=document.querySelector<HTMLDivElement>('#modal-root')!,toastRoot=document.querySelector<HTMLDivElement>('#toast')!;
-const loaded=readSave();let state=loaded.state,protectedSave=!!loaded.error;let archive:State|null=null;let view:View={...viewFresh(),lab:state.labs.active};let epoch=0,mapHandle:MapHandle|null=null;let travelRequest=0,travellingStage=0;let timer:ReturnType<typeof setInterval>|null=null,toastTimer:ReturnType<typeof setTimeout>|null=null;let focusBefore:HTMLElement|null=null;let saveWarning=false;let transitioning=false;
+const loaded=readSave();let state=loaded.state,protectedSave=!!loaded.error;let archive:State|null=null;let view:View={...viewFresh(),lab:state.labs.active};let epoch=0,mapHandle:MapHandle|null=null;let travelRequest=0,travellingStage=0;let timer:ReturnType<typeof setInterval>|null=null,toastTimer:ReturnType<typeof setTimeout>|null=null;let focusBefore:HTMLElement|null=null;let saveWarning=false;
 function hideToast(){toastRoot.className='';if(toastTimer)clearTimeout(toastTimer);toastTimer=null;}
 function notify(text:string,tone=''){toastRoot.textContent=text;toastRoot.className=`visible ${tone}`;narration.announce(text);if(toastTimer)clearTimeout(toastTimer);const finish=()=>{if(narration.isToastPlaying())toastTimer=setTimeout(finish,250);else toastRoot.className='';};toastTimer=setTimeout(finish,3700);}
 const researchAudio=createResearchAudio(()=>state.settings.sound);
