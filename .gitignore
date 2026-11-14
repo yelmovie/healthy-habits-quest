@@ -11,6 +11,7 @@ test-results/
 /image/
 /files/
 /invisible-traces/docs/asset-contact-sheet.jpg
+/invisible-traces/output/
 
 # Machine-local files and credentials
 .env
