@@ -15,7 +15,7 @@ export function nextInstruction(s: State, v: View): string {
       if (s.timeline.source !== 'book') return s.timeline.tick > 0 ? '시간 막대를 0으로 옮겨 처음을 살펴봐요.' : '처음 흔적이 있는 물체를 눌러요.';
       return s.timeline.intervention === null ? '손 씻을 때를 골라 연결을 비교해요.' : '손 씻을 때를 바꿔 더 줄일 수 있는지 봐요.';
     case 'P06': {
-      if (v.lab === 'synthesis') return '기침과 닫힌 공간을 바꿀 행동 두 개를 골라요.';
+      if (v.lab === 'synthesis') return '관찰한 기록을 떠올리며 다른 흔적을 줄일 행동 두 개를 골라요.';
       if (s.labs.done.includes(v.lab)) return '다음 실험 버튼을 눌러 다른 경로도 살펴봐요.';
       const instructions: Record<string, string> = {
         contact: '자동재생을 눌러 흔적이 옮겨 가는 순서를 봐요.',
@@ -68,10 +68,22 @@ export function learningFocus(s: State, v: View): string {
   return `<aside class="learning-focus" aria-label="이 활동의 핵심 개념"><mark>${concept.term}</mark><span>${concept.description}</span></aside>`;
 }
 
-export function learningGuide(s: State): string {
+export function recheckInstruction(s: State, v: View): string {
+  switch(s.route) {
+    case 'P02': return '단서함을 눌러 남길 카드의 장소와 행동을 다시 읽어요. 지금 조사하는 상황과 연결되는 근거가 있는지 비교해요.';
+    case 'P03': case 'P04': return '카드를 눌러 관찰 문장을 다시 읽어요. 고른 생활 장면에서 같은 변화가 있는지 살펴봐요.';
+    case 'P05': case 'P08': return '시간 막대를 움직여 앞뒤 장면의 같은 곳을 봐요. 흔적이 나타난 곳과 사라진 곳을 비교해요.';
+    case 'P06': return '살펴본 실험의 처음과 결과를 비교해요. 어떤 조건을 바꿨고 흔적이 어디까지 남았는지 확인해요.';
+    case 'P07': return '두 하루의 조건을 다시 읽어요. 내가 바꾼 행동이 어느 장면에 영향을 줄지 생각해요.';
+    case 'P09': return '작전 실행 뒤 남은 연결을 봐요. 장소와 행동 카드를 다시 눌러 어떤 연결이 유지됐는지 비교해요.';
+    default: return nextInstruction(s,v);
+  }
+}
+
+export function learningGuide(s: State, v?: View): string {
   const page = PAGES.find(p => p.id === s.route);
   if (!page) return '';
-  return `<h2>${page.name}에서 알아볼 것</h2><p>${page.learningObjectives.join(' ')}</p><div class="learning-question"><b>내 말로 설명해요</b><p>${page.reflection}</p></div><p>${page.evidence}</p><details class="learning-standards"><summary>연결된 성취기준</summary><p>${page.standards.map(id => `${id} · ${DATA.standards.find(s => s.id === id)?.focus}`).join('<br>')}</p></details><h3>그림을 읽는 약속</h3><p>보라색 흔적과 그림은 생활 속 연결을 관찰하는 모형이에요. 실제 입자 수나 감염 여부·확률을 나타내지 않아요. 병원체마다 옮겨 가는 방법이 달라요.</p><p>자동재생은 실험 과정을 보여줘요. 단서·예측·해석·대응 계획은 직접 선택해요.</p>`;
+  return `<h2>${page.name}에서 알아볼 것</h2>${v?`<div class="learning-question"><b>다시 볼 단서</b><p>${recheckInstruction(s,v)}</p></div>`:''}<p>${page.learningObjectives.join(' ')}</p><div class="learning-question"><b>내 말로 설명해요</b><p>${page.reflection}</p></div><p>${page.evidence}</p><details class="learning-standards"><summary>연결된 성취기준</summary><p>${page.standards.map(id => `${id} · ${DATA.standards.find(s => s.id === id)?.focus}`).join('<br>')}</p></details><h3>그림을 읽는 약속</h3><p>보라색 흔적과 그림은 생활 속 연결을 관찰하는 모형이에요. 실제 입자 수나 감염 여부·확률을 나타내지 않아요. 병원체마다 옮겨 가는 방법이 달라요.</p><p>자동재생은 실험 과정을 보여줘요. 단서·예측·해석·대응 계획은 직접 선택해요.</p>`;
 }
 
 export function curriculumGuide(): string {

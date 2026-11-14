@@ -249,7 +249,7 @@ body.on-map, body.on-home { --map-shadow: 0 3px 0 rgba(16, 62, 67, .28), 0 8px 1
 }
 .map-next small { color: var(--teal-strong); font-size: .88rem; font-weight: 800; }
 .map-next strong { font-size: 1.15rem; line-height: 1.3; }
-.map-next .btn { margin-top: .2rem; }
+.map-next > .btn { margin-top: .2rem; }
 .map-pips { display: flex; justify-content: space-between; gap: .3rem; margin-top: .3rem; }
 .map-pip { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 2px solid var(--line); border-radius: 50%; background: var(--surface); color: var(--ink-2); font-weight: 800; }
 .map-pip.done { border-color: var(--teal); background: var(--teal); color: #fff; }
