@@ -1,5 +1,6 @@
 // 실제 버튼만 눌러 새 기록에서 메인→지도→P01~P10→인증서까지 완주한다. 안 눌리는 버튼·막힌 흐름을 찾는다.
 // 사용: dev 서버를 띄운 뒤 PORT=<포트> OUT=<결과 폴더> node scripts/check-flow.mjs [너비] [높이]
+//       운영 주소는 URL=<주소> 로 같은 완주를 돌린다.
 import { chromium } from 'playwright';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -15,7 +16,8 @@ const browser = await chromium.launch({
 const page = await browser.newPage({ viewport: { width, height } });
 const errors = [];
 page.on('pageerror', e => errors.push(e.message));
-page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
+page.on('console', m => { if (m.type() === 'error' && !m.text().startsWith('Failed to load resource')) errors.push(m.text()); });
+page.on('response', r => { if (r.status() >= 400) errors.push(`${r.status()} ${r.url()}`); });
 page.setDefaultTimeout(15000);
 const steps = [];
 const KEY = 'invisible-traces-science-save-v1';
@@ -32,7 +34,7 @@ async function next(route) {
 }
 let failed = '';
 try {
-  await page.goto(`http://127.0.0.1:${process.env.PORT || 5175}/`);
+  await page.goto(process.env.URL || `http://127.0.0.1:${process.env.PORT || 5175}/`);
   await page.evaluate(k => { localStorage.clear(); localStorage.setItem('flow-check', '1'); }, KEY);
   await page.reload();
   await click('[data-action="settings"]', 'settings');
