@@ -1,10 +1,16 @@
 import {DATA,SITES,CLUE_ICONS,CLUE_NAMES,TARGETS} from '../data/game';
 import type {State} from '../simulation/model';
 import type {View} from './render';
-import {btn,image,playbackControls} from './render-parts';
+import {btn,image} from './render-parts';
 import {icon} from './icons';
 
+// 생활 영역 그림: 집에서 쉬는 아이·빈자리가 생긴 모둠·바뀐 학급 일정
+const IMPACT_ART=['impact-self-20261116','impact-others-20261116','impact-school-20261116'];
 const siteNames:Record<string,string>={classroom:'교실',cafeteria:'급식실',gym:'체육관'};
+// 그림 속 흔적이 숨은 자리(%). 돋보기를 이 근처로 옮기면 신호를 찾는다.
+export const SIGNAL_SPOTS:Record<string,[number,number]>={classroom:[30,52],cafeteria:[50,80],gym:[46,72]};
+// 신호를 찾으면 무엇이 보였는지 한 줄로 알려 준다. 다음 장(P02)의 단서를 고르는 실마리가 된다.
+const signalCaptions:Record<string,string>={classroom:'창문이 닫힌 교실, 친구들 사이에 흔적이 떠 있어요',cafeteria:'함께 먹는 그릇 주변에 흔적이 보여요',gym:'함께 쓴 공과 손에 흔적이 남았어요'};
 const focusTabs=(active:string,items:[string,string][])=>`<nav class="obs-focus-tabs" aria-label="활동 보기">${items.map(([id,label])=>btn(label,'focus',active===id?'small selected':'small',`data-id="${id}" aria-pressed="${active===id}"`)).join('')}</nav>`;
 
 // 작은 화면은 활동의 초점만 전환한다. 단서 선택·정답 연결은 학습자가 직접 한다.
@@ -12,8 +18,8 @@ export function observationPages(s:State,v:View):string {
   switch(s.route){
     case 'P01':return `<section class="observation-page observation-p01">
       <p class="mission-question">어디에 <b>신호</b>가 있을까요?</p>
-      <div class="obs-scan-toolbar"><nav class="obs-site-tabs" aria-label="살펴볼 장소">${SITES.map(x=>btn(`${icon(s.found.includes(x.id)?'check':x.icon,20)}<span>${siteNames[x.id]}</span>`,'site-preview',v.site===x.id?'small selected':'small',`data-id="${x.id}" aria-pressed="${v.site===x.id}"`)).join('')}</nav>${playbackControls(v,'scan')}</div>
-      <div class="site-scenes">${SITES.map(x=>{const found=s.found.includes(x.id);return `<button class="site-scene ${found?'discovered':''} ${v.site===x.id?'obs-current':''} ${!found?'obs-next':''}" data-action="discover" data-id="${x.id}" aria-label="${x.name} ${found?'현장 조사하기':'신호 찾기'}"><span class="obs-site-visual">${image(x.image,'site-image')}<span class="scanner-orb">${icon(found?'check':'search',38)}</span><span class="obs-viewfinder" aria-hidden="true"></span></span><span class="site-bottom"><strong>${x.name}</strong><span>${icon(found?'check':'search',20)}${found?'발견':'신호 찾기'}</span></span></button>`;}).join('')}</div>
+      <div class="obs-scan-toolbar"><nav class="obs-site-tabs" aria-label="살펴볼 장소">${SITES.map(x=>btn(`${icon(s.found.includes(x.id)?'check':x.icon,20)}<span>${siteNames[x.id]}</span>`,'site-preview',v.site===x.id?'small selected':'small',`data-id="${x.id}" aria-pressed="${v.site===x.id}"`)).join('')}</nav></div>
+      <div class="site-scenes">${SITES.map(x=>{const found=s.found.includes(x.id);return `<button class="site-scene ${found?'discovered':''} ${v.site===x.id?'obs-current':''} ${!found?'obs-next':''}" data-action="discover" data-id="${x.id}" aria-label="${x.name} ${found?'현장 조사하기':'신호 찾기'}"><span class="obs-site-visual" data-scan="${x.id}" style="--hx:${SIGNAL_SPOTS[x.id][0]}%;--hy:${SIGNAL_SPOTS[x.id][1]}%">${image(x.image,'site-image')}<span class="signal-spot ${found?'found':''}" aria-hidden="true"></span><span class="scanner-orb scan-lens" style="${found?`left:${SIGNAL_SPOTS[x.id][0]}%;top:${SIGNAL_SPOTS[x.id][1]}%`:''}">${icon(found?'check':'search',38)}</span><span class="obs-viewfinder" aria-hidden="true"></span>${found?`<span class="signal-caption">${signalCaptions[x.id]}</span>`:''}</span><span class="site-bottom"><strong>${x.name}</strong><span>${icon(found?'check':'search',20)}${found?'발견':'신호 찾기'}</span></span></button>`;}).join('')}</div>
     </section>`;
     case 'P02':{
       const clues=DATA.clues.filter(c=>c.site===v.site),index=Math.min(v.index??0,clues.length-1),tray=v.focus==='tray';
@@ -32,22 +38,20 @@ export function observationPages(s:State,v:View):string {
       </section>`;
     }
     case 'P04':{
-      const domains=v.focus==='domains',selected=DATA.p04.links.find(x=>x.id===v.effect);
+      // 빠른 분류: 아직 놓지 않은 카드가 차례로 위에 올라오고, 그림 하나만 누르면 된다.
+      const placed=Object.values(s.impacts),current=v.effect||DATA.p04.links.find(x=>!placed.includes(x.id))?.id||'';
+      const domains=v.focus==='domains',selected=DATA.p04.links.find(x=>x.id===current);
       return `<section class="observation-page observation-p04 ${domains?'obs-mode-domains':'obs-mode-effects'}"><p class="mission-question"><b>누구의 생활</b>에 영향을 줄까요?</p>${focusTabs(domains?'domains':'effects',[['effects','1 영향 카드'],['domains','2 생활 영역']])}
-      <div class="impact-layout"><div class="impact-effects">${DATA.p04.links.map(x=>`<button class="impact-effect ${v.effect===x.id?'selected':''} ${Object.values(s.impacts).includes(x.id)?'linked':''} ${!v.effect&&!Object.values(s.impacts).includes(x.id)?'obs-next':''}" data-action="select-effect" data-id="${x.id}" draggable="true" data-drag="impact" aria-pressed="${v.effect===x.id}">${icon('file',30)}<span>${x.effect}</span>${icon(Object.values(s.impacts).includes(x.id)?'check':v.effect===x.id?'arrow':'link',20)}</button>`).join('')}</div>
-      <div class="obs-impact-targets"><div class="obs-active-selection ${selected?'ready':''}" role="status">${icon(selected?'file':'link',22)}<b>${selected?selected.effect:'영향 카드를 먼저 골라요'}</b></div><div class="impact-domains">${['self','others','school'].map((d,i)=>{const x=DATA.p04.links.find(x=>x.id===s.impacts[d]);return `<button class="impact-domain domain-${i} ${x?'obs-impact-linked':''} ${selected?'obs-next':''}" data-action="impact-domain" data-id="${d}" data-drop="impact"><span class="obs-impact-scene" aria-hidden="true">${icon(['hand','people','home'][i],68)}</span><strong>${['나','친구·주변 사람','학급·학교생활'][i]}</strong>${x?`<small class="obs-domain-reason">${icon('check',18)}<span>${x.reason}</span></small>`:''}</button>`;}).join('')}</div></div></div>
+      <div class="impact-layout"><div class="impact-effects">${DATA.p04.links.map(x=>`<button class="impact-effect ${current===x.id?'selected current-card':''} ${Object.values(s.impacts).includes(x.id)?'linked':''} ${current===x.id?'obs-next':''}" data-action="select-effect" data-id="${x.id}" draggable="true" data-drag="impact" aria-pressed="${current===x.id}">${icon('file',30)}<span>${x.effect}</span>${icon(Object.values(s.impacts).includes(x.id)?'check':current===x.id?'arrow':'link',20)}</button>`).join('')}</div>
+      <div class="obs-impact-targets"><div class="obs-active-selection ${selected?'ready':''}" role="status">${icon(selected?'file':'link',22)}<b>${selected?selected.effect:'영향 카드를 먼저 골라요'}</b></div><div class="impact-domains">${['self','others','school'].map((d,i)=>{const x=DATA.p04.links.find(x=>x.id===s.impacts[d]);return `<button class="impact-domain domain-${i} ${x?'obs-impact-linked':''} ${selected?'obs-next':''}" data-action="impact-domain" data-id="${d}" data-drop="impact"><span class="obs-impact-scene obs-impact-art" aria-hidden="true">${image(IMPACT_ART[i],'obs-impact-image')}</span><strong>${['나','친구·주변 사람','학급·학교생활'][i]}</strong>${x?`<small class="obs-domain-reason">${icon('check',18)}<span>${x.reason}</span></small>`:''}</button>`;}).join('')}</div></div></div>
       </section>`;
     }
     default:return '';
   }
 }
 
+// 생활 상황 그림(손·물건 / 함께 있는 환경 / 기침 / 음식·식기). CSS 아이콘 대신 장면 그림으로 보여 준다.
+const RELATION_ART:Record<string,string>={contact:'rel-contact-20261116','shared-environment':'rel-environment-20261116',respiratory:'rel-respiratory-20261116',meal:'rel-meal-20261116'};
 function relationshipScene(id:string):string {
-  const pieces:Record<string,[string,string][]>= {
-    contact:[['hand','손'],['ball','물건'],['hand','다른 손']],
-    'shared-environment':[['people','친구들'],['window','공간']],
-    respiratory:[['air','기침'],['people','주변']],
-    meal:[['plate','음식'],['hand','식기']],
-  };
-  return `<span class="obs-relationship-scene" aria-hidden="true">${pieces[id].map(([glyph,label],i)=>`${i?icon('link',16):''}<span>${icon(glyph,37)}<small>${label}</small></span>`).join('')}</span>`;
+  return `<span class="obs-relationship-scene obs-relationship-art" aria-hidden="true">${image(RELATION_ART[id],'obs-rel-image')}</span>`;
 }

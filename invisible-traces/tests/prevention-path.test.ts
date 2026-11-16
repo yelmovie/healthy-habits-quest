@@ -1,3 +1,5 @@
-import test from 'node:test';import assert from 'node:assert/strict';import {contactAt,fresh,sanitize} from '../src/simulation/model';
-test('timing changes contacts, not a diagnosis',()=>{const original=contactAt(5),early=contactAt(5,1.5),late=contactAt(5,4.5);assert.ok(early.size<original.size);assert.ok(late.size>early.size);assert.ok(late.has('ball'));});
-test('trial values survive existing save validation',()=>{const s=fresh();s.timeline={tick:5,source:'book',intervention:1.5};assert.equal(sanitize(s).timeline.intervention,1.5);});
+import test from 'node:test';import assert from 'node:assert/strict';import {fresh,sanitize,fixtureFor,derive,tryIntervention} from '../src/simulation/model';
+test('trial values survive existing save validation',()=>{const s=fresh();s.timeline={tick:5,source:'book',intervention:1.5,tried:[3.5,1.5]};const out=sanitize(s);assert.equal(out.timeline.intervention,1.5);assert.deepEqual(out.timeline.tried,[3.5,1.5]);});
+test('P05 needs two wash timings including the early one',()=>{const s=fixtureFor(3,fresh().settings);s.timeline.source='book';tryIntervention(s,1.5);derive(s);assert.ok(!s.completed.includes('P05'),'one early guess is not a comparison');tryIntervention(s,4.5);derive(s);assert.ok(s.completed.includes('P05'));});
+test('late timings alone do not finish P05',()=>{const s=fixtureFor(3,fresh().settings);s.timeline.source='book';tryIntervention(s,2.5);tryIntervention(s,4.5);derive(s);assert.ok(!s.completed.includes('P05'));});
+test('older saves that already chose the early wash keep their record',()=>{const s=fixtureFor(4,fresh().settings) as unknown as Record<string,any>;s.timeline={tick:5,source:'book',intervention:1.5};const out=sanitize(s);assert.ok(out.completed.includes('P05'));});

@@ -30,6 +30,7 @@ const cases = Array.from({ length: 10 }, (_, i) => ({ route: `P${String(i + 1).p
 cases.push({ route: 'P05', intervention: 1.5 }, { route: 'P05', intervention: 4.5 }, { route: 'P05', intervention: 1.5, tick: 0 });
 for (const lab of ['droplet', 'air', 'water', 'saliva']) for (const value of [0, 1]) cases.push({ route: 'P06', lab, value });
 for (const action of ['coughEtiquette', 'ventilation', 'personalItems', 'portionFood']) cases.push({ route: 'P08', action });
+cases.push({ route: 'P08', action: 'washHands', pinned: true }, { route: 'P05', tried: [1.5, 4.5] });
 cases.push({ route: 'P10', apply: 'ventilation' }, { route: 'P10', apply: 'portionFood' }, { route: 'P10', apply: 'washHands' }, { route: 'P10', certificate: true });
 
 function audit() {
@@ -97,7 +98,7 @@ const savedStates = await page.evaluate(async cases => {
         const s = fixtureFor(Math.min(5, Math.ceil(n / 2) + (n % 2 === 0 ? 1 : 0)), { sound: false, reduced: true, large });
         if (n === 8) {
           const a = DATA.p07.actionPool.find(a => a.id === (c.action || 'washHands'));
-          s.experiment = { action: a.id, prediction: 'fewer', tick: 5, pinned: '', explanation: '', baselineSeen: true };
+          s.experiment = { action: a.id, prediction: 'fewer', tick: 5, pinned: c.pinned ? a.differenceEvent : '', explanation: '', baselineSeen: true };
         }
         if (n === 10) {
           s.strategy = { asked: [], placements: [{ site: 'classroom', actionId: 'ventilation' }, { site: 'cafeteria', actionId: 'portionFood' }, { site: 'gym', actionId: 'washHands' }], simulated: true };
@@ -105,7 +106,8 @@ const savedStates = await page.evaluate(async cases => {
           if (c.certificate) { s.final.applied = s.strategy.placements.map(placementKey); s.final.phase = 'certificate'; }
         }
         if (c.lab) s.labs.values[c.lab] = c.value;
-        if (c.intervention !== undefined) s.timeline = { tick: c.tick ?? 5, source: 'book', intervention: c.intervention };
+        if (c.intervention !== undefined) s.timeline = { tick: c.tick ?? 5, source: 'book', intervention: c.intervention, tried: [c.intervention] };
+        if (c.tried) s.timeline = { tick: 5, source: 'book', intervention: c.tried.at(-1), tried: c.tried };
         derive(s); s.route = c.route; s.lastRoute = c.route;
         return s;
   }));
@@ -133,7 +135,7 @@ try {
       const bottomIssues = await page.evaluate(audit);
       const issues = [...new Map([...topIssues, ...bottomIssues].map(i => [JSON.stringify(i), i])).values()];
       await page.evaluate(() => { document.querySelector('.page-content').scrollTop = 0; window.scrollTo(0, 0); });
-      const name = `${c.route}${c.lab ? `-${c.lab}-${c.value}` : ''}${c.action ? `-${c.action}` : ''}${c.apply ? `-${c.apply}` : ''}${c.certificate ? '-certificate' : ''}${c.intervention !== undefined ? `-shield-${c.intervention}-${c.tick ?? 5}` : ''}`;
+      const name = `${c.route}${c.lab ? `-${c.lab}-${c.value}` : ''}${c.action ? `-${c.action}` : ''}${c.apply ? `-${c.apply}` : ''}${c.certificate ? '-certificate' : ''}${c.pinned ? '-pinned' : ''}${c.tried ? '-compared' : ''}${c.intervention !== undefined ? `-shield-${c.intervention}-${c.tick ?? 5}` : ''}`;
       results.push({ width, height, large, name, issues });
       if (!large && (width === 1280 || width === 1024 || width === 390) && (!c.lab || c.value === 1)) await page.screenshot({ path: path.join(out, `${width}x${height}-${name}.png`), fullPage: true });
     }

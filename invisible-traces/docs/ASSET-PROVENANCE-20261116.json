@@ -1,0 +1,319 @@
+{
+  "date": "2026-11-17",
+  "method": "AI generated with the Codex built-in image tool. sharp 0.34 used for halo removal (objects: alpha<110 cleared), trimming, proportional resize and WebP encoding.",
+  "rejected": [
+    "water-unknown.png: a dented bottle with leaves gives an appearance cue; P06 must be decided by supply information, so the unknown water keeps the same clear glass (water-glass-20261108).",
+    "node-hand.png: red fringe on edges, kept the existing hand-palm-20261112 art instead."
+  ],
+  "sharedStyle": "Bright friendly Korean elementary school educational game illustration, soft cel shading, clean fine navy outlines, pastel teal and sky palette, no text. Objects on transparent background; scenes 4:3 with an existing game scene as style reference.",
+  "assets": [
+    {
+      "file": "public/assets/water-managed-20261116.webp",
+      "original": "asset-bank/original/flow-20261116/water-managed.png",
+      "source": "imagegen built-in (Codex, ChatGPT login)",
+      "kind": "object",
+      "usage": "P06 물 실험: 관리 기록이 확인된 물",
+      "promptSummary": "A clean modern white school drinking-water purifier dispenser with a small green check-mark sticker (no text) and a clear glass of water filled from it, standing together.",
+      "dimensions": [
+        389,
+        480
+      ],
+      "bytes": 30562,
+      "sha256": "4dd875e088c55f623d9a58e645c3d41f76dc1154ea396d4a7f53ddb8edabbdc6"
+    },
+    {
+      "file": "public/assets/node-book-20261116.webp",
+      "original": "asset-bank/original/flow-20261116/node-book.png",
+      "source": "imagegen built-in (Codex, ChatGPT login)",
+      "kind": "object",
+      "usage": "P05 시간 추적: 처음 흔적이 있던 책",
+      "promptSummary": "A closed classroom hardcover book with a teal cover and a bookmark ribbon, slightly worn corners.",
+      "dimensions": [
+        423,
+        480
+      ],
+      "bytes": 30944,
+      "sha256": "defc510411b0616194840998935e72cba4a9bf7218daeea55a84cff23042e23d"
+    },
+    {
+      "file": "public/assets/node-ball-20261116.webp",
+      "original": "asset-bank/original/flow-20261116/node-ball.png",
+      "source": "imagegen built-in (Codex, ChatGPT login)",
+      "kind": "object",
+      "usage": "P05 시간 추적·P08 손 씻기 비교: 함께 쓰는 공",
+      "promptSummary": "A red and white rubber playground ball used in a school gym, a little scuffed.",
+      "dimensions": [
+        460,
+        480
+      ],
+      "bytes": 46138,
+      "sha256": "e40574cf6ce06409cf0877e1619bc05e8d14f41a1a64ed22defb0ad837439bc1"
+    },
+    {
+      "file": "public/assets/node-door-20261116.webp",
+      "original": "asset-bank/original/flow-20261116/node-door.png",
+      "source": "imagegen built-in (Codex, ChatGPT login)",
+      "kind": "object",
+      "usage": "P05 시간 추적: 문손잡이",
+      "promptSummary": "A silver lever-style classroom door handle mounted on a small piece of pale wooden door, close-up.",
+      "dimensions": [
+        480,
+        382
+      ],
+      "bytes": 30286,
+      "sha256": "aa4494689d4a2c5e8af7c9e8f62c50102c93be5ef770eab1d8a4109e3f5ce6f0"
+    },
+    {
+      "file": "public/assets/impact-self-20261116.webp",
+      "original": "asset-bank/original/flow-20261116/impact-self.png",
+      "source": "imagegen built-in (Codex, ChatGPT login)",
+      "kind": "scene",
+      "usage": "P04 생활 영역: 나",
+      "promptSummary": "Wide 4:3 scene: a Korean elementary school child with a mild cold resting in bed at home under a blanket, a glass of water and a thermometer on the bedside table, looking a little sad at a school backpack hanging by the door. Warm cozy bedroom, morning light. Keep the bottom third calm and simple.",
+      "dimensions": [
+        960,
+        720
+      ],
+      "bytes": 65612,
+      "sha256": "1963c5c75666489ae25c31008aae886271bbc383a9017c4b14ca7fd0d282443e"
+    },
+    {
+      "file": "public/assets/impact-others-20261116.webp",
+      "original": "asset-bank/original/flow-20261116/impact-others.png",
+      "source": "imagegen built-in (Codex, ChatGPT login)",
+      "kind": "scene",
+      "usage": "P04 생활 영역: 친구·주변 사람",
+      "promptSummary": "Wide 4:3 scene: a Korean elementary classroom group table where three children are doing a group craft project, one chair at the table is clearly empty with a name-less pencil case left on it, the children glance at the empty chair looking like they miss their friend. Keep the bottom third calm and simple.",
+      "dimensions": [
+        960,
+        720
+      ],
+      "bytes": 88626,
+      "sha256": "d543435c45548364a282377c454850ba07b68152c28ca03c5c538faf0566656a"
+    },
+    {
+      "file": "public/assets/impact-school-20261116.webp",
+      "original": "asset-bank/original/flow-20261116/impact-school.png",
+      "source": "imagegen built-in (Codex, ChatGPT login)",
+      "kind": "scene",
+      "usage": "P04 생활 영역: 학급·학교생활",
+      "promptSummary": "Wide 4:3 scene: a Korean elementary school teacher moving colorful blank picture cards on a weekly class schedule board on the classroom wall to rearrange activities, two students watching curiously, a sports day ball basket set aside in the corner. Blank cards only, no writing. Keep the bottom third calm and simple.",
+      "dimensions": [
+        960,
+        720
+      ],
+      "bytes": 82706,
+      "sha256": "6f2cc7091047dd911ce57f405543913c06e59867c14895c7837457da417362ef"
+    },
+    {
+      "file": "public/assets/plan-classroom-20261116.webp",
+      "original": "asset-bank/original/flow-20261116/plan-classroom.png",
+      "source": "imagegen built-in (Codex, ChatGPT login)",
+      "kind": "scene",
+      "usage": "P09 작전: 교실 문제 장면",
+      "promptSummary": "Wide 4:3 scene: inside a Korean elementary classroom with all windows tightly closed, many children chatting closely at desks, one boy coughing into the air without covering his mouth, faint stuffy atmosphere. Different camera angle from a typical front view: seen from the back corner of the room toward the closed windows.",
+      "dimensions": [
+        960,
+        720
+      ],
+      "bytes": 135822,
+      "sha256": "907f30d487521d804eefbc6712b64740260bd9f5c3778bcf5a278570b573c4cb"
+    },
+    {
+      "file": "public/assets/plan-cafeteria-20261116.webp",
+      "original": "asset-bank/original/flow-20261116/plan-cafeteria.png",
+      "source": "imagegen built-in (Codex, ChatGPT login)",
+      "kind": "scene",
+      "usage": "P09 작전: 급식 공간 문제 장면",
+      "promptSummary": "Wide 4:3 scene: a Korean school cafeteria table seen from above at an angle, four children sharing one big communal bowl of japchae in the center, each dipping their own spoon directly into the shared bowl, there is a serving ladle lying unused beside the bowl.",
+      "dimensions": [
+        960,
+        720
+      ],
+      "bytes": 116828,
+      "sha256": "310e226989d0ac8ca4ea455a2db6bc30bb6dfd484cc0300c85fd96cb9e5c7285"
+    },
+    {
+      "file": "public/assets/plan-gym-20261116.webp",
+      "original": "asset-bank/original/flow-20261116/plan-gym.png",
+      "source": "imagegen built-in (Codex, ChatGPT login)",
+      "kind": "scene",
+      "usage": "P09 작전: 체육 활동 공간 문제 장면",
+      "promptSummary": "Wide 4:3 scene: a Korean school gymnasium right after a ball game, a red playground ball on the floor, children with sweaty hands reaching into a snack box on a bench without washing hands, a hand-washing sink visible near the gym door in the background.",
+      "dimensions": [
+        960,
+        720
+      ],
+      "bytes": 118280,
+      "sha256": "efaa05e1467f084de3fa4220d1c5afbd8946517a8a3b043be56223f51f9b8aad"
+    },
+    {
+      "file": "public/assets/bg-plaza-20261116.webp",
+      "original": "asset-bank/original/flow-20261116/bg-plaza.png",
+      "source": "imagegen built-in (Codex, ChatGPT login)",
+      "kind": "scene",
+      "usage": "미션 1 활동 배경: 신호 광장",
+      "promptSummary": "A sunny Korean elementary school front plaza with paving stones, flower beds, benches and trees, the school building softly blurred in the distance, a few faint glowing purple sparkles floating in the air like mysterious traces.",
+      "dimensions": [
+        1599,
+        900
+      ],
+      "bytes": 168178,
+      "sha256": "fa3059ee2399338e0068ac65f2ad7271aa3624942e91990e5fff2220408df7dd"
+    },
+    {
+      "file": "public/assets/bg-gym-20261116.webp",
+      "original": "asset-bank/original/flow-20261116/bg-gym.png",
+      "source": "imagegen built-in (Codex, ChatGPT login)",
+      "kind": "scene",
+      "usage": "미션 2 활동 배경: 체육관",
+      "promptSummary": "Inside a bright Korean school gymnasium with wooden floor, basketball hoop, ball basket and mats at the sides, big windows with sunlight, empty of people.",
+      "dimensions": [
+        1599,
+        900
+      ],
+      "bytes": 88750,
+      "sha256": "8f80e0e6a5722eed096813bcbfb6d8b0057093f52516344446f3fab2963dc2a8"
+    },
+    {
+      "file": "public/assets/bg-classroom-20261116.webp",
+      "original": "asset-bank/original/flow-20261116/bg-classroom.png",
+      "source": "imagegen built-in (Codex, ChatGPT login)",
+      "kind": "scene",
+      "usage": "미션 3 활동 배경: 본관 교실",
+      "promptSummary": "Inside a bright Korean elementary classroom viewed from the back, rows of desks softly blurred, green chalkboard, large windows with trees outside, empty of people.",
+      "dimensions": [
+        1599,
+        900
+      ],
+      "bytes": 73034,
+      "sha256": "0a997f67a5b352c9a6e74e62bd77e2ad2957d4b4c720edef19e97c59730e5122"
+    },
+    {
+      "file": "public/assets/bg-cafeteria-20261116.webp",
+      "original": "asset-bank/original/flow-20261116/bg-cafeteria.png",
+      "source": "imagegen built-in (Codex, ChatGPT login)",
+      "kind": "scene",
+      "usage": "미션 4 활동 배경: 급식실",
+      "promptSummary": "Inside a clean bright Korean school cafeteria with long tables, trays stacked, serving counter at the side, big windows, empty of people.",
+      "dimensions": [
+        1599,
+        900
+      ],
+      "bytes": 97730,
+      "sha256": "09b5b4acf2d0f32eb4d9fcdec0811db09cb3695d3dcf339b01cde6b98e8a4824"
+    },
+    {
+      "file": "public/assets/bg-field-20261116.webp",
+      "original": "asset-bank/original/flow-20261116/bg-field.png",
+      "source": "imagegen built-in (Codex, ChatGPT login)",
+      "kind": "scene",
+      "usage": "미션 5 활동 배경: 운동장",
+      "promptSummary": "A Korean school sports field with a red running track, green grass, soccer goal, trees and the school building at the far edge, blue sky, empty of people.",
+      "dimensions": [
+        1599,
+        900
+      ],
+      "bytes": 146570,
+      "sha256": "3cc83f2d507dcd66f62ab0d6fe01612190faf0c235835bb522bed02b6820e093"
+    },
+    {
+      "file": "public/assets/rel-contact-20261116.webp",
+      "original": "asset-bank/original/flow-20261116/rel-contact.png",
+      "source": "imagegen built-in (Codex, ChatGPT login)",
+      "kind": "scene",
+      "usage": "P03 생활 상황: 손·물건의 접촉",
+      "promptSummary": "Two children's hands passing a red playground ball from one hand to another, faint glowing purple sparkle traces moving from the first hand onto the ball and toward the second hand.",
+      "dimensions": [
+        560,
+        560
+      ],
+      "bytes": 14830,
+      "sha256": "0c57a83ae3df1f138423d27f7c5112124052569769096b89847bf09336702e7e"
+    },
+    {
+      "file": "public/assets/rel-environment-20261116.webp",
+      "original": "asset-bank/original/flow-20261116/rel-environment.png",
+      "source": "imagegen built-in (Codex, ChatGPT login)",
+      "kind": "scene",
+      "usage": "P03 생활 상황: 함께 있는 환경",
+      "promptSummary": "Several children chatting closely together inside a small classroom with the windows shut, faint purple sparkle traces floating in the still air around them.",
+      "dimensions": [
+        560,
+        560
+      ],
+      "bytes": 28888,
+      "sha256": "38e9e617b2529d9f77471856bf4bbe894b6431c65453926ef90213cb3fe0b89b"
+    },
+    {
+      "file": "public/assets/rel-respiratory-20261116.webp",
+      "original": "asset-bank/original/flow-20261116/rel-respiratory.png",
+      "source": "imagegen built-in (Codex, ChatGPT login)",
+      "kind": "scene",
+      "usage": "P03 생활 상황: 기침과 주변 공간",
+      "promptSummary": "A child coughing without covering the mouth, a soft cone of tiny purple droplet sparkles spreading toward a nearby friend who leans back.",
+      "dimensions": [
+        560,
+        560
+      ],
+      "bytes": 20430,
+      "sha256": "573391ce3952210d00ab7185cccb5493730fc088097692b0cb4b988214ac7222"
+    },
+    {
+      "file": "public/assets/rel-meal-20261116.webp",
+      "original": "asset-bank/original/flow-20261116/rel-meal.png",
+      "source": "imagegen built-in (Codex, ChatGPT login)",
+      "kind": "scene",
+      "usage": "P03 생활 상황: 음식·식기의 사용",
+      "promptSummary": "A shared bowl of japchae with three children's own spoons dipping straight into it, faint purple sparkle traces on the spoons and the shared food.",
+      "dimensions": [
+        560,
+        560
+      ],
+      "bytes": 26210,
+      "sha256": "56dcae24f02e45a62a751e535bd211bc75f09c1764b163b0cfabe309d99e752c"
+    },
+    {
+      "file": "public/assets/wash-palm-20261116.webp",
+      "original": "asset-bank/original/flow-20261116/wash-palm.png",
+      "source": "imagegen built-in (Codex, ChatGPT login)",
+      "kind": "scene",
+      "usage": "P10 손 씻기 1단계: 손바닥",
+      "promptSummary": "Two soapy hands rubbing palm to palm under running water, lots of white soap bubbles, close-up.",
+      "dimensions": [
+        560,
+        560
+      ],
+      "bytes": 13450,
+      "sha256": "2c99de89597aff84ee7bb77a1262beac572a906c3a058418c0c22098c6e14402"
+    },
+    {
+      "file": "public/assets/wash-back-20261116.webp",
+      "original": "asset-bank/original/flow-20261116/wash-back.png",
+      "source": "imagegen built-in (Codex, ChatGPT login)",
+      "kind": "scene",
+      "usage": "P10 손 씻기 2단계: 손등",
+      "promptSummary": "One soapy palm rubbing the back of the other hand under running water, soap bubbles, close-up.",
+      "dimensions": [
+        560,
+        560
+      ],
+      "bytes": 18786,
+      "sha256": "7e7bcc5820fbd181673bdd690289b2070eb1f1ed3012ab68146681f00efc6f56"
+    },
+    {
+      "file": "public/assets/wash-fingers-20261116.webp",
+      "original": "asset-bank/original/flow-20261116/wash-fingers.png",
+      "source": "imagegen built-in (Codex, ChatGPT login)",
+      "kind": "scene",
+      "usage": "P10 손 씻기 3단계: 손가락 사이",
+      "promptSummary": "Two soapy hands with fingers interlaced, rubbing between the fingers, soap bubbles, close-up.",
+      "dimensions": [
+        560,
+        560
+      ],
+      "bytes": 21268,
+      "sha256": "3845c76565b6378372f6806692f3789f19bdbac1d4d5cfc8b0644a7d34ed78ec"
+    }
+  ]
+}

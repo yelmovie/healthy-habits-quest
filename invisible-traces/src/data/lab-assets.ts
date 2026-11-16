@@ -11,4 +11,8 @@ export const labAssets = Object.freeze({
   personalPlate: { src: base + 'assets/personal-plate-20261112.webp', width: 720, height: 480 },
   handwashing: { src: base + 'assets/handwashing-20261112.webp', width: 720, height: 480 },
   handPalm: { src: base + 'assets/hand-palm-20261112.webp', width: 658, height: 720 },
+  waterManaged: { src: base + 'assets/water-managed-20261116.webp', width: 389, height: 480 },
+  book: { src: base + 'assets/node-book-20261116.webp', width: 423, height: 480 },
+  ball: { src: base + 'assets/node-ball-20261116.webp', width: 460, height: 480 },
+  door: { src: base + 'assets/node-door-20261116.webp', width: 480, height: 382 },
 });

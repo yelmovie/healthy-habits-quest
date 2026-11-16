@@ -1,3 +1,4 @@
+import { icon } from './icons';
 import { DATA, PAGES } from '../data/game';
 import { nextPlacement, type State } from '../simulation/model';
 import type { View } from './render';
@@ -6,20 +7,21 @@ import type { View } from './render';
 export function nextInstruction(s: State, v: View): string {
   if (s.completed.includes(s.route) && s.route !== 'P10') return '잘 관찰했어요. 다음 조사로 가요!';
   switch (s.route) {
-    case 'P01': return '장소 그림의 돋보기를 눌러 신호를 찾아요.';
+    case 'P01': return '돋보기를 그림 위로 움직여 보라 빛이 숨은 곳을 찾아요.';
     case 'P02': return v.replacement ? '단서함에서 바꿀 단서를 눌러요.'
       : s.clues.length === 5 ? '단서함에서 관계가 먼 단서를 바꿔요.' : '장소를 바꿔 보며 관련 단서를 눌러 담아요.';
     case 'P03': return v.clue ? '이 단서와 이어지는 생활 상황을 눌러요.' : '연결할 단서를 골라요.';
-    case 'P04': return v.effect ? '이 영향이 생길 생활 영역을 눌러요.' : '영향 카드를 하나 눌러요.';
+    case 'P04': return '반짝이는 카드의 일이 누구에게 생길지 그림을 눌러요.';
     case 'P05':
       if (s.timeline.source !== 'book') return s.timeline.tick > 0 ? '시간 막대를 0으로 옮겨 처음을 살펴봐요.' : '처음 흔적이 있는 물체를 눌러요.';
-      return s.timeline.intervention === null ? '손 씻을 때를 골라 연결을 비교해요.' : '손 씻을 때를 바꿔 더 줄일 수 있는지 봐요.';
+      if (s.timeline.tried.length === 0) return '비누 방패를 넣을 때를 하나 골라요.';
+      return s.timeline.tried.includes(1.5) ? '다른 때에도 넣어 흔적 수를 비교해요.' : '더 일찍 씻으면 흔적이 줄어들까요?';
     case 'P06': {
       if (v.lab === 'synthesis') return '관찰한 기록을 떠올리며 다른 흔적을 줄일 행동 두 개를 골라요.';
       if (s.labs.done.includes(v.lab)) return '다음 실험 버튼을 눌러 다른 경로도 살펴봐요.';
       const instructions: Record<string, string> = {
-        contact: '자동재생을 눌러 흔적이 옮겨 가는 순서를 봐요.',
-        droplet: '입·코 가리기를 눌러 흔적의 범위를 비교해요.',
+        contact: '다음 실험 버튼을 눌러 다른 경로를 살펴봐요.',
+        droplet: '옷소매를 기침하는 친구의 입으로 끌어 흔적 범위를 비교해요.',
         air: '열기를 눌러 창문 전후를 비교해요.',
         water: '관리 정보를 읽고 마실 물을 골라요.',
         saliva: '개인 접시에 덜기를 눌러 도구의 역할을 봐요.',
@@ -32,7 +34,7 @@ export function nextInstruction(s: State, v: View): string {
       const event = DATA.p07.events.find(e => e.id === action?.differenceEvent);
       if (!event) return '조건 실험실에서 행동을 먼저 골라요.';
       if (s.experiment.tick < event.time) return '자동재생이나 시간 막대로 두 하루를 관찰해요.';
-      return s.experiment.pinned ? '관찰한 결과 연결하기에서 알맞은 변화를 골라요.' : '두 그림의 차이를 보고 차이 표시를 눌러요.';
+      return s.experiment.pinned ? '달라진 결과 카드 중 알맞은 것을 골라요.' : 'B 그림에서 달라진 곳을 눌러 표시해요.';
     }
     case 'P09': return v.action ? '고른 행동을 놓을 장소 그림을 눌러요.'
       : !s.strategy.placements.length ? '장소의 설명을 읽고 행동 카드를 눌러요.'
@@ -40,9 +42,9 @@ export function nextInstruction(s: State, v: View): string {
     case 'P10': {
       if (s.final.phase === 'report') return '내 계획을 보고 직접 실천하기를 눌러요.';
       const placement = nextPlacement(s);
-      if (placement?.actionId === 'washHands') return '손바닥·손등·손가락 사이를 하나씩 눌러요.';
-      if (placement?.actionId === 'ventilation') return '창문 열기를 눌러 공기를 바꿔요.';
-      return '개인 접시에 담기를 눌러 실천해요.';
+      if (placement?.actionId === 'washHands') return '손바닥·손등·손가락 사이 카드를 쓱쓱 문질러요.';
+      if (placement?.actionId === 'ventilation') return '창문을 오른쪽으로 밀어 열어요.';
+      return '공용 음식을 개인 접시로 끌거나 접시를 눌러 덜어요.';
     }
     default: return '';
   }
@@ -83,7 +85,12 @@ export function recheckInstruction(s: State, v: View): string {
 export function learningGuide(s: State, v?: View): string {
   const page = PAGES.find(p => p.id === s.route);
   if (!page) return '';
-  return `<h2>${page.name}에서 알아볼 것</h2>${v?`<div class="learning-question"><b>다시 볼 단서</b><p>${recheckInstruction(s,v)}</p></div>`:''}<p>${page.learningObjectives.join(' ')}</p><div class="learning-question"><b>내 말로 설명해요</b><p>${page.reflection}</p></div><p>${page.evidence}</p><details class="learning-standards"><summary>연결된 성취기준</summary><p>${page.standards.map(id => `${id} · ${DATA.standards.find(s => s.id === id)?.focus}`).join('<br>')}</p></details><h3>그림을 읽는 약속</h3><p>보라색 흔적과 그림은 생활 속 연결을 관찰하는 모형이에요. 실제 입자 수나 감염 여부·확률을 나타내지 않아요. 병원체마다 옮겨 가는 방법이 달라요.</p><p>자동재생은 실험 과정을 보여줘요. 단서·예측·해석·대응 계획은 직접 선택해요.</p>`;
+  // 팝업은 카드 두 장(다시 볼 단서·내 말로 설명)만 펼쳐 두고, 긴 약속·성취기준은 접어 둔다.
+  return `<header class="guide-head"><span class="guide-chip">${icon('flag', 16)}미션 ${Number(page.stage.slice(1))} · ${page.name}</span><h2>이 활동에서 알아볼 것</h2><p class="guide-goal">${page.learningObjectives.join(' ')}</p></header>
+  <div class="guide-cards">${v ? `<section class="guide-card look"><b>${icon('search', 20)}다시 볼 단서</b><p>${recheckInstruction(s, v)}</p></section>` : ''}<section class="guide-card talk"><b>${icon('voice', 20)}내 말로 설명해요</b><p>${page.reflection}</p></section></div>
+  <p class="guide-note">${page.evidence}</p>
+  <details class="learning-standards"><summary>그림을 읽는 약속</summary><p>보라색 흔적과 그림은 생활 속 연결을 관찰하는 모형이에요. 실제 입자 수나 감염 여부·확률을 나타내지 않아요. 병원체마다 옮겨 가는 방법이 달라요.</p><p>자동재생은 시간에 따른 변화를 보여줘요. 단서·예측·해석·대응 계획과 실천은 직접 해요.</p></details>
+  <details class="learning-standards"><summary>연결된 성취기준</summary><p>${page.standards.map(id => `${id} · ${DATA.standards.find(s => s.id === id)?.focus}`).join('<br>')}</p></details>`;
 }
 
 export function curriculumGuide(): string {

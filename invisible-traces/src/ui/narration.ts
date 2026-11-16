@@ -12,7 +12,7 @@ export function mountNarration(options:{enabled:()=>boolean;quiet:(value:boolean
   const scene=document.querySelector<HTMLElement>('.npc-stage-dialog[open] .npc-stage');
   if(scene){scene.dataset.speaking=String(player.playing&&scene.dataset.lineId===current);const change=scene.querySelector<HTMLButtonElement>('[data-npc-switch]');if(change)change.disabled=!!player.active;}
   if(!button?.isConnected)return;const active=!!player.active,label=active?'안내 목소리 멈추기':'안내 다시 듣기';
-  if(button.getAttribute('aria-label')!==label){button.setAttribute('aria-label',label);button.title=label;button.innerHTML=icon(active?'pause':'sound',22);}
+  if(button.getAttribute('aria-label')!==label){button.setAttribute('aria-label',label);button.title=label;button.innerHTML=icon(active?'pause':'voice',22);}
   button.setAttribute('aria-pressed',String(active));button.disabled=!current;
  }
  function visible(el:HTMLElement){return !(el.closest('details:not([open])')&&!el.closest('summary'))&&!el.closest('[hidden], [inert]')&&el.getClientRects().length>0&&getComputedStyle(el).visibility!=='hidden'&&!el.closest('#toast:not(.visible)');}

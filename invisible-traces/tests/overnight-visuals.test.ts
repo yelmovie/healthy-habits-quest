@@ -8,10 +8,13 @@ test('기침 종합은 아무 두 행동이 아니라 기침 예절과 환기를
   assert.equal(synthesisReady(['coughEtiquette', 'washHands']), false);
   assert.equal(synthesisReady(['coughEtiquette', 'ventilation']), true);
 });
-test('물 출처 비교는 동일한 생성 이미지로 외형 정답 단서를 주지 않는다', () => {
+test('물 출처 비교는 물의 겉모습이 아니라 공급 정보로만 달라진다', () => {
   const s = fresh(); s.route = 'P06';
   const html = tracingPages(s, { lab: 'water', playing: false } as View);
-  assert.equal((html.match(/src="\/assets\/water-glass-20261108.webp"/g) || []).length, 2);
+  // 출처 모를 물은 맑은 컵 그대로, 관리된 물은 같은 맑은 컵 + 점검된 정수기(출처 정보)다.
+  assert.equal((html.match(/src="\/assets\/water-glass-20261108.webp"/g) || []).length, 1);
+  assert.equal((html.match(/src="\/assets\/water-managed-20261116.webp"/g) || []).length, 1);
+  assert.doesNotMatch(html, /water-unknown/);
   assert.match(html, /출처가 확인되지 않은 물/);
 });
 

@@ -24,8 +24,9 @@ test('단서와 영향 연결은 선택 전후에 맞는 다음 조작을 알려
   const s = fresh(), v = viewFresh(); s.route = 'P03';
   assert.match(nextInstruction(s, v), /단서를 골라/);
   v.clue = 'CL01'; assert.match(nextInstruction(s, v), /생활 상황/);
-  s.route = 'P04'; assert.match(nextInstruction(s, v), /영향 카드/);
-  v.effect = 'FX01'; assert.match(nextInstruction(s, v), /생활 영역/);
+  // P04는 빠른 분류: 카드를 따로 고르지 않고 반짝이는 카드의 일이 생길 그림을 바로 누른다.
+  s.route = 'P04'; assert.match(nextInstruction(s, v), /반짝이는 카드/);
+  assert.match(nextInstruction(s, v), /그림을 눌러요/);
 });
 
 test('실험 안내는 현재 실험의 조작과 완료 뒤 이동을 구별한다', () => {

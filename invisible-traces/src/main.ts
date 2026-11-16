@@ -11,15 +11,18 @@ import './ui/stages-strategy.css';
 import './ui/activity-fit.css';
 import './ui/scenery-surfaces.css';
 import './ui/learning-guidance.css';
+import './ui/flow-upgrade.css';
 import {learningGuide,curriculumGuide,nextInstruction} from './ui/learning-guidance';
-import {DATA,PAGES,STAGES,LABS,SITES,EFFECTS} from './data/game';
-import {fresh,derive,canEnter,fixtureFor,addPlacement,planResult,placementKey,contactAt,applyPlacement,type State,type Route} from './simulation/model';
+import {DATA,PAGES,STAGES,LABS,SITES,EFFECTS,asset} from './data/game';
+const STAGE_BACKDROPS:Record<string,string>={S1:'bg-plaza-20261116',S2:'bg-gym-20261116',S3:'bg-classroom-20261116',S4:'bg-cafeteria-20261116',S5:'bg-field-20261116'};
+import {fresh,derive,canEnter,tryIntervention,timingCompared,EARLY_WASH,fixtureFor,addPlacement,planResult,placementKey,contactAt,applyPlacement,type State,type Route} from './simulation/model';
 import {demonstrationSteps,playbackDelay,playbackSpeed,type PlaybackKind,type DemoStep} from './simulation/playback';
 import {readSave,writeSave,resetSave,saveError} from './state/storage';
 import {icon,esc} from './ui/icons';
 import {header,home,map,mapStatus,mapViewLabel,shell,pageContent,records,viewFresh,comparisonBoard,comparisonTasks,gateHint,type View,btn} from './ui/render';
 import type {MapHandle} from './game/pixel-map';
 import {NODES,PLACES} from './game/school-map';
+import {SIGNAL_SPOTS} from './ui/stages-observation';
 const root=document.querySelector<HTMLDivElement>('#app')!,modalRoot=document.querySelector<HTMLDivElement>('#modal-root')!,toastRoot=document.querySelector<HTMLDivElement>('#toast')!;
 const loaded=readSave();let state=loaded.state,protectedSave=!!loaded.error;let archive:State|null=null;let view:View={...viewFresh(),lab:state.labs.active};let epoch=0,mapHandle:MapHandle|null=null;let travelRequest=0,travellingStage=0;let timer:ReturnType<typeof setInterval>|null=null,toastTimer:ReturnType<typeof setTimeout>|null=null;let focusBefore:HTMLElement|null=null;let saveWarning=false;
 function hideToast(){toastRoot.className='';if(toastTimer)clearTimeout(toastTimer);toastTimer=null;}
@@ -40,8 +43,13 @@ function update(fn:(s:State)=>void,redraw=true){const before=new Set(state.evide
  if(evidence||state.completed.some(p=>!pages.has(p)))sound('success');if(evidence)notify('새 연구 기록이 자동으로 정리됐어요.','success');if(redraw)render();}
 function navigate(route:Route){if(!canEnter(state,route)){notify('앞선 조사 기록을 먼저 완성해 주세요.');return;}narration.stop();stop();if(route!==state.route)hideToast();state.route=route;if(route!=='C00'&&route!=='C01')state.lastRoute=route;view.clue='';view.effect='';view.replacement='';view.action='';view.focus='';view.index=0;view.lab=state.labs.active;view.labPreview=null;view.demoStep=0;playbackSession=null;derive(state);persist();render();}
 function render(keepTimer=false){disposeNpc?.();if(!keepTimer){stop();playbackSession=null;}epoch++;travelRequest++;travellingStage=0;mapRequest?.abort();mapRequest=null;mapHandle?.destroy();mapHandle=null;document.body.classList.toggle('reduced',state.settings.reduced||matchMedia('(prefers-reduced-motion: reduce)').matches);document.body.classList.toggle('large-text',state.settings.large);document.body.classList.toggle('on-map',state.route==='C01');document.body.classList.toggle('on-home',state.route==='C00');document.body.classList.toggle('on-activity',state.route.startsWith('P'));
+ // 미션마다 지도 속 장소 그림을 활동 화면 뒤에 깐다(신호 광장·체육관·본관 교실·급식실·운동장).
+ {const stage=PAGES.find(p=>p.id===state.route)?.stage;const bg=stage?STAGE_BACKDROPS[stage]:'';if(bg)document.body.style.setProperty('--stage-bg',`url(${asset(bg)})`);else document.body.style.removeProperty('--stage-bg');document.body.classList.toggle('has-stage-bg',!!bg);}
  if(state.route==='P06'&&state.completed.includes('P05')&&!state.labs.done.includes('contact')){state.labs.done.push('contact');derive(state);persist();}
+ if(state.route==='P06'&&view.lab==='contact'){view.lab=LABS.find(l=>l.id!=='contact'&&!state.labs.done.includes(l.id))?.id??'synthesis';}
  if(state.route==='P07'&&!state.experiment.baselineSeen){state.experiment.baselineSeen=true;persist();}
+ // P09에서 방금 본 계획을 다시 보여 주는 확인 화면은 건너뛰고 바로 실천한다.
+ if(state.route==='P10'&&state.final.phase==='report'&&state.completed.includes('P09')){state.final.phase='apply';persist();}
  root.innerHTML=header(state,!!archive)+(state.route==='C00'?home(state):state.route==='C01'?map(state,view):shell(state,view,pageContent(state,view)));
  if(state.route==='C00')disposeNpc=mountNpcGuide(root.querySelector('.title-actions'),{text:'보이지 않는 흔적을 함께 찾아보자. 증거를 살펴 감염이 퍼지는 경로를 생각하고, 생활 속에서 실천할 예방 방법을 골라 보자.',stop:()=>narration.stop(),reduced:()=>state.settings.reduced});
  if(protectedSave||saveWarning){const warning=document.createElement('div');warning.className='storage-warning';warning.setAttribute('role','status');warning.textContent=saveError()??'현재 탐구는 임시 상태예요. 창을 닫기 전에 연구 기록을 확인해 주세요.';root.prepend(warning);}
@@ -117,7 +125,8 @@ root.addEventListener('click',e=>{if(Date.now()<suppressClick)return;const targe
  if(a==='site-preview'){view.site=id;render();return;}
  if(sealed()&&!['site','lab','timeline-play','comparison-play','re-experiment','select-clue','select-effect'].includes(a)){notify('이 미션의 기록이 완성됐어요. 지도에서 다시 실험할 수 있어요.');return;}
  switch(a){
- case 'discover':if(state.found.includes(id)&&state.completed.includes('P01')){view.site=id;navigate('P02');return;}update(s=>{if(!s.found.includes(id))s.found.push(id);});notify('신호 위치를 기록했어요.');return;
+ case 'discover':{// 돋보기로 찾은 그 손짓의 클릭이 바로 현장 이동으로 이어지지 않게 한다(그 그림만, 잠깐).
+ if(scanGrace.id===id&&Date.now()<scanGrace.until)return;if(state.found.includes(id)&&state.completed.includes('P01')){view.site=id;navigate('P02');return;}if(state.found.includes(id))return;const me=e as MouseEvent,vis=target.querySelector<HTMLElement>('.obs-site-visual');if(me.detail!==0&&vis&&!scanAt(vis,id,me.clientX,me.clientY)){notify('보라 빛이 새어 나오는 곳으로 돋보기를 옮겨 봐요.');return;}discover(id);return;}
  case 'site':view.site=id;view.index=0;view.replacement='';view.focus='clues';render();return;
  case 'clue':if(state.clues.includes(id)){update(s=>s.clues=s.clues.filter(x=>x!==id));return;}if(state.clues.length>=5){view.replacement=id;view.focus='tray';notify('바꿀 기존 단서를 골라주세요.');render();return;}update(s=>s.clues.push(id));cluesHint();return;
  case 'remove-clue':update(s=>{s.clues=s.clues.filter(x=>x!==id);if(view.replacement){s.clues.push(view.replacement);view.replacement='';}});cluesHint();return;
@@ -126,7 +135,7 @@ root.addEventListener('click',e=>{if(Date.now()<suppressClick)return;const targe
  case 'select-effect':view.effect=id;view.focus='domains';render();return;
  case 'impact-domain':linkImpact(id);return;
  case 'source':update(s=>s.timeline.source=id);if(id!=='book')notify('시간을 처음으로 되감아 가장 먼저 빛난 물체를 살펴보세요.');return;
- case 'intervene':update(s=>{s.timeline.intervention=Number(id);s.timeline.tick=5;});return;
+ case 'intervene':{const was=state.completed.includes('P05');update(s=>tryIntervention(s,Number(id)));washFeedback(was);}return;
  case 'timeline-play':play('timeline');return;
  case 'comparison-play':play('comparison');return;
  case 'lab':view.lab=id;view.labPreview=null;view.demoStep=0;state.labs.active=id;persist();render();return;
@@ -138,25 +147,44 @@ root.addEventListener('click',e=>{if(Date.now()<suppressClick)return;const targe
  case 'predict':if(!state.experiment.action)return;update(s=>{s.experiment.prediction=id;s.experiment.tick=0;},false);navigate('P08');play('comparison');return;
  case 'difference':{const action=DATA.p07.actionPool.find(x=>x.id===state.experiment.action)!;update(s=>s.experiment.pinned=action.differenceEvent);return;}
  case 're-experiment':if(state.evidence.includes('E4')){if(!archive)archive=structuredClone(state);state=fixtureFor(4,state.settings);}navigate('P07');return;
+ case 'explain':{const a=DATA.p07.actionPool.find(x=>x.id===state.experiment.action);if(!state.experiment.pinned)return;if(a&&id!==a.metric){notify('이 행동과 직접 관련된 변화인지 두 장면을 다시 살펴봐요.');return;}update(s=>s.experiment.explanation=id);return;}
  case 'question':if(state.strategy.asked.includes(id))return;if(state.strategy.asked.length>=3){notify('질문권을 모두 썼어요. 연구 노트와 이미 들은 답을 살펴봐요.');return;}update(s=>s.strategy.asked.push(id));return;
  case 'strategy-action':view.action=id;render();return;
  case 'place':if(!view.action){notify('배치할 행동을 먼저 골라주세요.');return;}place(view.action,id);return;
  case 'remove-placement':update(s=>{s.strategy.placements=s.strategy.placements.filter(p=>placementKey(p)!==id);s.strategy.simulated=false;});return;
  case 'simulate':update(s=>s.strategy.simulated=true);if(planResult(state.strategy.placements).success)notify('대응안 완성! 에너지는 계획 놀이의 규칙이에요. 생활에서는 기침 예절과 개인 물품 사용도 함께 지켜요.','success');return;
  case 'begin-apply':update(s=>s.final.phase='apply');return;
- case 'apply':if(Date.now()<applyLock)return;apply(id);return;
- case 'hand-zone':if(Date.now()<applyLock)return;update(s=>{if(!s.final.hands.includes(id))s.final.hands.push(id);},false);if(state.final.hands.length===3)apply(target.dataset.key??'');else render();return;
+ case 'apply':applyWithReveal(id);return;
+ case 'hand-zone':if(Date.now()<applyLock||state.final.hands.includes(id))return;if((e as MouseEvent).detail===0||addRub(target,id,34))finishZone(id,target.dataset.key??'');return;
  }
 });
 // 단서와 생활 상황은 근거가 맞을 때만 잇는다. 틀린 연결에 완료 표시가 붙어 오개념이 남지 않게 한다.
 function linkRelation(clue:string,target:string){if(!DATA.p03.acceptedBranches.some(b=>b.requiresAll.some(([from,to])=>from===clue&&to===target))){view.clue=clue;notify('이 단서와 더 직접 이어지는 생활 상황을 다시 골라 봐요.');render();return;}update(s=>{s.relations[clue]=target;view.clue='';view.focus='';});}
+// 손 씻는 때를 한 번만 넣으면 비교가 되지 않는다. 다음에 무엇을 해 볼지 짧게 알려 준다.
+function washFeedback(wasDone=true){if(state.route!=='P05')return;if(state.completed.includes('P05')){if(!wasDone)notify('일찍 씻을수록 다른 곳으로 옮겨 가는 흔적이 줄었어요!','success');return;}const t=state.timeline;if(t.source!=='book')return;if(t.tried.length===1)notify(t.tried[0]===EARLY_WASH?'일찍 씻었어요! 늦게 씻으면 어떨까요? 다른 때도 넣어 봐요.':'흔적이 남았어요. 더 일찍 씻으면 어떨까요?');else if(!timingCompared(state))notify('아직 남은 흔적이 있어요. 더 일찍 씻을 때를 찾아봐요.');}
+// P01 돋보기: 그림 위에서 움직이면 따라오고, 흔적 자리에 닿으면 신호를 찾는다. 키보드는 바로 찾는다.
+function scanAt(vis:HTMLElement,id:string,x:number,y:number){const r=vis.getBoundingClientRect(),px=(x-r.left)/r.width*100,py=(y-r.top)/r.height*100;const lens=vis.querySelector<HTMLElement>('.scan-lens');if(lens){lens.style.left=`${Math.max(8,Math.min(92,px))}%`;lens.style.top=`${Math.max(10,Math.min(90,py))}%`;}const [hx,hy]=SIGNAL_SPOTS[id]??[50,50];return Math.hypot(px-hx,(py-hy)*r.height/r.width)<16;}
+function discover(id:string){if(state.found.includes(id))return;sound('scan');update(s=>{if(!s.found.includes(id))s.found.push(id);});notify('신호 위치를 기록했어요.');}
+let scanPressed=false,scanGrace={id:'',until:0};
+root.addEventListener('pointerdown',e=>{if((e.target as HTMLElement).closest('.obs-site-visual'))scanPressed=true;});
+window.addEventListener('pointerup',()=>{scanPressed=false;});
+root.addEventListener('pointermove',e=>{if(state.route!=='P01'||sealed())return;const vis=(e.target as HTMLElement).closest<HTMLElement>('.obs-site-visual[data-scan]');if(!vis||(e.pointerType!=='mouse'&&!scanPressed))return;const id=vis.dataset.scan!;if(state.found.includes(id))return;if(scanAt(vis,id,e.clientX,e.clientY)){scanPressed=false;scanGrace={id,until:Date.now()+700};discover(id);}});
 function cluesHint(){if(state.route==='P02'&&state.clues.length===5&&!state.completed.includes('P02'))notify(gateHint(state));}
-function linkImpact(id:string){if(!view.effect){notify('먼저 영향 카드를 골라주세요.');return;}if(DATA.p04.links.find(x=>x.id===view.effect)?.domain!==id){notify('이 영향은 누구의 생활과 더 직접 이어질까요?');return;}update(s=>{s.impacts[id]=view.effect;view.effect='';view.focus='';});}
+function linkImpact(id:string){if(!view.effect)view.effect=DATA.p04.links.find(x=>!Object.values(state.impacts).includes(x.id))?.id??'';if(!view.effect){notify('먼저 영향 카드를 골라주세요.');return;}if(DATA.p04.links.find(x=>x.id===view.effect)?.domain!==id){notify('이 영향은 누구의 생활과 더 직접 이어질까요?');return;}update(s=>{s.impacts[id]=view.effect;view.effect='';view.focus='';});}
 function setLab(id:string,value:number){view.labPreview=null;update(s=>{s.labs.values[id]=value;if(value===1&&!s.labs.done.includes(id))s.labs.done.push(id);});}
 function place(actionId:string,site:string){let result='';update(s=>{result=addPlacement(s,{actionId,site});if(result==='ok')view.action='';});if(result==='budget')notify('에너지가 부족해요. 기존 행동을 빼거나 바꿔보세요.');if(result==='wrong-site')notify('이 행동과 관련된 장소에 놓아주세요.');if(result==='duplicate')notify('이미 이 장소에 배치한 행동이에요.');}
 // 적용 직후 같은 자리에 다음 계획 버튼이 그려지므로, 연속 탭이 그 버튼까지 누르지 않게 잠깐 막는다.
 let applyLock=0;
 function apply(key:string){if(Date.now()<applyLock)return;let applied=false;const pages=state.completed.length;update(s=>applied=applyPlacement(s,key));if(applied){applyLock=Date.now()+700;if(state.completed.length===pages)sound('success');notify('계획을 직접 실천했어요.','success');}}
+// 실천 결과(열린 창문·담긴 접시·씻은 손)를 잠깐 보여 준 뒤 다음 계획으로 넘어간다.
+function applyWithReveal(key:string,reveal=true){if(Date.now()<applyLock||state.route!=='P10')return;const p=state.strategy.placements.find(x=>placementKey(x)===key);if(!p||state.final.applied.includes(key))return;applyLock=Date.now()+1400;if(reveal){view.demoStep=1;render();}else render();sound('success');const at=epoch;setTimeout(()=>{if(epoch!==at&&state.route!=='P10')return;applyLock=0;view.demoStep=0;apply(key);applyLock=Date.now()+250;},reveal?1200:900);}
+// 손 씻기: 문지르면(끌기) 한 번에, 톡 누르면 세 번에 한 부분이 깨끗해진다. 키보드는 바로 완료.
+const rub:Record<string,number>={};let rubbing:{id:string;key:string;el:HTMLElement;x:number;y:number;pointer:number}|null=null;
+function addRub(el:HTMLElement,id:string,amount:number){rub[id]=Math.min(100,(rub[id]??0)+amount);el.style.setProperty('--rub',`${rub[id]}%`);el.classList.add('rubbing');return rub[id]>=100;}
+function finishZone(id:string,key:string){delete rub[id];sound('scan');update(s=>{if(!s.final.hands.includes(id))s.final.hands.push(id);},false);if(state.final.hands.length===3)applyWithReveal(key,false);else render();}
+root.addEventListener('pointerdown',e=>{const el=(e.target as HTMLElement).closest<HTMLElement>('.hand-zone');if(!el||state.route!=='P10'||state.final.hands.includes(el.dataset.id!))return;rubbing={id:el.dataset.id!,key:el.dataset.key??'',el,x:e.clientX,y:e.clientY,pointer:e.pointerId};});
+window.addEventListener('pointermove',e=>{const r=rubbing;if(!r||e.pointerId!==r.pointer||!r.el.isConnected)return;const d=Math.hypot(e.clientX-r.x,e.clientY-r.y);r.x=e.clientX;r.y=e.clientY;if(d<2)return;if(addRub(r.el,r.id,d/3.2)){rubbing=null;suppressClick=Date.now()+450;finishZone(r.id,r.key);}});
+window.addEventListener('pointerup',()=>{rubbing=null;});
 function paintInstruction(){const el=root.querySelector('.next-instruction');const text=nextInstruction(state,view);if(el&&el.textContent!==text)el.textContent=text;}
 function paintTimeline(){paintInstruction();const trace=contactAt(state.timeline.tick,state.timeline.intervention);const baseline=contactAt(state.timeline.tick);const result=root.querySelector('#prevention-result span');if(result&&state.timeline.intervention!==null)result.textContent=`${baseline.size}곳 → ${trace.size}곳에 모형 흔적. ${[...baseline].filter(n=>!trace.has(n)).length}곳의 연결이 달라졌어요.`;root.querySelectorAll<HTMLElement>('[data-node]').forEach(el=>{el.classList.toggle('has-trace',trace.has(el.dataset.node!));const protectedNode=baseline.has(el.dataset.node!)&&!trace.has(el.dataset.node!);el.classList.toggle('trace-protected',protectedNode);const label=el.querySelector('.prevented-trace');if(label)label.textContent=protectedNode?'연결 차단':'';});const text=root.querySelector('#time-label');if(text)text.textContent=`사건 ${state.timeline.tick.toFixed(1)} / 5`;const range=root.querySelector<HTMLInputElement>('[data-range="timeline"]');if(range)range.value=String(state.timeline.tick);}
 function paintComparison(){paintInstruction();const live=root.querySelector('.comparison-live'),tasks=root.querySelector('.comparison-tasks'),text=root.querySelector('#comparison-time'),range=root.querySelector<HTMLInputElement>('[data-range="comparison"]');if(live)live.innerHTML=comparisonBoard(state);const a=DATA.p07.actionPool.find(x=>x.id===state.experiment.action);const after=String(!!a&&state.experiment.tick>=DATA.p07.events.find(e=>e.id===a.differenceEvent)!.time);if(tasks instanceof HTMLElement&&tasks.dataset.after!==after){tasks.dataset.after=after;tasks.innerHTML=comparisonTasks(state);}if(text)text.textContent=`${state.experiment.tick.toFixed(1)} / 5`;if(range&&document.activeElement!==range)range.value=String(state.experiment.tick);}
@@ -218,7 +246,7 @@ function questions(){
  modal(`<h2>현장에 물어보기</h2><p>남은 질문 ${3-state.strategy.asked.length}회 · 들은 답은 다시 볼 수 있어요.</p><div class="guide-stages question-dialog">${DATA.p09.questions.map(q=>`<button class="btn secondary question-dialog-card" data-modal="question" data-id="${q.id}" ${!state.strategy.asked.includes(q.id)&&(state.strategy.asked.length>=3||sealed())?'disabled':''}><strong>${q.text}</strong>${state.strategy.asked.includes(q.id)?`<span>${q.answer}</span>`:''}</button>`).join('')}</div>`);
 }
 root.addEventListener('input',e=>{const el=e.target as HTMLInputElement;if(el.dataset.range==='timeline'){if(timer){stop();showPlay('timeline-play','재생');paintPlaybackControls();}state.timeline.tick=Number(el.value);paintTimeline();}if(el.dataset.range==='comparison'){if(timer){stop();showPlay('comparison-play','비교 재생');paintPlaybackControls();}state.experiment.tick=Number(el.value);paintComparison();}if(el.dataset.range==='window'&&!sealed()){root.querySelector('.window-demo')?.classList.toggle('open',el.value==='1');}});
-root.addEventListener('change',e=>{const el=e.target as HTMLInputElement|HTMLSelectElement;if(el.dataset.select==='observation-site'){view.site=el.value;view.index=0;view.replacement='';view.focus='clues';render();return;}if(el.dataset.select==='playback-speed'){view.speed=playbackSpeed(Number(el.value));if(timer){clearTimeout(timer);timer=null;schedulePlayback();}return;}if(el.dataset.select==='intervention'){if(sealed())return;if(el.value!=='')update(s=>{s.timeline.intervention=Number(el.value);s.timeline.tick=5;});return;}if(el.dataset.range==='timeline'){persist();render();}if(el.dataset.range==='comparison'){persist();render();}if((el.dataset.range==='window'||el.dataset.select==='explanation')&&sealed()){notify('이 미션의 기록이 완성됐어요. 지도에서 다시 실험할 수 있어요.');render();return;}if(el.dataset.range==='window'){sound();setLab('air',Number(el.value));}if(el.dataset.select==='explanation'){const a=DATA.p07.actionPool.find(x=>x.id===state.experiment.action);if(a&&el.value!==a.metric){notify('이 행동과 직접 관련된 변화인지 두 장면을 다시 살펴봐요.');}update(s=>s.experiment.explanation=el.value);}});
+root.addEventListener('change',e=>{const el=e.target as HTMLInputElement|HTMLSelectElement;if(el.dataset.select==='observation-site'){view.site=el.value;view.index=0;view.replacement='';view.focus='clues';render();return;}if(el.dataset.select==='playback-speed'){view.speed=playbackSpeed(Number(el.value));if(timer){clearTimeout(timer);timer=null;schedulePlayback();}return;}if(el.dataset.select==='intervention'){if(sealed())return;if(el.value!==''){{const was=state.completed.includes('P05');update(s=>tryIntervention(s,Number(el.value)));washFeedback(was);}}return;}if(el.dataset.range==='timeline'){persist();render();}if(el.dataset.range==='comparison'){persist();render();}if((el.dataset.range==='window'||el.dataset.select==='explanation')&&sealed()){notify('이 미션의 기록이 완성됐어요. 지도에서 다시 실험할 수 있어요.');render();return;}if(el.dataset.range==='window'){sound();setLab('air',Number(el.value));}if(el.dataset.select==='explanation'){const a=DATA.p07.actionPool.find(x=>x.id===state.experiment.action);if(a&&el.value!==a.metric){notify('이 행동과 직접 관련된 변화인지 두 장면을 다시 살펴봐요.');}update(s=>s.experiment.explanation=el.value);}});
 modalRoot.addEventListener('click',e=>{const b=(e.target as HTMLElement).closest<HTMLElement>('[data-modal]');if(!b||b.hasAttribute('disabled'))return;sound();switch(b.dataset.modal){case 'exit-replay':closeModal();exitReplay();return;case 'teacher':teacher(true);return;case 'settings':settings();modalRoot.querySelector<HTMLButtonElement>('[data-modal="teacher"]')?.focus();return;case 'records':modal(records(state));return;case 'question':{const id=b.dataset.id!;if(!state.strategy.asked.includes(id)&&state.strategy.asked.length<3&&!sealed()){state.strategy.asked.push(id);derive(state);persist();}questions();const answer=DATA.p09.questions.find(q=>q.id===id)?.answer;if(answer)narration.announce(answer);return;}case 'close':closeModal();return;case 'unlock':if(!archive)archive=structuredClone(state);state=structuredClone(state);view.teacher=true;closeModal();navigate('C01');notify('미션을 고르면 본편을 보존하는 예시 시연으로 열려요.');return;case 'reset':confirmReset();return;case 'confirm-reset':{const next=fresh();next.settings={...state.settings};if(!resetSave(next)){notify(saveError()??'새 연구를 저장하지 못해 기존 기록을 유지했어요.');return;}state=next;archive=null;protectedSave=false;saveWarning=false;view=viewFresh();closeModal();navigate('C01');return;}}});
 modalRoot.addEventListener('change',e=>{const input=e.target as HTMLInputElement;const key=input.dataset.setting as keyof State['settings']|undefined;if(key){state.settings[key]=input.checked;researchAudio.sync();narration.sync();persist();document.body.classList.toggle('large-text',state.settings.large);document.body.classList.toggle('reduced',state.settings.reduced||matchMedia('(prefers-reduced-motion: reduce)').matches);}});
 document.addEventListener('keydown',e=>{if(!modalRoot.firstChild)return;if(e.key==='Escape'){closeModal();return;}if(e.key==='Tab'){const focusable=Array.from(modalRoot.querySelectorAll<HTMLElement>('button,input,select,[tabindex="0"]')).filter(x=>!x.hasAttribute('disabled'));const first=focusable[0],last=focusable.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus();}}});
@@ -226,7 +254,7 @@ let dragged:{kind:string;id:string}|null=null;
 root.addEventListener('dragstart',e=>{const el=(e.target as HTMLElement).closest<HTMLElement>('[data-drag]');if(!el||sealed()||touchDrag){e.preventDefault();return;}dragged={kind:el.dataset.drag!,id:el.dataset.id!};e.dataTransfer?.setData('text/plain',el.dataset.id!);});
 root.addEventListener('dragover',e=>{const el=(e.target as HTMLElement).closest<HTMLElement>('[data-drop]');if(el&&dragged?.kind===el.dataset.drop){e.preventDefault();el.classList.add('drop-hover');}});
 root.addEventListener('dragleave',e=>(e.target as HTMLElement).closest('[data-drop]')?.classList.remove('drop-hover'));
-function dropOn(d:{kind:string;id:string},el:HTMLElement){sound();if(d.kind==='wash-point'){const tick=Number(el.dataset.id);if(DATA.p05.intervention.allowedTicks.includes(tick))update(s=>{s.timeline.intervention=tick;s.timeline.tick=5;});return;}if(d.kind==='relation')linkRelation(d.id,el.dataset.id!);if(d.kind==='impact'){view.effect=d.id;linkImpact(el.dataset.id!);}if(d.kind==='strategy')place(d.id,el.dataset.id!);if(d.kind==='serving')setLab('saliva',1);if(d.kind==='final-serve')apply(d.id);}
+function dropOn(d:{kind:string;id:string},el:HTMLElement){sound();if(d.kind==='wash-point'){const tick=Number(el.dataset.id);if(DATA.p05.intervention.allowedTicks.includes(tick)){{const was=state.completed.includes('P05');update(s=>tryIntervention(s,tick));washFeedback(was);}}return;}if(d.kind==='relation')linkRelation(d.id,el.dataset.id!);if(d.kind==='impact'){view.effect=d.id;linkImpact(el.dataset.id!);}if(d.kind==='strategy')place(d.id,el.dataset.id!);if(d.kind==='serving')setLab('saliva',1);if(d.kind==='sleeve')setLab('droplet',1);if(d.kind==='final-serve')applyWithReveal(d.id);}
 root.addEventListener('drop',e=>{const el=(e.target as HTMLElement).closest<HTMLElement>('[data-drop]');if(!el||!dragged||sealed())return;e.preventDefault();el.classList.remove('drop-hover');if(el.dataset.drop!==dragged.kind)return;const d=dragged;dragged=null;dropOn(d,el);});
 root.addEventListener('dragend',()=>{dragged=null;root.querySelectorAll('.drop-hover').forEach(x=>x.classList.remove('drop-hover'));});
 // 태블릿·전자칠판: HTML 드래그는 터치에서 동작하지 않아 손가락 끌기를 포인터 이벤트로 따로 처리한다.
@@ -239,7 +267,7 @@ window.addEventListener('pointerup',e=>endTouchDrag(e,false));window.addEventLis
 
 let gesture:{x:number;id:number;kind:string;key:string;epoch:number}|null=null;
 root.addEventListener('pointerdown',e=>{const el=(e.target as HTMLElement).closest<HTMLElement>('[data-gesture]');if(el&&!sealed()){gesture={x:e.clientX,id:e.pointerId,kind:el.dataset.gesture!,key:el.dataset.id??'',epoch};el.setPointerCapture(e.pointerId);}});
-root.addEventListener('pointerup',e=>{if(gesture&&gesture.id===e.pointerId&&gesture.epoch===epoch){const g=gesture;gesture=null;if(e.clientX-g.x>40){if(g.kind==='final-window')apply(g.key);else{sound();setLab('air',1);}}}});
+root.addEventListener('pointerup',e=>{if(gesture&&gesture.id===e.pointerId&&gesture.epoch===epoch){const g=gesture;gesture=null;if(e.clientX-g.x>40){if(g.kind==='final-window')applyWithReveal(g.key);else{sound();setLab('air',1);}}}});
 root.addEventListener('pointercancel',()=>gesture=null);
 function viewport(){document.documentElement.style.setProperty('--app-height',`${visualViewport?.height??innerHeight}px`);gesture=null;}
 window.addEventListener('resize',viewport);visualViewport?.addEventListener('resize',viewport);document.addEventListener('visibilitychange',()=>{if(document.hidden){const was=!!timer;stop();persist();if(was)render();}});

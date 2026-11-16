@@ -36,7 +36,7 @@ export function gateHint(s:State):string {
  case 'P02':return s.clues.length<5?`단서를 ${5-s.clues.length}개 더 담아보세요.`:'사건과 관계가 먼 단서가 섞여 있어요. 다시 비교해 바꿔보세요.';
  case 'P03':return `설명한 관계 ${branches(s)} / 2 · 단서를 알맞은 생활 상황에 이어보세요.`;
  case 'P04':return `영향 카드를 ${DATA.p04.links.filter(x=>s.impacts[x.domain]!==x.id).length}개 더 연결해 보세요.`;
- case 'P05':return s.timeline.source!=='book'?'시간을 처음으로 되감고, 흔적이 처음 시작된 물체를 눌러보세요.':s.timeline.intervention===null?'손을 씻을 때를 하나 골라 끼워 넣어 보세요.':'다른 때에 손을 씻으면 연결이 어떻게 달라질까요?';
+ case 'P05':return s.timeline.source!=='book'?'시간을 처음으로 되감고, 흔적이 처음 시작된 물체를 눌러보세요.':s.timeline.tried.length<2?'손 씻을 때를 두 번 이상 넣어 흔적 수를 비교해 보세요.':'흔적이 가장 적게 남는 이른 때를 찾아보세요.';
  case 'P06':{const n=LABS.filter(x=>!s.labs.done.includes(x.id)).length;return n?`실험을 ${n}개 더 해보세요.`:'닫힌 교실에서 기침할 때 바꿀 행동 두 가지를 골라보세요.';}
  case 'P07':return s.experiment.action?'흔적이 어떻게 달라질지 예측을 골라보세요.':'바꿀 행동 하나를 골라보세요.';
  case 'P08':{const a=DATA.p07.actionPool.find(x=>x.id===s.experiment.action);if(!a)return '조건 실험실에서 행동을 먼저 골라주세요.';return s.experiment.pinned!==a.differenceEvent?'두 장면이 달라지는 순간에 차이 지점을 표시해 보세요.':'바꾼 행동과 이어지는 결과를 골라 연결해 보세요.';}
@@ -51,8 +51,8 @@ function progressLabel(s:State):string {
  case 'P02':return `단서 ${s.clues.length} / 5개`;
  case 'P03':return `관계 ${branches(s)} / 2가지`;
  case 'P04':return `영향 ${Object.keys(s.impacts).length} / 3영역`;
- case 'P05':return s.timeline.source==='book'&&s.timeline.intervention===1.5?'시간 추적 완료':`시작점 ${s.timeline.source==='book'?'찾음':s.timeline.source?'다시 찾기':'미선택'} · 시점 ${s.timeline.intervention===null?'미선택':'선택함'}`;
- case 'P06':return `실험 ${s.labs.done.length} / 5 · 종합 ${synthesisReady(s.labs.synthesis)?'완료':'확인 중'}`;
+ case 'P05':return s.completed.includes('P05')?'시간 추적 완료':`시작점 ${s.timeline.source==='book'?'찾음':s.timeline.source?'다시 찾기':'미선택'} · 비교 ${Math.min(2,s.timeline.tried.length)} / 2`;
+ case 'P06':return `실험 ${s.labs.done.filter(x=>x!=='contact').length} / 4 · 종합 ${synthesisReady(s.labs.synthesis)?'완료':'확인 중'}`;
  case 'P07':return s.experiment.action?'행동 선택함 · 예측 대기':'행동 · 예측 미선택';
  case 'P08':{const action=DATA.p07.actionPool.find(a=>a.id===s.experiment.action);return `관찰 기록 ${Number(!!action&&s.experiment.pinned===action.differenceEvent)+Number(!!action&&s.experiment.explanation===action.metric)} / 2`;}
  case 'P09':return `대응 행동 ${s.strategy.placements.length}개 배치`;

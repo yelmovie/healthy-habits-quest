@@ -1,0 +1,251 @@
+/* 2026-11-16 흐름·디자인 고도화: 배경 그림을 살리고, 눌러야 할 곳을 하나로 모은다. */
+
+/* P02 — 현장 그림을 가리지 않는 유리 카드 */
+.observation-p02 .clue-board { background: #0d3a3f; }
+.observation-p02 .clue-backdrop { opacity: 1; filter: saturate(1.05); }
+.observation-p02 .clue-board::after { content: ""; position: absolute; inset: 45% 0 0; background: linear-gradient(to bottom, rgba(13,58,63,0), rgba(13,58,63,.45)); pointer-events: none; }
+.observation-p02 .clue-grid { position: relative; z-index: 1; align-items: end; }
+.observation-p02 .clue-card { justify-content: flex-start; height: auto; max-height: 100%; background: rgba(255,255,255,.86); border-color: rgba(255,255,255,.9); border-radius: 22px; box-shadow: 0 10px 26px rgba(8,40,44,.22); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); transition: transform .18s ease, background .18s ease; }
+.observation-p02 .clue-card:hover { transform: translateY(-3px); }
+.observation-p02 .clue-card.obs-next { border-color: #b7a4f2; }
+.observation-p02 .clue-card.selected { background: rgba(216,242,239,.94); border-color: var(--teal); }
+
+/* P01 — 찾은 신호를 그림 위에 짧게 보여 준다 */
+.signal-caption { position: absolute; left: 10%; right: 10%; bottom: 10%; z-index: 2; padding: .45rem .7rem; border-radius: 14px; background: rgba(117,86,212,.9); color: #fff; font-size: .9rem; line-height: 1.35; font-weight: 700; text-align: center; box-shadow: 0 6px 18px rgba(60,30,140,.3); animation: caption-in .35s ease both; }
+@keyframes caption-in { from { transform: translateY(8px) scale(.96); } to { transform: none; } }
+.observation-p01 .site-scene.discovered .scanner-orb { top: 32%; width: 56px; height: 56px; }
+
+/* P05 — 교실 그림 위에 놓인 투명 사물 카드와 비교 결과 */
+.tracing-p05 .timeline-background { opacity: .85; }
+.tracing-p05 .trace-node { background: rgba(255,255,255,.82); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); border-radius: 20px; }
+.tracing-p05 .trace-node .trace-object img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(16,62,67,.18)); }
+.tracing-p05 .trace-node.has-trace .trace-object img { filter: drop-shadow(0 0 10px rgba(117,86,212,.9)) drop-shadow(0 0 3px rgba(117,86,212,.9)); }
+.tracing-choices .btn.choice { justify-content: space-between; gap: .4rem; }
+.trial-result { flex: none; padding: .1rem .5rem; border-radius: 999px; background: var(--purple-soft); color: var(--purple); font-size: .85rem; font-weight: 800; }
+.trial-result.good { background: var(--teal-soft); color: var(--teal-strong); }
+
+/* P06 — 종합 장면의 창문 그림, 접시 모양 */
+.tracing-synthesis-window img { width: 88%; max-width: 220px; height: auto; max-height: 60%; object-fit: contain; }
+.tracing-synthesis-window.open { background: var(--teal-soft); color: var(--teal-strong); }
+.tracing-empty-plate { width: min(80%, 230px); height: auto; max-height: none; aspect-ratio: 1.45 / 1; }
+.tracing-lab-play .btn.primary { min-height: 52px; padding-inline: 1.3rem; font-size: 1.05rem; }
+.water-card img.tracing-water-art { width: auto; max-width: 92%; height: 100%; max-height: 210px; min-height: 0; object-fit: contain; }
+
+/* P08 — B 그림 위 깃발, 결과 카드 */
+.compare-pin-wrap { position: relative; min-height: 0; display: grid; }
+.compare-pin-wrap > .compare-scene { min-height: 0; }
+.compare-pin { position: absolute; right: 10px; top: 10px; z-index: 3; display: inline-flex; align-items: center; gap: .35rem; min-height: 48px; padding: .45rem 1rem; border: 0; border-radius: 999px; background: var(--orange-strong); color: #fff; font-weight: 800; font-size: 1rem; box-shadow: 0 8px 20px rgba(168,84,0,.35); cursor: pointer; }
+.compare-pin.pinned { background: var(--teal-action); box-shadow: none; cursor: default; min-height: 40px; padding: .3rem .8rem; font-size: .9rem; }
+.comparison-activity .strategy-tasks { grid-template-columns: minmax(0, 1fr) auto; align-items: center; }
+.explain-step { display: flex; align-items: center; gap: .6rem; min-width: 0; padding: .45rem .6rem; border-radius: 18px; background: rgba(255,255,255,.8); border: 1px solid var(--line); }
+.explain-step.waiting { opacity: .75; }
+.explain-label { display: inline-flex; align-items: center; gap: .35rem; flex: none; font-weight: 800; color: var(--ink); font-size: .95rem; }
+.explain-choices { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .45rem; flex: 1; min-width: 0; }
+.explain-choices .btn { min-height: 48px; padding: .35rem .6rem; font-size: .9rem; line-height: 1.3; white-space: normal; border-radius: 16px; }
+/* 낮은 가로 화면: 한 줄을 유지하고 안내 글만 줄인다. */
+@media (max-height: 620px) {
+  .explain-label { display: none; }
+  .explain-step { padding: .25rem .35rem; }
+  .explain-choices .btn { min-height: 44px; padding: .2rem .45rem; font-size: .82rem; line-height: 1.2; }
+}
+/* 세로 폰: 결과 카드를 한 줄씩 넓게 쌓는다. */
+@media (max-width: 640px) {
+  .comparison-activity .strategy-tasks { grid-template-columns: minmax(0, 1fr); }
+  .explain-step { flex-direction: column; align-items: stretch; gap: .35rem; }
+  .explain-choices { grid-template-columns: minmax(0, 1fr); }
+  .explain-choices .btn { height: auto; min-height: 44px; }
+}
+/* 표시한 뒤에는 B 제목 줄의 깃발로 충분하다. 그림을 가리지 않게 숨긴다. */
+.compare-pin.pinned { display: none; }
+
+/* P10 — 밀어 여는 손짓 안내와 실천 결과 */
+.final-window { position: relative; touch-action: pan-y; cursor: grab; }
+.swipe-hint { position: absolute; left: 28%; top: 50%; z-index: 2; display: inline-flex; align-items: center; gap: .1rem; padding: .5rem .8rem; border-radius: 999px; background: rgba(255,255,255,.92); color: var(--teal-strong); box-shadow: var(--shadow); pointer-events: none; animation: swipe-nudge 1.6s ease-in-out infinite; }
+@keyframes swipe-nudge { 0%, 100% { transform: translate(0, -50%); } 50% { transform: translate(60px, -50%); } }
+.final-reveal { position: absolute; left: 0; right: 0; margin-inline: auto; width: max-content; bottom: 8%; z-index: 2; display: inline-flex; align-items: center; gap: .4rem; padding: .5rem 1rem; border-radius: 999px; background: var(--teal-action); color: #fff; font-weight: 800; white-space: nowrap; animation: caption-in .3s ease both; }
+.final-serving .personal-plate.filled { border-style: solid; border-color: var(--teal); background: var(--teal-soft); }
+.reduced .swipe-hint, .reduced .signal-caption, .reduced .final-reveal { animation: none; }
+
+/* P04 — 생활 영역 그림 카드 */
+.observation-p04 .impact-domain .obs-impact-art { display: block; width: 100%; flex: 1 1 0; min-height: 0; border-radius: 16px; overflow: hidden; background: var(--sky); }
+.observation-p04 .impact-domain .obs-impact-art img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.observation-p04 .impact-domain { border-radius: 22px; }
+
+/* P09 — 배치한 행동 태그가 카드 테두리에 걸치지 않게 */
+.strategy-placement-tags { padding-top: .35rem; }
+
+/* P10 손 씻기 — 문지를수록 차오르는 거품 막대 */
+.hand-zone { position: relative; overflow: hidden; touch-action: none; }
+.rub-meter { position: absolute; left: 0; right: 0; bottom: 0; height: 8px; background: rgba(18,160,151,.15); }
+.rub-meter::after { content: ""; position: absolute; inset: 0 auto 0 0; width: var(--rub, 0%); background: linear-gradient(90deg, #7fd8f0, var(--teal)); border-radius: 0 999px 999px 0; transition: width .15s; }
+.hand-zone.rubbing:not(.done) { background: linear-gradient(to top, rgba(173,228,245,.7), var(--sky) 60%); }
+.hand-zone.done .rub-meter::after { width: 100%; }
+
+/* P05 사물 그림 칸: 흔적이 있으면 보라 빛, 차단되면 청록 */
+.tracing-p05 .tracing-sequence .trace-node .trace-object { background: rgba(226,242,251,.75); padding: 10%; }
+.tracing-p05 .tracing-sequence .trace-node.has-trace .trace-object { background: rgba(239,234,253,.95); box-shadow: inset 0 0 0 3px rgba(117,86,212,.55); }
+.tracing-p05 .tracing-sequence .trace-node.trace-protected .trace-object { background: rgba(216,242,239,.95); box-shadow: inset 0 0 0 3px rgba(18,160,151,.55); }
+
+/* P06 탭은 비말·공기·물·타액·종합 다섯 개 (세로 폰은 기존 3열 유지) */
+@media not ((max-width: 640px) and (min-height: 521px)) { .tracing-lab-tabs { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+.observation-p04 .obs-impact-scene.obs-impact-art { padding: 0; background: var(--sky); }
+.observation-p04 .obs-impact-art .obs-impact-image { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
+.observation-p04 .impact-domain.obs-impact-linked .obs-impact-art { box-shadow: inset 0 0 0 3px var(--teal); }
+/* 세로로 긴 카드에서도 그림의 주인공이 보이도록 초점을 맞춘다. */
+.observation-p04 .domain-0 .obs-impact-image { object-position: 30% 40%; }
+.observation-p04 .domain-1 .obs-impact-image { object-position: 85% 50%; }
+.observation-p04 .domain-2 .obs-impact-image { object-position: 40% 35%; }
+/* 종합: 환기를 고르면 실내에 머무는 흔적이 옅어진다(기침 예절은 퍼지는 범위를 줄인다). */
+.tracing-synthesis-scene:has(.tracing-synthesis-window.open) .tracing-cough-path i { opacity: .35; transform: translateX(14px); }
+
+/* 활동 화면 배경: 미션 장소 그림 위에 밝은 막을 덮어 글과 카드가 또렷하게 보이게 한다. */
+body.on-activity.has-stage-bg { --surface: rgba(255,255,255,.8); background: linear-gradient(rgba(238,248,248,.22), rgba(238,248,248,.4)), var(--stage-bg) center / cover no-repeat, var(--bg); }
+body.on-activity.has-stage-bg .mission-question { align-self: flex-start; width: fit-content; max-width: 100%; padding: .3rem .85rem; border-radius: 999px; background: rgba(255,255,255,.82); box-shadow: var(--shadow-sm); }
+body.on-activity.has-stage-bg .learning-focus { background: rgba(255,255,255,.8); }
+@media (prefers-reduced-transparency: reduce) { body.on-activity.has-stage-bg { background: var(--bg); } }
+
+/* P05 작은 화면: 드롭다운 대신 손 씻는 때 버튼 4개를 2×2로 보여 준다(넣어 본 결과가 버튼에 남아야 비교된다). */
+.tracing-intervention-select { display: none; }
+.tracing-p05 .trace-node .trace-object { overflow: hidden; }
+.tracing-p05 .trace-node .trace-object img { min-width: 0; min-height: 0; max-width: 100%; max-height: 100%; }
+@media (max-width: 900px), (max-height: 700px) {
+  .tracing-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .3rem; }
+  .tracing-choices .btn.choice { min-height: 44px; padding: .25rem .4rem; flex-direction: column; align-items: flex-start; justify-content: center; gap: .1rem; font-size: .82rem; line-height: 1.2; }
+  .tracing-choices .trial-result { font-size: .75rem; padding: 0 .4rem; }
+}
+body.on-activity.has-stage-bg .page-content { background: transparent; }
+/* 장면 위 카드는 유리처럼 비쳐 배경이 살아 보이게 한다. */
+body.on-activity.has-stage-bg :is(.source-card,.target-card,.impact-effect,.impact-domain,.evidence-tray,.lab-device,.trace-node,.compare-half,.strategy-zone-card,.prediction-panel,.condition-study,.apply-device,.intervention-panel) { backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.tracing-lab-play { display: flex; justify-content: flex-end; }
+
+/* P05 사물 그림은 칸 크기를 밀어내지 않도록 칸 안에 띄운다. */
+.tracing-p05 .trace-node .trace-object { position: relative; }
+.tracing-p05 .trace-node .trace-object img { position: absolute; inset: 10%; width: 80%; height: 80%; max-width: none; max-height: none; }
+.choice-short { display: none; }
+@media (max-height: 560px), (max-width: 900px) and (max-height: 1100px) {
+  .large-text .tracing-choices .choice-full { display: none; }
+  .large-text .tracing-choices .choice-short { display: inline; }
+}
+/* 아주 낮은 가로 화면: 짧은 이름 2×2와 결과 칩을 지키고, 모자라는 높이는 스크롤로 확보한다. */
+@media (max-height: 430px) {
+  .tracing-choices .choice-full { display: none; }
+  .tracing-choices .choice-short { display: inline; }
+  .tracing-intervention .intervention-result, .tracing-intervention .soap-shield small, .tracing-intervention-label { display: none; }
+  .activity-layout .page-content:has(.tracing-p05) { overflow-y: auto; }
+  .tracing-p05 { min-height: 440px; flex-shrink: 0; }
+  .large-text .tracing-p05 { min-height: 520px; }
+}
+.tracing-choices .btn.choice { height: auto; }
+
+/* 세로 폰 P08: 결과 카드가 비교 그림을 누르지 않게 활동 영역을 스크롤로 늘린다. */
+@media (max-width: 640px) and (min-height: 521px) {
+  .activity-layout .page-content:has(.comparison-activity) { overflow-y: auto; }
+  .comparison-activity { min-height: 780px; flex-shrink: 0; }
+  .large-text .comparison-activity { min-height: 900px; }
+}
+/* 세로 폰 P05: 2×2 버튼만큼 늘어난 높이를 스크롤 영역에 더한다. 큰 글자 1024×768은 방패 설명을 줄인다. */
+@media (max-width: 640px) and (min-height: 521px) {
+  .tracing-p05 { min-height: 820px; }
+  .large-text .tracing-p05 { min-height: 940px; }
+
+}
+@media (max-height: 800px) { .large-text .tracing-intervention .soap-shield small { display: none; } }
+
+/* P01 돋보기 탐색: 숨은 보라 빛은 희미하게 깜빡이고, 돋보기가 닿으면 환하게 드러난다. */
+.observation-p01 .obs-site-visual { touch-action: none; cursor: crosshair; }
+.observation-p01 .scan-lens { transition: left .12s linear, top .12s linear; pointer-events: none; }
+.signal-spot { position: absolute; left: var(--hx); top: var(--hy); z-index: 1; width: 26%; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle, rgba(170,140,255,.55) 0%, rgba(117,86,212,.28) 40%, rgba(117,86,212,0) 70%); opacity: .45; pointer-events: none; animation: spot-breathe 2.4s ease-in-out infinite; }
+.signal-spot.found { opacity: 1; width: 34%; animation: none; background: radial-gradient(circle, rgba(200,180,255,.9) 0%, rgba(117,86,212,.5) 38%, rgba(117,86,212,0) 70%); }
+@keyframes spot-breathe { 0%, 100% { opacity: .25; } 50% { opacity: .6; } }
+.reduced .signal-spot { animation: none; opacity: .45; }
+
+/* P04 빠른 분류: 지금 분류할 카드를 크게 띄운다. */
+.observation-p04 .impact-effect.current-card { border-color: var(--purple); box-shadow: 0 0 0 4px rgba(117,86,212,.22), 0 10px 22px rgba(60,30,140,.16); transform: scale(1.02); }
+.observation-p04 .impact-effect.linked { opacity: .78; }
+
+/* P06 비말: 옷소매 칩을 기침하는 친구에게 끌어다 놓는다. */
+.sleeve-chip { display: inline-flex; align-items: center; gap: .4rem; min-height: 48px; padding: .4rem 1rem; border-radius: 999px; border: 2px dashed var(--purple); background: var(--purple-soft); color: var(--purple); font-weight: 800; cursor: grab; touch-action: none; user-select: none; }
+.tracing-device-droplet .tracing-device-action { display: flex; align-items: center; justify-content: center; gap: .6rem; flex-wrap: wrap; }
+.tracing-cough-person.sleeve-target { border-radius: 18px; outline: 3px dashed rgba(117,86,212,.45); outline-offset: 4px; }
+.tracing-cough-person.drop-hover { outline-color: var(--teal); background: rgba(216,242,239,.6); }
+.observation-p01 .signal-caption { bottom: auto; top: 7%; }
+
+/* ---------- 팝업·토스트·글자 위계 (yelsam-design: Modal scale .95→1, duration-slow, Glassmorphism) ---------- */
+:root { --ease-out: cubic-bezier(.16, 1, .3, 1); --dur-slow: 400ms; --dur-base: 250ms; --modal-radius: 28px; }
+.modal-backdrop { background: radial-gradient(ellipse at 50% 30%, rgba(16,62,67,.32), rgba(16,62,67,.55)); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.modal { width: min(680px, 100%); gap: 1rem; padding: 1.6rem 1.6rem 1.4rem; border-radius: var(--modal-radius); border: 1px solid rgba(255,255,255,.9); background: linear-gradient(180deg, rgba(232,248,246,.97) 0, rgba(255,255,255,.97) 120px); box-shadow: 0 30px 70px rgba(16,62,67,.32), inset 0 1px 0 #fff; animation: modal-in var(--dur-slow) var(--ease-out); }
+@keyframes modal-in { from { opacity: 0; transform: translateY(10px) scale(.95); } }
+.modal h2 { font-size: 1.35rem; line-height: 1.35; letter-spacing: -.01em; }
+.modal-close { top: .9rem; right: .9rem; width: 48px; height: 48px; }
+.guide-head { display: grid; gap: .45rem; padding-right: 3rem; }
+.guide-chip { display: inline-flex; align-items: center; gap: .35rem; width: fit-content; padding: .25rem .75rem; border-radius: 999px; background: var(--teal-action); color: #fff; font-size: .85rem; font-weight: 800; }
+.guide-goal { margin: 0; color: var(--ink-2); line-height: 1.6; }
+.guide-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: .7rem; }
+.guide-card { display: grid; gap: .4rem; align-content: start; padding: 1rem 1.1rem; border-radius: 20px; background: #fff; border: 1px solid var(--line); box-shadow: 0 6px 16px rgba(16,62,67,.07); }
+.guide-card b { display: inline-flex; align-items: center; gap: .4rem; font-size: 1rem; }
+.guide-card p { margin: 0; line-height: 1.6; color: var(--ink); }
+.guide-card.look b { color: var(--teal-strong); }
+.guide-card.talk { background: linear-gradient(160deg, #f6f2ff, #fff 70%); border-color: #ddd2fb; }
+.guide-card.talk b { color: var(--purple); }
+.guide-note { margin: 0; padding: .7rem .9rem; border-radius: 16px; background: rgba(226,242,251,.7); color: var(--ink-2); font-size: .92rem; line-height: 1.55; }
+.modal .learning-standards { margin-block: 0; border-top: 1px solid var(--line); }
+.modal .learning-standards summary { display: flex; align-items: center; min-height: 48px; padding: .5rem 0; color: var(--ink); }
+.modal .learning-standards p { color: var(--ink-2); font-size: .92rem; line-height: 1.6; }
+.record-entry { border-radius: 18px; padding: .9rem 1rem; }
+.record-entry.ready { background: linear-gradient(160deg, var(--teal-soft), #fff 85%); border: 1px solid #bfe6e1; }
+.modal-actions .btn { min-height: 52px; }
+#toast { padding: .75rem 1.3rem; border: 1px solid rgba(255,255,255,.25); background: rgba(16,62,67,.92); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); box-shadow: 0 12px 30px rgba(16,62,67,.28); line-height: 1.45; }
+#toast.success { background: rgba(10,112,105,.94); }
+@media (max-width: 640px) { .modal { padding: 1.2rem 1rem 1rem; border-radius: 24px; } .modal h2 { font-size: 1.18rem; } }
+.reduced .modal, .reduced .modal-backdrop { animation: none; }
+@media (prefers-reduced-motion: reduce) { .modal { animation: fade .2s; } }
+
+/* 글자 위계: 미션 질문은 또렷하게, 개념 막대는 작은 꼬리표 + 본문. */
+.mission-question { font-size: 1.06rem; font-weight: 600; letter-spacing: -.01em; }
+.mission-question b { color: var(--teal-strong); font-weight: 800; }
+.learning-focus mark { border-radius: 999px; padding: .1rem .6rem; background: var(--teal-action); color: #fff; font-weight: 800; }
+.btn.primary { background: linear-gradient(180deg, #13998f, var(--teal-action)); box-shadow: 0 6px 16px rgba(18,160,151,.3), inset 0 1px 0 rgba(255,255,255,.25); }
+.btn.primary:hover:not(:disabled) { background: linear-gradient(180deg, #11897f, var(--teal-strong)); }
+.modal .learning-standards summary::after { content: ""; width: 9px; height: 9px; margin-left: auto; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg) translateY(-3px); transition: transform var(--dur-base) var(--ease-out); }
+.modal .learning-standards[open] summary::after { transform: rotate(-135deg); }
+.modal .learning-standards summary::-webkit-details-marker { display: none; }
+.strategy-selection-hint[hidden] { display: none !important; }
+
+/* P03 생활 상황 그림 카드 */
+.observation-p03 .obs-relationship-scene.obs-relationship-art { display: block; padding: 0; overflow: hidden; border-radius: 16px; background: #fff; min-height: 0; flex: 1 1 0; }
+.observation-p03 .obs-rel-image { display: block; width: 100%; height: 100%; object-fit: cover; }
+.observation-p03 .target-card.obs-next .obs-relationship-art { box-shadow: inset 0 0 0 2px rgba(117,86,212,.35); }
+
+/* P10 손 씻기: 큰 그림과 글자 카드를 단계 그림 카드 3장으로 합친다. */
+.strategy-apply .wash-steps { display: block; width: min(100%, 1000px); height: 100%; min-height: 0; }
+.strategy-apply .wash-steps .hand-zones { height: 100%; }
+.strategy-apply .wash-steps .hand-zone { grid-template-rows: auto minmax(0, 1fr) auto auto; padding: .6rem .6rem 1rem; border-radius: 22px; background: rgba(255,255,255,.9); }
+.strategy-apply .wash-steps .hand-zone-number { position: absolute; left: .6rem; top: .6rem; z-index: 1; }
+.hand-zone-art { width: 100%; height: 100%; min-height: 0; object-fit: contain; border-radius: 16px; background: #fff; grid-row: 2; }
+.strategy-apply .wash-steps .hand-zone-cue { grid-row: 4; font-size: .9rem; line-height: 1.4; color: var(--ink-2); text-align: center; }
+.strategy-apply .wash-steps .hand-zone > b { grid-row: 3; }
+.strategy-apply .wash-steps .hand-zone.done { background: rgba(216,242,239,.95); }
+@media (max-height: 620px) { .strategy-apply .wash-steps .hand-zone-cue { display: none; } }
+
+/* P07 행동 카드 그림과 예측 카드 */
+.action-choices .btn.choice { flex-direction: column; gap: .3rem; padding: .45rem; }
+.action-thumb { width: 100%; height: 0; flex: 1 1 0; min-height: 36px; max-height: 92px; object-fit: contain; }
+.prediction-choices .btn { border-radius: 20px; flex-direction: column; gap: .2rem; font-weight: 700; }
+.prediction-choices .btn:disabled { opacity: .55; }
+.predict-mark { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--purple-soft); color: var(--purple); font-size: 1.1rem; font-weight: 900; }
+@media (max-height: 560px) { .action-thumb { max-height: 44px; } .predict-mark { width: 28px; height: 28px; font-size: .95rem; } }
+/* 낮은 화면: P07 카드 그림·예측 기호를 숨겨 글자 칸을 지킨다. */
+@media (max-height: 620px) { .action-thumb, .predict-mark { display: none; } .action-choices .btn.choice { flex-direction: row; } }
+@media (max-height: 700px) { .large-text .action-thumb, .large-text .predict-mark { display: none; } .large-text .action-choices .btn.choice { flex-direction: row; } }
+/* 아주 낮은 가로 화면 P08: 비교 그림 이름표가 잘리지 않게 스크롤로 높이를 확보한다. */
+@media (max-height: 430px) {
+  .activity-layout .page-content:has(.comparison-activity) { overflow-y: auto; }
+  .comparison-activity { min-height: 460px; flex-shrink: 0; }
+  .large-text .comparison-activity { min-height: 560px; }
+}
+@media (max-width: 640px) and (min-height: 521px) { .large-text .comparison-activity { min-height: 1320px; } }
+/* 깃발 감싸개는 레이아웃에 끼지 않는다(그림 칸 높이가 0으로 접히지 않게). 깃발은 B 카드 기준으로 띄운다. */
+.compare-pin-wrap { display: contents; }
+.compare-half.modified { position: relative; }
+.compare-half.modified .compare-pin { top: 3.1rem; right: .7rem; }
+@media (max-width: 640px) { .large-text .activity-layout .page-content > .comparison-activity { min-height: 1000px; } }
