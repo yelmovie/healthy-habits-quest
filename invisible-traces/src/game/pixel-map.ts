@@ -1,6 +1,6 @@
 import {bindDirectionPad,mapKeyDirection} from '../map-controls.js';
 import Phaser from 'phaser';
-import { mountMapEncounters,type MapReaction } from '../map-encounters.js';
+import { mountMapEncounters,type MapReaction,type MapEncounterSound } from '../map-encounters.js';
 import { encounterLook,encounterStage } from '../map-encounter-theme.js';
 import {schoolBuildingPatch,schoolCelebration} from './school-restoration';
 import { asset } from '../data/game';
@@ -10,7 +10,7 @@ export interface MapOptions {
  start:Point|null;overview:boolean;reduced:boolean;signal?:AbortSignal;
  /** 미션 번호(0부터)별 입장 가능 여부와, 지금 해야 할 미션 번호(없으면 -1). */
  open:boolean[];next:number;done:boolean[];newly:number[];newEncounter:number|null;celebration:boolean;
- mapHits:Record<string,number>;encountersEnabled:boolean;onEncounterSave:(patch:Record<string,number>)=>void;onEncounterSound:(kind:'hit'|'finish'|'contact',hits:number)=>void;
+ mapHits:Record<string,number>;encountersEnabled:boolean;onEncounterSave:(patch:Record<string,number>)=>void;onEncounterSound:(kind:MapEncounterSound,hits:number)=>void;
  onSelect:(stage:number)=>void;onMove:(p:Point)=>void;onView:(mode:'follow'|'free'|'overview')=>void;onStop:(place:number)=>void;
 }
 export interface MapHandle { travel:(stage:number)=>Promise<boolean>;cancel:()=>void;destroy:()=>void }

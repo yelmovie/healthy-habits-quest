@@ -41,6 +41,8 @@ function layoutSpeech(host, entries){
 }
 
 const REPEAT=380;
+// Wind-up before contact (70-120ms); the hit sound and the meter land together on the strike.
+const STRIKE=90,EXIT_SOUND=230;
 const CUES={
   cap:'M9 10h14v12H9zm3-4h8v4h-8z', pane:'M6 7h20v18H6zm4 4v10h12V11z',
   file:'M7 5h12l6 6v16H7zm12 2v6h5M11 17h10m-10 4h8', label:'M5 10h15l7 6-7 6H5zm5 4h5m-5 4h7',
@@ -107,6 +109,8 @@ export function mountMapEncounters({
   const paused=()=>doc.hidden||blocked()||Boolean(host.closest('[inert]'))||Boolean(doc.querySelector('dialog[open]'));
   const pose={hero:null,ally:null};
   let current=null,lastNear=null,lastHit=-Infinity,lastTone=-Infinity,saved={},last=null,closed=false;
+  const timers=new Set();
+  function later(fn,ms){if(ms<=0){fn();return;}const id=view.setTimeout(()=>{timers.delete(id);if(!closed)fn();},ms);timers.add(id);}
 
   function speak(foe,text,time){
     for(const other of foes)if(other!==foe){other.saidUntil=0;other.bubble.hidden=true;}
@@ -125,8 +129,11 @@ export function mountMapEncounters({
     if(Math.abs(foe.point.x-last.hero.x)>3)foe.facing=last.hero.x<foe.point.x?-1:1;
     const calm=still(),duration=calm?170:n===HITS?660:360;
     foe.poseUntil=time+duration;foe.hitAt=time;foe.hurtAt=undefined;
+    const strike=calm?0:STRIKE;foe.strikeAt=time+strike;
     pose.hero={kind:'attack',direction:-foe.facing,start:time,end:time+(calm?140:320)};
-    saved={...saved,[foe.s.id]:n};onSave({...saved});tone(n===HITS?'finish':'hit',n);
+    saved={...saved,[foe.s.id]:n};onSave({...saved});
+    tone('swing',n);later(()=>tone(n===HITS?'finish':'hit',n),strike);
+    if(n===HITS)later(()=>tone('exit',n),strike+EXIT_SOUND);
     speak(foe, n===HITS?foe.s.finish??'앗, 물러날게!':foe.s.hit?.[n-1]??(n===1?'앗, 들켰네!':'이번 건 제법인데!'),time+(n===HITS?2750:1800));
     live.textContent+=n===HITS?' 세 번 명중! 악당이 물러나요.':` ${n}번 명중. ${HITS-n}번 남았어요.`;
     if(n===HITS&&requiredFoes>0&&stages.length===requiredFoes&&stages.every(s=>(saved[s.id]??record[s.id])===HITS))finaleAt=time+2920;
@@ -232,7 +239,8 @@ export function mountMapEncounters({
       el.dataset.hit=String(foe.hits);
       if(foe.hits===HITS)el.dataset.exited=String(now>=foe.poseUntil);
       el.dataset.facing=foe.facing<0?'left':'right';
-      const marks='●'.repeat(HITS-foe.hits)+'○'.repeat(foe.hits);
+      const shown=foe.hits-(now<(foe.strikeAt??0)?1:0);
+      const marks='●'.repeat(HITS-shown)+'○'.repeat(shown);
       if(foe.meter.textContent!==marks)foe.meter.textContent=marks;
       foe.bubble.hidden=now>=foe.saidUntil||stop;
     }
@@ -246,7 +254,10 @@ export function mountMapEncounters({
       if(id!=null&&id!==clearId&&now-clearReady>=1250){
         const stage=stages.find(s=>String(s.id)===String(id));
         if(stage?.lines?.[0]){
-          clearId=id;clearUntil=now+4200;lastSpeechLayout=-Infinity;callback.textContent=`${stage.speaker??stage.name} · “${stage.lines[0]}”`;
+          clearId=id;clearUntil=now+4200;
+          // Once per newly unlocked villain; re-entering the map passes no new encounter.
+          if(foes.some(f=>String(f.s.id)===String(id)&&f.hits<HITS))tone('appear',0);
+          lastSpeechLayout=-Infinity;callback.textContent=`${stage.speaker??stage.name} · “${stage.lines[0]}”`;
         }
       }
       callback.hidden=now>=clearUntil;
@@ -272,7 +283,7 @@ export function mountMapEncounters({
     }
     return {hero:output('hero',now),ally:output('ally',now)};
   }
-  return {update,destroy(){closed=true;handles.abort();attack.remove();layer.remove();}};
+  return {update,destroy(){closed=true;for(const id of timers)view.clearTimeout(id);timers.clear();handles.abort();attack.remove();layer.remove();}};
 }
 
 const STYLES=`

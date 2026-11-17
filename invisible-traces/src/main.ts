@@ -27,7 +27,7 @@ const root=document.querySelector<HTMLDivElement>('#app')!,modalRoot=document.qu
 const loaded=readSave();let state=loaded.state,protectedSave=!!loaded.error;let archive:State|null=null;let view:View={...viewFresh(),lab:state.labs.active};let epoch=0,mapHandle:MapHandle|null=null;let travelRequest=0,travellingStage=0;let timer:ReturnType<typeof setInterval>|null=null,toastTimer:ReturnType<typeof setTimeout>|null=null;let focusBefore:HTMLElement|null=null;let saveWarning=false;
 function hideToast(){toastRoot.className='';if(toastTimer)clearTimeout(toastTimer);toastTimer=null;}
 function notify(text:string,tone=''){toastRoot.textContent=text;toastRoot.className=`visible ${tone}`;narration.announce(text);if(toastTimer)clearTimeout(toastTimer);const finish=()=>{if(narration.isToastPlaying())toastTimer=setTimeout(finish,250);else toastRoot.className='';};toastTimer=setTimeout(finish,3700);}
-const researchAudio=createResearchAudio(()=>state.settings.sound);
+const researchAudio=createResearchAudio(()=>state.settings.sound,import.meta.env.BASE_URL);
 const music=createMusic(()=>state.settings.sound,import.meta.env.BASE_URL);
 const narration=mountNarration({enabled:()=>state.settings.sound,quiet:v=>{researchAudio.quiet(v);music.quiet(v);},context:()=>state.route});
 function sound(kind:Cue='tap'){void researchAudio.play(kind);}
@@ -64,8 +64,9 @@ async function mountMap(){const currentEpoch=epoch,{open,next,done}=mapStatus(st
  const request=mapRequest=new AbortController(),{signal}=request;
  let loadingCode=true,timer:ReturnType<typeof setTimeout>|undefined;
  const deadline=new Promise<never>((_,reject)=>{timer=setTimeout(()=>{reject(Error('map timeout'));request.abort();},10000);});
+ researchAudio.preload(['swing','hit1','hit2','finish','exit','appear','bump']);
  const load=async()=>{const {createMap}=await import('./game/pixel-map');if(signal.aborted||epoch!==currentEpoch)return null;loadingCode=false;const parent=document.getElementById('pixel-map');if(!parent)return null;
- return createMap(parent,{signal,start:view.mapSpot??(last?NODES[last.node]:null),overview:view.mapOverview,mapHits:state.mapHits,encountersEnabled:!archive,onEncounterSave:patch=>{state.mapHits={...state.mapHits,...patch};persist();},onEncounterSound:(kind,hits)=>sound(kind==='finish'?'success':kind==='hit'&&hits===2?'scan':'tap'),newEncounter,reduced:state.settings.reduced||matchMedia('(prefers-reduced-motion: reduce)').matches,open,next,done,newly,celebration:state.completed.includes('P10'),onSelect:n=>void startStage(n),onMove:p=>{view.mapSpot=p;},onStop:mapHint,onView:mode=>{view.mapOverview=mode==='overview';const button=root.querySelector('[data-action=map-view]');if(button){const label=mapViewLabel(mode);button.setAttribute('aria-label',label);button.setAttribute('title',label);}}});
+ return createMap(parent,{signal,start:view.mapSpot??(last?NODES[last.node]:null),overview:view.mapOverview,mapHits:state.mapHits,encountersEnabled:!archive,onEncounterSave:patch=>{state.mapHits={...state.mapHits,...patch};persist();},onEncounterSound:(kind,hits)=>void researchAudio.play(kind==='hit'?(hits===2?'hit2':'hit1'):kind==='contact'?'bump':kind,kind==='hit'||kind==='finish'||kind==='exit'),newEncounter,reduced:state.settings.reduced||matchMedia('(prefers-reduced-motion: reduce)').matches,open,next,done,newly,celebration:state.completed.includes('P10'),onSelect:n=>void startStage(n),onMove:p=>{view.mapSpot=p;},onStop:mapHint,onView:mode=>{view.mapOverview=mode==='overview';const button=root.querySelector('[data-action=map-view]');if(button){const label=mapViewLabel(mode);button.setAttribute('aria-label',label);button.setAttribute('title',label);}}});
  };
  try{const h=await Promise.race([load(),deadline]);if(!h)return null;
  if(epoch!==currentEpoch){h.destroy();return null;}pendingMapRestore=pendingMapRestore.filter(i=>!newly.includes(i));if(pendingMapEncounter===newEncounter)pendingMapEncounter=null;mapHandle=h;return h;

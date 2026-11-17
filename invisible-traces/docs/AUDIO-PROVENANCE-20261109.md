@@ -32,3 +32,20 @@
 | 배경음 2곡 (Suno 생성) | audio/bgm/main-theme.mp3 (첫 탭부터 홈·지도·활동 반복), audio/bgm/final-theme.mp3 (엔딩·인증서 1회, 지도 파이널 영상 대화상자가 열린 동안) | 2026-11-17 사용자가 Suno로 생성해 제공. 프롬프트는 _shared/music-prompts-10-16.html | 원본은 invisible-traces/references/suno 보관(Git 제외). 상업 이용 근거(생성 당시 Suno 유료 요금제) 확인 필요 |
 
 인물 목소리가 나오는 동안 배경음은 1/4로 줄어든다. 소리 피드백을 끄거나 탭을 숨기면 멈춘다. 지도 파이널 영상은 계속 무음이다.
+
+## 효과음 파일 (2026-11-17 추가)
+
+과학34 공통 라이브러리(`_shared/sfx-library-20261117`, 모두 CC0 재확인)에서 감염병 단원에 맞게 겁주지 않는 소리(세정 분무·비누 거품·맑은 차임)만 골라 복사했다. 가공은 앱 안의 음량·재생 속도 조절뿐이다. 조작음(tap)과 탐색음(scan)은 기존 합성음을 그대로 쓰고, 파일을 못 읽으면 각 소리도 합성 차임으로 대신한다.
+
+| 파일 | 사용 위치 | 원본 · 제작자 | 라이선스 | SHA-256 앞 16자 |
+| --- | --- | --- | --- | --- |
+| `audio/sfx/spray-hiss-03.mp3` | 지도 공격 시작(손소독 분무) | cleaning-spray-single-l-stereo.flac · BeneGe (https://freesound.org/people/BeneGe/sounds/453179) | CC0 (원본 페이지 재확인) | `843e096a230a29b0` |
+| `audio/sfx/bubble-02.mp3` | 지도 1타 명중 | bubble_02 · rubberduck (https://opengameart.org/content/40-cc0-water-splash-slime-sfx) | CC0 (원본 페이지 재확인) | `c3bc83266b353f15` |
+| `audio/sfx/hit-light-02.mp3` | 지도 2타 명중(재생 속도 0.92) | cartoon pop or drip · AlaskaRobotics (https://freesound.org/people/AlaskaRobotics/sounds/221091) | CC0 (원본 페이지 재확인) | `794b3447b6fd7b23` |
+| `audio/sfx/hit-heavy-02.mp3` | 지도 3타 명중 | Loud Pillow Hit 2.wav · saturdaysoundguy (https://freesound.org/people/saturdaysoundguy/sounds/388035) | CC0 (원본 페이지 재확인) | `a1c26243b5a77780` |
+| `audio/sfx/villain-exit-04.mp3` | 악당 퇴장(3타 230ms 뒤) | Sparkling Star 01.wav · MATRIXXX_ (https://freesound.org/people/MATRIXXX_/sounds/462095) | CC0 (원본 페이지 재확인) | `820f745f038dc1bb` |
+| `audio/sfx/villain-appear-01.mp3` | 새 악당 첫 등장(새 기록 직후 한 번) | Pop 5.ogg · javapimp (https://freesound.org/people/javapimp/sounds/439186) | CC0 (원본 페이지 재확인) | `b0fb8b57cabe178a` |
+| `audio/sfx/hurt-bump-01.mp3` | 아군 접촉 움찔(둘 다 닿아도 한 번) | LowHit_01.wav · Faulkin (https://freesound.org/people/Faulkin/sounds/336495) | CC0 (원본 페이지 재확인) | `9b67e7d2c5debc8c` |
+| `audio/sfx/correct-01.mp3` | 기록 완성·활동 완료 성공음(기존 합성 차임 대체, 실패 시 합성음) | confirmation_001 · Kenney (https://kenney.nl/assets/interface-sounds) | CC0 (원본 페이지 재확인) | `287d54966793603e` |
+
+모든 악당 격퇴 뒤 승리 징글은 넣지 않았다. 지도 파이널 영상 대화상자가 열리면 파이널 배경음이 바로 시작되어 겹치기 때문이다. 효과음은 기존 소리 설정(끄면 무음)·인물 목소리 재생 중 정지·탭 숨김 정지를 그대로 따른다.
