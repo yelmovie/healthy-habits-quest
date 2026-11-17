@@ -12,6 +12,7 @@ test-results/
 /files/
 /invisible-traces/docs/asset-contact-sheet.jpg
 /invisible-traces/output/
+/invisible-traces/references/suno/
 
 # Machine-local files and credentials
 .env

@@ -2,6 +2,13 @@
 
 최신 대조일 2026-11-17.
 
+## 2026-11-17 Suno 배경음 적용
+
+- 사용자가 Suno로 만든 2곡을 넣었다. 메인 테마 `public/assets/audio/bgm/main-theme.mp3`는 첫 탭(pointerdown/keydown)부터 홈·지도·활동 내내 반복하고, 파이널 `final-theme.mp3`는 P10 엔딩(restored)·인증서에서 한 번, 지도 파이널 영상 대화상자가 열린 동안 재생한다(영상은 무음 유지). 닫으면 메인 테마가 멈췄던 곳부터 이어진다.
+- 코드: `src/audio.ts`의 `createMusic`, `src/main.ts`(장면 전환·소리 설정·내레이션 덕킹 연결), `src/map-finale.js`(`map-finale-music` 이벤트). 인물 목소리 중에는 1/4로 줄고, 소리 피드백 끄기·탭 숨김에서 멈춘다.
+- 원본은 `invisible-traces/references/suno/`(Git 제외). 상업 이용 근거(Suno 유료 요금제)는 확인 필요. 출처: `invisible-traces/docs/AUDIO-PROVENANCE-20261109.md`.
+- 검증: 타입 검사, 테스트 59개, 빌드, 개발 서버·빌드 미리보기에서 Chrome 상태값 확인(재생·정지·덕킹·엔딩·지도 파이널·콘솔 오류 0).
+
 ## 2026-11-17 흐름·디자인 고도화
 
 클릭이 많아 지루하거나 핵심 개념을 건너뛸 수 있던 흐름을 고쳤다. 자세한 분석과 검증은 [흐름 고도화 기록](../invisible-traces/docs/reviews/FLOW-UPGRADE-20261116.md)에 있다.

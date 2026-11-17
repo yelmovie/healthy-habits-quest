@@ -29,3 +29,5 @@ npm run preview  # 빌드 결과 확인(서비스워커는 이때만 동작)
 ```
 
 원본 image/와 files/는 로컬 참고 자료이고, 최적화한 게임 배경은 invisible-traces/public/assets/에 있다.
+
+배경음은 Suno로 만든 2곡(사용자 제공)이다. 메인 테마(`public/assets/audio/bgm/main-theme.mp3`)는 첫 탭부터 홈·지도·활동 내내 반복하고, 파이널(`final-theme.mp3`)은 엔딩·인증서에서 한 번, 지도 파이널 영상 대화상자가 열린 동안 재생한다. 인물 목소리가 나오면 1/4로 줄어든다. 원본은 `invisible-traces/references/suno`(Git 제외), 상업 이용 근거(Suno 유료 요금제)는 확인 필요. 출처 기록: [오디오 출처](invisible-traces/docs/AUDIO-PROVENANCE-20261109.md).
