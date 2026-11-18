@@ -1,0 +1,144 @@
+{
+ "date": "2026-11-18",
+ "method": "AI generated with the Codex built-in image tool (GPT image), one image at a time, 1024x1536, with the game's own character art and the five mission backdrops attached as style references. sharp used for cover resize and WebP encoding (cards 640x960 q82, thumbnails 96x144 q78) via the shared _shared/reward-cards/convert.cjs. Frame, stars, rarity label and title are drawn by code (src/reward-cards.js), not painted into the art.",
+ "rejected": [],
+ "sharedStyle": "Cute chibi anime sticker style with soft cel shading and clean dark outlines exactly matching the reference characters: the detective boy with messy black hair, teal eyes, a white zip hoodie with teal hood and teal trim, dark backpack, black cargo pants and blue-and-white sneakers, holding a round magnifying glass; and his partner girl with long wavy dark-brown hair, a purple headband with a small bow, lavender sweatshirt, blue cargo jeans, lavender sneakers and a grey crossbody bag, hugging a grey tablet. Vertical 2:3 full-bleed card art, no frame, no text, no letters, no numbers; bright cheerful victory scenes showing positive hygiene actions only (no germs, no villains).",
+ "license": "확인 필요: 생성 당시 ChatGPT 계정 이용 조건은 다른 AI 생성 그림과 같이 납품 때 대조한다. 원본 PNG는 asset-bank/original(Git 제외)에 둔다.",
+ "assets": [
+  {
+   "file": "public/assets/reward-cards/card-1-0.webp",
+   "original": "asset-bank/original/reward-cards-20261118/card-1-0.png",
+   "source": "imagegen built-in (Codex, ChatGPT login)",
+   "kind": "reward card",
+   "usage": "성취 카드 1/5 「이상 신호 관찰 탐정」(신호 광장 악당 격퇴 보상)",
+   "promptSummary": "heroic victory moment in a sunny school plaza with flower beds, benches and the school building behind. The boy proudly raises his magnifying glass, and through its lens small glowing clue lights appear around the plaza, while the girl happily records each discovery on her tablet. Soft teal light rays, floating sparkles and tiny stars.",
+   "dimensions": [
+    640,
+    960
+   ],
+   "bytes": 122326,
+   "sha256": "98923dc5cc0549c194d2fd0b8d61e9d9f75d79f90e6518c1d9a9261688a7b578"
+  },
+  {
+   "file": "public/assets/reward-cards/thumb-1-0.webp",
+   "original": "asset-bank/original/reward-cards-20261118/card-1-0.png",
+   "source": "imagegen built-in (Codex, ChatGPT login)",
+   "kind": "reward card thumbnail",
+   "usage": "성취 카드 1/5 「이상 신호 관찰 탐정」(신호 광장 악당 격퇴 보상) · 머리글 칸 썸네일",
+   "dimensions": [
+    96,
+    144
+   ],
+   "bytes": 5178,
+   "sha256": "6034969359424cf47df6fec64459b636fff1141659c4f9dcb52620b6b36709c6"
+  },
+  {
+   "file": "public/assets/reward-cards/card-2-1.webp",
+   "original": "asset-bank/original/reward-cards-20261118/card-2-1.png",
+   "source": "imagegen built-in (Codex, ChatGPT login)",
+   "kind": "reward card",
+   "usage": "성취 카드 2/5 「단서 연결 추리왕」(체육관 악당 격퇴 보상)",
+   "promptSummary": "heroic victory moment inside a bright school gym with a polished wooden floor. The boy and the girl stretch shining ribbons of light between floating clue bubbles that hold a ball, a window, a spoon and a pair of hands, joining them into one glowing web above the court, and they high-five as the last ribbon connects. Sky-blue and teal glow with drifting sparkles.",
+   "dimensions": [
+    640,
+    960
+   ],
+   "bytes": 127338,
+   "sha256": "1cc37bf8e75e5b1932bb201f6e77908f59b1ec9ade807c80a124f54e982104fb"
+  },
+  {
+   "file": "public/assets/reward-cards/thumb-2-1.webp",
+   "original": "asset-bank/original/reward-cards-20261118/card-2-1.png",
+   "source": "imagegen built-in (Codex, ChatGPT login)",
+   "kind": "reward card thumbnail",
+   "usage": "성취 카드 2/5 「단서 연결 추리왕」(체육관 악당 격퇴 보상) · 머리글 칸 썸네일",
+   "dimensions": [
+    96,
+    144
+   ],
+   "bytes": 5788,
+   "sha256": "aaa89bd0f5d5fe69e6bfef53cb679280dc535138f1c001dc405f9d95c70ff70a"
+  },
+  {
+   "file": "public/assets/reward-cards/card-3-2.webp",
+   "original": "asset-bank/original/reward-cards-20261118/card-3-2.png",
+   "source": "imagegen built-in (Codex, ChatGPT login)",
+   "kind": "reward card",
+   "usage": "성취 카드 3/5 「감염 경로 추적 박사」(본관 교실 악당 격퇴 보상)",
+   "promptSummary": "heroic victory moment in a cheerful sunlit classroom. The boy follows a gentle sparkling trail of light with his magnifying glass as it links a book, a ball and a door handle, while the girl pushes the window wide open so a fresh swirling breeze sweeps the trail away. Friendly and bright mood, soft lavender shimmer turning into clean teal sparkles and flowing air lines.",
+   "dimensions": [
+    640,
+    960
+   ],
+   "bytes": 97854,
+   "sha256": "e3343537e38e597baeb609f62f22b47dce02fda37c0a0d86397ef53aed182d5e"
+  },
+  {
+   "file": "public/assets/reward-cards/thumb-3-2.webp",
+   "original": "asset-bank/original/reward-cards-20261118/card-3-2.png",
+   "source": "imagegen built-in (Codex, ChatGPT login)",
+   "kind": "reward card thumbnail",
+   "usage": "성취 카드 3/5 「감염 경로 추적 박사」(본관 교실 악당 격퇴 보상) · 머리글 칸 썸네일",
+   "dimensions": [
+    96,
+    144
+   ],
+   "bytes": 4576,
+   "sha256": "afac23f032400d03e12ea0d0d9deff7b4b521f9787c7002d3f9b2c445727bec9"
+  },
+  {
+   "file": "public/assets/reward-cards/card-4-3.webp",
+   "original": "asset-bank/original/reward-cards-20261118/card-4-3.png",
+   "source": "imagegen built-in (Codex, ChatGPT login)",
+   "kind": "reward card",
+   "usage": "성취 카드 4/5 「손 씻기 비교 실험왕」(급식실 악당 격퇴 보상)",
+   "promptSummary": "heroic victory moment in a clean bright school cafeteria next to a row of shiny sinks. The boy joyfully holds up both hands covered in fluffy soap foam with big rainbow soap bubbles floating all around, while the girl cheers beside two neat lunch trays, comparing them with her tablet held high. Sparkling water drops, shimmering bubbles and warm sunlight from the windows.",
+   "dimensions": [
+    640,
+    960
+   ],
+   "bytes": 107802,
+   "sha256": "74092612a514407472633d6ff300de03ed945fedd58b232ac660e659f0ebf4f4"
+  },
+  {
+   "file": "public/assets/reward-cards/thumb-4-3.webp",
+   "original": "asset-bank/original/reward-cards-20261118/card-4-3.png",
+   "source": "imagegen built-in (Codex, ChatGPT login)",
+   "kind": "reward card thumbnail",
+   "usage": "성취 카드 4/5 「손 씻기 비교 실험왕」(급식실 악당 격퇴 보상) · 머리글 칸 썸네일",
+   "dimensions": [
+    96,
+    144
+   ],
+   "bytes": 4824,
+   "sha256": "132016530c98abcad4202ebbe794c8d22574c976d607c795017ebbfe06847bda"
+  },
+  {
+   "file": "public/assets/reward-cards/card-5-4.webp",
+   "original": "asset-bank/original/reward-cards-20261118/card-5-4.png",
+   "source": "imagegen built-in (Codex, ChatGPT login)",
+   "kind": "reward card",
+   "usage": "성취 카드 5/5 「건강 학교 수호 영웅」(운동장 악당 격퇴 보상)",
+   "promptSummary": "legendary finale on a wide sunny school field with the whole school shining in the background. The boy and the girl leap high in the centre holding the magnifying glass and the tablet up together as a huge sparkling dome of light and a rainbow spread over the school, every window open with fresh breezes, soap bubbles and water drops glittering in the sky. The most spectacular image of the set, with golden light rays, confetti-like sparkles and stars everywhere.",
+   "dimensions": [
+    640,
+    960
+   ],
+   "bytes": 115694,
+   "sha256": "99ebe8fedbe63c4b59f1e123d60a5471df99a98483fc601716acbd96684a7ea2"
+  },
+  {
+   "file": "public/assets/reward-cards/thumb-5-4.webp",
+   "original": "asset-bank/original/reward-cards-20261118/card-5-4.png",
+   "source": "imagegen built-in (Codex, ChatGPT login)",
+   "kind": "reward card thumbnail",
+   "usage": "성취 카드 5/5 「건강 학교 수호 영웅」(운동장 악당 격퇴 보상) · 머리글 칸 썸네일",
+   "dimensions": [
+    96,
+    144
+   ],
+   "bytes": 4280,
+   "sha256": "a93f0a4ee5e83779b2c377a33e11a75d2072e89f5de6381d94dcf7fefd485124"
+  }
+ ]
+}

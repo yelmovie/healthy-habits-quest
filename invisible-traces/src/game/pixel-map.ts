@@ -11,6 +11,8 @@ export interface MapOptions {
  /** 미션 번호(0부터)별 입장 가능 여부와, 지금 해야 할 미션 번호(없으면 -1). */
  open:boolean[];next:number;done:boolean[];newly:number[];newEncounter:number|null;celebration:boolean;
  mapHits:Record<string,number>;encountersEnabled:boolean;onEncounterSave:(patch:Record<string,number>)=>void;onEncounterSound:(kind:MapEncounterSound,hits:number)=>void;
+ /** 성취 카드가 열릴 차례를 기다리는 동안 참. 악당과 전체 격퇴 파이널이 카드 뒤로 밀린다. */
+ encounterHold:()=>boolean;
  onSelect:(stage:number)=>void;onMove:(p:Point)=>void;onView:(mode:'follow'|'free'|'overview')=>void;onStop:(place:number)=>void;
 }
 export interface MapHandle { travel:(stage:number)=>Promise<boolean>;cancel:()=>void;destroy:()=>void }
@@ -48,7 +50,7 @@ export async function createMap(parent:HTMLElement,options:MapOptions):Promise<M
   const p=NODES[place.node],toward=NODES['plazaMid'],d=Math.hypot(toward.x-p.x,toward.y-p.y)||1;
   return options.done[i]?[encounterStage(i,i,place.name,nearestOnRoad({x:p.x+(toward.x-p.x)/d*38,y:p.y+(toward.y-p.y)/d*38}).point)]:[];
  }):[],progress:options.mapHits,onSave:options.onEncounterSave,reduced:()=>options.reduced,
- blocked:()=>!!parent.closest('[inert]')||!!page.querySelector('.window-restoration[open]'),tone:options.onEncounterSound,reach:68,contact:19,...encounterLook});
+ blocked:()=>!!parent.closest('[inert]')||!!page.querySelector('.window-restoration[open]')||options.encounterHold(),tone:options.onEncounterSound,reach:68,contact:19,...encounterLook});
 
  class SchoolMap extends Phaser.Scene {
   hero!:Phaser.GameObjects.Sprite;mate!:Phaser.GameObjects.Sprite;heroShadow!:Phaser.GameObjects.Ellipse;mateShadow!:Phaser.GameObjects.Ellipse;ring!:Phaser.GameObjects.Ellipse;

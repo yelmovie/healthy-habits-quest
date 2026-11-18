@@ -1,0 +1,9 @@
+/* 지도 머리글의 성취 카드 칸: 세로로 든 폰에서는 칸을 좁히고 상표 글자를 접어 머리글 한 줄을 지킨다. */
+@media (max-width: 640px) {
+  .topbar .rc-slots { gap: 2px; min-height: 44px; padding: 4px 5px; }
+  .topbar .rc-slot { width: 18px; height: 27px; border-radius: 4px; font-size: 11px; }
+}
+@media (max-width: 480px) {
+  body.on-map .brand { padding: .3rem; }
+  body.on-map .brand > span:last-child { display: none; }
+}

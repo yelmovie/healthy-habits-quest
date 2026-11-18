@@ -1,15 +1,20 @@
 // Original procedural research cues plus a few CC0 sample cues for map encounters and record completion
 // (docs/AUDIO-PROVENANCE-20261109.md). No microphone or third-party requests.
-export type Cue = 'tap' | 'success' | 'scan' | 'swing' | 'hit1' | 'hit2' | 'finish' | 'exit' | 'appear' | 'bump';
+export type Cue = 'tap' | 'success' | 'scan' | 'swing' | 'hit1' | 'hit2' | 'finish' | 'exit' | 'appear' | 'bump'
+ | 'cardWhoosh' | 'cardReveal' | 'cardEpic' | 'cardSlot' | 'cardComplete';
 // Gentle hygiene sounds (spray, soap bubbles, clean chimes) instead of alarms or illness noises.
 const CUE_FILES:Partial<Record<Cue,{file:string;gain:number;rate?:number}>>={
  success:{file:'correct-01.mp3',gain:.5},swing:{file:'spray-hiss-03.mp3',gain:.35,rate:1.1},
  hit1:{file:'bubble-02.mp3',gain:.6},hit2:{file:'hit-light-02.mp3',gain:.7,rate:.92},
  finish:{file:'hit-heavy-02.mp3',gain:1},exit:{file:'villain-exit-04.mp3',gain:.4},
  appear:{file:'villain-appear-01.mp3',gain:.6},bump:{file:'hurt-bump-01.mp3',gain:.8},
+ // Achievement card cues: fly in, reveal (the two rarest cards use the longer jingle), land in the slot, full set.
+ cardWhoosh:{file:'wind-whoosh-03.mp3',gain:.45},cardReveal:{file:'reward-01.mp3',gain:.4},cardEpic:{file:'reward-03.mp3',gain:.4},
+ cardSlot:{file:'pickup-01.mp3',gain:.55},cardComplete:{file:'victory-jingle-01.mp3',gain:.4},
 };
 // Synth fallback when a sample cannot load or decode.
-const NOTES:Record<Cue,number[]>={tap:[440],scan:[392,523.25],success:[523.25,659.25,783.99],swing:[659.25],hit1:[440],hit2:[523.25],finish:[523.25,783.99],exit:[783.99,659.25,523.25],appear:[392,523.25],bump:[329.63]};
+const NOTES:Record<Cue,number[]>={tap:[440],scan:[392,523.25],success:[523.25,659.25,783.99],swing:[659.25],hit1:[440],hit2:[523.25],finish:[523.25,783.99],exit:[783.99,659.25,523.25],appear:[392,523.25],bump:[329.63],
+ cardWhoosh:[392,587.33],cardReveal:[659.25,987.77],cardEpic:[523.25,783.99,1046.5],cardSlot:[880],cardComplete:[523.25,659.25,783.99,1046.5]};
 export function createResearchAudio(enabled:()=>boolean,base='./'){
  let context:AudioContext|null=null,quiet=false,request=0;
  const nodes=new Set<{src:AudioScheduledSourceNode;gain:GainNode}>();

@@ -12,6 +12,8 @@ import './ui/activity-fit.css';
 import './ui/scenery-surfaces.css';
 import './ui/learning-guidance.css';
 import './ui/flow-upgrade.css';
+import './reward-cards.css';
+import './reward-card-set.css';
 import {learningGuide,curriculumGuide,nextInstruction} from './ui/learning-guidance';
 import {DATA,PAGES,STAGES,LABS,SITES,EFFECTS,asset} from './data/game';
 const STAGE_BACKDROPS:Record<string,string>={S1:'bg-plaza-20261116',S2:'bg-gym-20261116',S3:'bg-classroom-20261116',S4:'bg-cafeteria-20261116',S5:'bg-field-20261116'};
@@ -23,6 +25,7 @@ import {header,home,map,mapStatus,mapViewLabel,shell,pageContent,records,viewFre
 import type {MapHandle} from './game/pixel-map';
 import {NODES,PLACES} from './game/school-map';
 import {SIGNAL_SPOTS} from './ui/stages-observation';
+import {rewardSlotsHtml,wonRewardCards,winRewardCard,rewardCardDue,bindRewardSound} from './reward-card-set';
 const root=document.querySelector<HTMLDivElement>('#app')!,modalRoot=document.querySelector<HTMLDivElement>('#modal-root')!,toastRoot=document.querySelector<HTMLDivElement>('#toast')!;
 const loaded=readSave();let state=loaded.state,protectedSave=!!loaded.error;let archive:State|null=null;let view:View={...viewFresh(),lab:state.labs.active};let epoch=0,mapHandle:MapHandle|null=null;let travelRequest=0,travellingStage=0;let timer:ReturnType<typeof setInterval>|null=null,toastTimer:ReturnType<typeof setTimeout>|null=null;let focusBefore:HTMLElement|null=null;let saveWarning=false;
 function hideToast(){toastRoot.className='';if(toastTimer)clearTimeout(toastTimer);toastTimer=null;}
@@ -31,6 +34,9 @@ const researchAudio=createResearchAudio(()=>state.settings.sound,import.meta.env
 const music=createMusic(()=>state.settings.sound,import.meta.env.BASE_URL);
 const narration=mountNarration({enabled:()=>state.settings.sound,quiet:v=>{researchAudio.quiet(v);music.quiet(v);},context:()=>state.route});
 function sound(kind:Cue='tap'){void researchAudio.play(kind);}
+// 성취 카드 소리는 앞 소리(악당 퇴장, 카드 등장)를 끊지 않고 겹쳐 낸다. 지도 파이널이 열리면 완성 징글이 파이널 음악과 겹치지 않게 끊는다.
+bindRewardSound(cue=>void researchAudio.play(cue,true));
+document.addEventListener('map-finale-music',e=>{if((e as CustomEvent<boolean>).detail)researchAudio.stop();});
 function persist(){if(archive||protectedSave)return;if(!writeSave(state)&&!saveWarning){saveWarning=true;notify(saveError()??'이 기기에 저장하지 못했어요. 창을 닫으면 기록이 사라질 수 있어요.');}}
 let pendingMapRestore:number[]=[];
 let pendingMapEncounter:number|null=null;
@@ -53,7 +59,7 @@ function render(keepTimer=false){disposeNpc?.();if(!keepTimer){stop();playbackSe
  if(state.route==='P07'&&!state.experiment.baselineSeen){state.experiment.baselineSeen=true;persist();}
  // P09에서 방금 본 계획을 다시 보여 주는 확인 화면은 건너뛰고 바로 실천한다.
  if(state.route==='P10'&&state.final.phase==='report'&&state.completed.includes('P09')){state.final.phase='apply';persist();}
- root.innerHTML=header(state,!!archive)+(state.route==='C00'?home(state):state.route==='C01'?map(state,view):shell(state,view,pageContent(state,view)));
+ root.innerHTML=header(state,!!archive,state.route==='C01'?rewardSlotsHtml((archive??state).mapHits):'')+(state.route==='C00'?home(state):state.route==='C01'?map(state,view):shell(state,view,pageContent(state,view)));
  if(state.route==='C00')disposeNpc=mountNpcGuide(root.querySelector('.title-actions'),{text:'보이지 않는 흔적을 함께 찾아보자. 증거를 살펴 감염이 퍼지는 경로를 생각하고, 생활 속에서 실천할 예방 방법을 골라 보자.',stop:()=>narration.stop(),reduced:()=>state.settings.reduced});
  if(protectedSave||saveWarning){const warning=document.createElement('div');warning.className='storage-warning';warning.setAttribute('role','status');warning.textContent=saveError()??'현재 탐구는 임시 상태예요. 창을 닫기 전에 연구 기록을 확인해 주세요.';root.prepend(warning);}
  if(state.route==='C01'){void mountMap();mountWindowRestoration(root.querySelector('.map-page')!,state,persist,()=>sound('success'));}
@@ -64,9 +70,9 @@ async function mountMap(){const currentEpoch=epoch,{open,next,done}=mapStatus(st
  const request=mapRequest=new AbortController(),{signal}=request;
  let loadingCode=true,timer:ReturnType<typeof setTimeout>|undefined;
  const deadline=new Promise<never>((_,reject)=>{timer=setTimeout(()=>{reject(Error('map timeout'));request.abort();},10000);});
- researchAudio.preload(['swing','hit1','hit2','finish','exit','appear','bump']);
+ researchAudio.preload(['swing','hit1','hit2','finish','exit','appear','bump','cardWhoosh','cardReveal','cardEpic','cardSlot','cardComplete']);
  const load=async()=>{const {createMap}=await import('./game/pixel-map');if(signal.aborted||epoch!==currentEpoch)return null;loadingCode=false;const parent=document.getElementById('pixel-map');if(!parent)return null;
- return createMap(parent,{signal,start:view.mapSpot??(last?NODES[last.node]:null),overview:view.mapOverview,mapHits:state.mapHits,encountersEnabled:!archive,onEncounterSave:patch=>{state.mapHits={...state.mapHits,...patch};persist();},onEncounterSound:(kind,hits)=>void researchAudio.play(kind==='hit'?(hits===2?'hit2':'hit1'):kind==='contact'?'bump':kind,kind==='hit'||kind==='finish'||kind==='exit'),newEncounter,reduced:state.settings.reduced||matchMedia('(prefers-reduced-motion: reduce)').matches,open,next,done,newly,celebration:state.completed.includes('P10'),onSelect:n=>void startStage(n),onMove:p=>{view.mapSpot=p;},onStop:mapHint,onView:mode=>{view.mapOverview=mode==='overview';const button=root.querySelector('[data-action=map-view]');if(button){const label=mapViewLabel(mode);button.setAttribute('aria-label',label);button.setAttribute('title',label);}}});
+ return createMap(parent,{signal,start:view.mapSpot??(last?NODES[last.node]:null),overview:view.mapOverview,mapHits:state.mapHits,encountersEnabled:!archive,encounterHold:rewardCardDue,onEncounterSave:patch=>{const won=wonRewardCards(state.mapHits,patch);state.mapHits={...state.mapHits,...patch};persist();won.forEach(awardCard);},onEncounterSound:(kind,hits)=>void researchAudio.play(kind==='hit'?(hits===2?'hit2':'hit1'):kind==='contact'?'bump':kind,kind==='hit'||kind==='finish'||kind==='exit'),newEncounter,reduced:state.settings.reduced||matchMedia('(prefers-reduced-motion: reduce)').matches,open,next,done,newly,celebration:state.completed.includes('P10'),onSelect:n=>void startStage(n),onMove:p=>{view.mapSpot=p;},onStop:mapHint,onView:mode=>{view.mapOverview=mode==='overview';const button=root.querySelector('[data-action=map-view]');if(button){const label=mapViewLabel(mode);button.setAttribute('aria-label',label);button.setAttribute('title',label);}}});
  };
  try{const h=await Promise.race([load(),deadline]);if(!h)return null;
  if(epoch!==currentEpoch){h.destroy();return null;}pendingMapRestore=pendingMapRestore.filter(i=>!newly.includes(i));if(pendingMapEncounter===newEncounter)pendingMapEncounter=null;mapHandle=h;return h;
@@ -80,6 +86,13 @@ async function mountMap(){const currentEpoch=epoch,{open,next,done}=mapStatus(st
   }
   return null;
  }finally{clearTimeout(timer);}
+}
+// 악당의 세 번째 타격이 저장되면 퇴장 연출 뒤 성취 카드를 연다. 카드가 열려 있는 동안 #app이 inert라서
+// 걷기·악당·전체 격퇴 파이널이 카드를 닫을 때까지 기다린다. 그 사이 지도를 떠났으면 칸만 채운다.
+function awardCard(index:number){
+ void winRewardCard(index,{delay:state.settings.reduced||matchMedia('(prefers-reduced-motion: reduce)').matches?520:760,hits:()=>(archive??state).mapHits,
+  state:()=>state.route!=='C01'||archive?'gone':document.hidden||modalRoot.firstChild||document.querySelector('dialog[open]')?'wait':'open',
+  origin:()=>{const spot=document.querySelector(`#pixel-map [data-encounter="${index}"]`)?.getClientRects()[0];return spot?{x:spot.left,y:spot.top-30}:undefined;}});
 }
 function cancelMapTravel(){travelRequest++;travellingStage=0;mapHandle?.cancel();const b=root.querySelector<HTMLButtonElement>('.map-next-cue');if(b){b.disabled=false;b.removeAttribute('aria-busy');}}
 async function startStage(n:number){

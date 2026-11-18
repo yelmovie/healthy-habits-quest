@@ -49,3 +49,17 @@
 | `audio/sfx/correct-01.mp3` | 기록 완성·활동 완료 성공음(기존 합성 차임 대체, 실패 시 합성음) | confirmation_001 · Kenney (https://kenney.nl/assets/interface-sounds) | CC0 (원본 페이지 재확인) | `287d54966793603e` |
 
 모든 악당 격퇴 뒤 승리 징글은 넣지 않았다. 지도 파이널 영상 대화상자가 열리면 파이널 배경음이 바로 시작되어 겹치기 때문이다. 효과음은 기존 소리 설정(끄면 무음)·인물 목소리 재생 중 정지·탭 숨김 정지를 그대로 따른다.
+
+## 성취 카드 효과음 (2026-11-18 추가)
+
+지도 악당을 물리치고 받는 성취 카드의 소리다. 같은 공통 라이브러리(`_shared/sfx-library-20261117`)에서 그대로 복사했고(재인코딩 없음), 가공은 앱 안의 음량 조절뿐이다. 다른 효과음과 같은 재생기(`src/audio.ts`의 `createResearchAudio`)로 내므로 소리 설정·인물 목소리 중 정지·탭 숨김 정지를 그대로 따른다. 앞 소리(악당 퇴장, 카드 등장)를 끊지 않고 겹쳐 낸다.
+
+| 파일 | 사용 위치 | 원본 · 제작자 | 라이선스 | SHA-256 앞 16자 |
+| --- | --- | --- | --- | --- |
+| `audio/sfx/wind-whoosh-03.mp3` | 카드가 날아올 때, 칸으로 날아갈 때 | Slow Swosh 40 · qubodup (https://freesound.org/people/qubodup/sounds/60027) | CC0 (원본 페이지 2026-11-17 재확인) | `35286e952e795b77` |
+| `audio/sfx/reward-01.mp3` | 카드 공개(별 1~3개) | Fantasy_ui_Button_3.wav · ZenithInfinitiveStudios (https://freesound.org/people/ZenithInfinitiveStudios/sounds/376745) | CC0 (원본 페이지 2026-11-17 재확인) | `b359edf4f8e226f6` |
+| `audio/sfx/reward-03.mp3` | 카드 공개(별 4~5개: 홀로·레전드) | Achievement Happy Beeps Jingle · CogFireStudios (https://freesound.org/people/CogFireStudios/sounds/619838) | CC0 (원본 페이지 2026-11-17 재확인) | `009f9d63c7daeec4` |
+| `audio/sfx/pickup-01.mp3` | 카드가 칸에 도착 | item-pickup-v1.wav · DeltaCode (https://freesound.org/people/DeltaCode/sounds/678384) | CC0 (원본 페이지 2026-11-17 재확인) | `7c6fa70aee7b6886` |
+| `audio/sfx/victory-jingle-01.mp3` | 다섯 장 완성 축하 | Game Success Fanfare Short · el_boss (https://freesound.org/people/el_boss/sounds/677858) | CC0 (원본 페이지 2026-11-17 재확인) | `0c28c5d2c984b207` |
+
+다섯 장 완성 징글은 전체 격퇴 파이널 영상보다 먼저(카드 축하 화면에서) 난다. 축하를 닫아 파이널 대화상자가 열리면 효과음을 끊어 파이널 배경음과 겹치지 않게 했다.

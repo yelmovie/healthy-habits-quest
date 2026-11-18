@@ -31,3 +31,5 @@ npm run preview  # 빌드 결과 확인(서비스워커는 이때만 동작)
 원본 image/와 files/는 로컬 참고 자료이고, 최적화한 게임 배경은 invisible-traces/public/assets/에 있다.
 
 배경음은 Suno로 만든 2곡(사용자 제공)이다. 메인 테마(`public/assets/audio/bgm/main-theme.mp3`)는 첫 탭부터 홈·지도·활동 내내 반복하고, 파이널(`final-theme.mp3`)은 엔딩·인증서에서 한 번, 지도 파이널 영상 대화상자가 열린 동안 재생한다. 인물 목소리가 나오면 1/4로 줄어든다. 원본은 `invisible-traces/references/suno`(Git 제외), 상업 이용 근거(Suno 유료 요금제)는 확인 필요. 출처 기록: [오디오 출처](invisible-traces/docs/AUDIO-PROVENANCE-20261109.md).
+
+성취 카드(2026-11-18): 지도 악당을 세 번 맞혀 물리치면 퇴장 뒤 화면 가운데로 카드가 돌며 나타나고, 「카드 보관함에 넣기」를 누르면 지도 오른쪽 위 소리 버튼 앞 다섯 칸으로 들어간다. 장소 순서대로 별 1~5개이고 다섯 장을 모으면 「컬렉션 완성!」이 나온다. 칸을 누르면 보관함이 열린다. 가진 카드는 기존 격퇴 기록(`mapHits` 3타)에서 계산해 저장 형식은 그대로다. 카드나 보관함이 열린 동안 지도(걷기·키·악당)는 멈추고, 전체 격퇴 파이널 영상은 카드를 닫은 뒤에 나온다. 칸은 지도 화면에만 있다. 연결 코드는 `invisible-traces/src/reward-card-set.ts`이고, 연출 모듈 `src/reward-cards.js`·`src/reward-cards.css`는 과학34 공통 모듈(`_shared/reward-cards`)을 그대로 복사한 것이라 고치지 않는다.
