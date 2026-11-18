@@ -2,6 +2,7 @@ import lines from '../data/narration.json';
 import {createNarrationPlayer} from '../narration';
 import {icon} from './icons';
 // Captions remain the source of truth. One replay control avoids moving activity cards.
+// Lines marked keep (map villain bubbles) finish even after their short-lived bubble hides.
 export function mountNarration(options:{enabled:()=>boolean;quiet:(value:boolean)=>void;context:()=>string}){
  const base=import.meta.env.BASE_URL;
  let seen=new Set<string>(),context='',current:string|null=null,scheduled=false,pending:string|null=null,queue:string[]=[],button:HTMLButtonElement|null=null;
@@ -25,7 +26,7 @@ export function mountNarration(options:{enabled:()=>boolean;quiet:(value:boolean
   for(const area of scopes)for(const el of [area,...area.querySelectorAll('*')] as HTMLElement[]){if(el.closest('[data-narration-control]')||el.matches('script,style')||!visible(el))continue;
    const text=(el.textContent??'').replace(/\s+/g,' ').trim();for(const line of lines)if(text.includes(line.text)&&![...el.children].some(child=>(child.textContent??'').replace(/\s+/g,' ').includes(line.text)))found.add(line.id);
   }
-  const added=[...found].filter(id=>!seen.has(id));if(pending&&found.has(pending)){const i=added.indexOf(pending);if(i>=0)added.splice(i,1);added.unshift(pending);}pending=null;if(current&&!found.has(current)){stop();current=null;}
+  const added=[...found].filter(id=>!seen.has(id));if(pending&&found.has(pending)){const i=added.indexOf(pending);if(i>=0)added.splice(i,1);added.unshift(pending);}pending=null;if(current&&!found.has(current)&&!(byId.get(current) as {keep?:boolean}|undefined)?.keep){stop();current=null;}
   queue=queue.filter(id=>found.has(id));seen=found;
   const host=overlay?.querySelector('[data-narration-host]')??overlay??scope.querySelector('.tools');
   if(host&&found.size){if(!button?.isConnected||!host.contains(button)){button?.remove();button=document.createElement('button');button.type='button';button.dataset.narrationControl='';button.className=overlay?'btn small':'icon-btn';button.style.minWidth='48px';button.style.minHeight='48px';
