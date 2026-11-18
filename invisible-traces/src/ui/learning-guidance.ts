@@ -3,9 +3,20 @@ import { DATA, PAGES } from '../data/game';
 import { nextPlacement, type State } from '../simulation/model';
 import type { View } from './render';
 
+// 받침이 없거나 ㄹ 받침이면 '로', 그 밖의 받침이면 '으로'.
+function toParticle(word: string): string {
+  const code = word.charCodeAt(word.length - 1) - 0xac00;
+  if (code < 0 || code > 11171) return '로';
+  const final = code % 28;
+  return final === 0 || final === 8 ? '로' : '으로';
+}
+
 // Keep the instruction tied to the learner's state without identifying an answer.
 export function nextInstruction(s: State, v: View): string {
-  if (s.completed.includes(s.route) && s.route !== 'P10') return '잘 관찰했어요. 다음 조사로 가요!';
+  if (s.completed.includes(s.route) && s.route !== 'P10') {
+    const next = PAGES.find(p => p.id === PAGES.find(p => p.id === s.route)?.next);
+    return next ? `잘 해냈어요! 「다음 조사」를 눌러 ${next.name}${toParticle(next.name)} 가요.` : '잘 해냈어요! 「다음 조사」를 눌러요.';
+  }
   switch (s.route) {
     case 'P01': return '돋보기를 그림 위로 움직여 보라 빛이 숨은 곳을 찾아요.';
     case 'P02': return v.replacement ? '단서함에서 바꿀 단서를 눌러요.'
@@ -43,7 +54,7 @@ export function nextInstruction(s: State, v: View): string {
       if (s.final.phase === 'report') return '내 계획을 보고 직접 실천하기를 눌러요.';
       const placement = nextPlacement(s);
       if (placement?.actionId === 'washHands') return '손바닥·손등·손가락 사이 카드를 쓱쓱 문질러요.';
-      if (placement?.actionId === 'ventilation') return '창문을 오른쪽으로 밀어 열어요.';
+      if (placement?.actionId === 'ventilation') return '창문을 오른쪽으로 밀거나 「창문 밀어 열기」를 눌러요.';
       return '공용 음식을 개인 접시로 끌거나 접시를 눌러 덜어요.';
     }
     default: return '';
@@ -59,7 +70,7 @@ const LAB_CONCEPTS: Record<string, { term: string; description: string }> = {
   synthesis: { term: '함께 예방', description: '기침에서 나오는 흔적과 실내에 머무는 흔적을 함께 생각해요.' },
 };
 
-export function learningFocus(s: State, v: View): string {
+export function learningFocus(s: State, v: View, question = ''): string {
   if (s.route === 'P10' && ['restored', 'ending', 'certificate'].includes(s.final.phase)) return '';
   const page = PAGES.find(p => p.id === s.route);
   if (!page) return '';
@@ -67,7 +78,7 @@ export function learningFocus(s: State, v: View): string {
   if (s.route === 'P10' && s.final.phase === 'apply' && nextPlacement(s)?.actionId === 'washHands') {
     concept = { term: '30초 이상', description: '실제로는 비누와 흐르는 물로 씻어요. 엄지·손끝·손톱 밑도 꼼꼼히!' };
   }
-  return `<aside class="learning-focus" aria-label="이 활동의 핵심 개념"><mark>${concept.term}</mark><span>${concept.description}</span></aside>`;
+  return `<aside class="learning-focus${question ? ' has-question' : ''}" aria-label="이 활동의 질문과 핵심 개념"><mark>${concept.term}</mark>${question}<span class="focus-description">${concept.description}</span></aside>`;
 }
 
 export function recheckInstruction(s: State, v: View): string {

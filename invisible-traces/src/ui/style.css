@@ -662,6 +662,9 @@ select { min-height: 48px; padding: .4rem 2.2rem .4rem .9rem; border: 2px solid 
 #toast.visible { opacity: 1; transform: translate(-50%, 0); }
 #toast.success { background: var(--teal-strong); }
 
+/* 활동 화면: 위 질문 띠를 가리지 않게 아래 진행 줄 바로 위 오른쪽에 짧은 칩으로 띄운다. */
+body.on-activity #toast { top: auto; left: auto; right: 20px; bottom: calc(80px + env(safe-area-inset-bottom)); max-width: min(420px, calc(100% - 40px)); padding: .55rem 1.1rem; border-radius: 16px; font-size: 1rem; transform: translateY(12px); }
+body.on-activity #toast.visible { transform: none; }
 /* ---------- 설정: 동작 줄이기 ---------- */
 body.reduced *, body.reduced *::before, body.reduced *::after { animation: none !important; transition: none !important; }
 

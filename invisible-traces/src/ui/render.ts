@@ -62,7 +62,10 @@ function progressLabel(s:State):string {
 }
 export function shell(s:State,v:View,content:string){
  const done=s.completed.includes(s.route);
- return `<main class="play-layout activity-layout" data-page="${s.route}" data-focus="${v.focus}"><section class="play-main">${learningFocus(s,v)}<div id="page-content" class="page-content">${content}</div><footer class="actionbar"><div class="activity-status"><button class="icon-btn activity-info" data-action="model-info" aria-label="조작 힌트와 학습 모형 안내">${icon('info',20)}</button><span class="status-line ${done?'success':''}" role="status"><span><small class="activity-progress">${progressLabel(s)}</small><b class="next-instruction">${nextInstruction(s,v)}</b></span></span></div>${s.route==='P10'?btn(`${icon('file',19)} 연구 기록`,'records','small'):btn(`${PAGES.find(p=>p.id===s.route)?.next==='C01'?'조사 지도':'다음 조사'} ${icon('arrow',20)}`,'next',`primary ${done?'next-target':''}`,done?'':'disabled')}</footer></section></main>`;
+ // 놀이 영역 위 띠는 한 줄: 페이지 질문을 개념 칩 줄로 올려 합친다.
+ const question=content.match(/<p class="mission-question">[\s\S]*?<\/p>/)?.[0]??'';
+ if(question)content=content.replace(question,'');
+ return `<main class="play-layout activity-layout" data-page="${s.route}" data-focus="${v.focus}"><section class="play-main">${learningFocus(s,v,question)}<div id="page-content" class="page-content">${content}</div><footer class="actionbar"><div class="activity-status"><button class="icon-btn activity-info" data-action="model-info" aria-label="조작 힌트와 학습 모형 안내">${icon('info',20)}</button><span class="status-line ${done?'success':''}" role="status"><span><small class="activity-progress">${progressLabel(s)}</small><b class="next-instruction">${nextInstruction(s,v)}</b></span></span></div>${s.route==='P10'?btn(`${icon('file',19)} 연구 기록`,'records','small'):btn(`${PAGES.find(p=>p.id===s.route)?.next==='C01'?'조사 지도':'다음 조사'} ${icon('arrow',20)}`,'next',`primary ${done?'next-target':''}`,done?'':'disabled')}</footer></section></main>`;
 }
 export function pageContent(s:State,v:View):string {
  const page=Number(s.route.slice(1));
