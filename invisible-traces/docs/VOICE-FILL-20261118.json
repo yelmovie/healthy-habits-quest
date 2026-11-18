@@ -1,0 +1,53 @@
+{
+ "project": "12",
+ "date": "2026-11-18",
+ "license": "ElevenLabs 유료 요금제(Creator) 생성물 — 상업 이용 가능. 실제 사람 음성 복제 아님.",
+ "characters": [
+  {
+   "name": "과학 조사원 = 관찰 담당 친구(돋보기 든 소년)",
+   "voiceId": "IQt4I2Udet4gAwcFGAlU",
+   "voiceName": "oki",
+   "reason": "홈 대화창이 intro-1을 \"과학 조사원\" 이름·초상으로 보여 주므로 intro-1 화자는 조사원이 맞다(Qwen 기록의 기록 담당 배정은 대화창 도입 전 기록). 이미 쓰인 el-intro-1의 젊은 남성 목소리를 대표로 유지."
+  },
+  {
+   "name": "기록 파트너 = 기록 담당 친구(태블릿 든 소녀)",
+   "voiceId": "R57C1ECBzXRSHUbNYPYx",
+   "voiceName": "Sora – Modern, Versatile & Expressive",
+   "reason": "el-title-1에서 이미 쓰인 ElevenLabs 목소리. 개념 해설도 이 목소리로 계획."
+  },
+  {
+   "name": "현장 선생님",
+   "voiceId": "xyE2KXhy5mfTGV7xRXpD",
+   "voiceName": "Sara Kim – Warm Korean Narrator",
+   "reason": "계획만(미생성). 차분한 중년 여성 교육용 목소리."
+  },
+  {
+   "name": "자국 도깨비",
+   "voiceId": "IAETYMYM3nJvjnlkVTKI",
+   "voiceName": "Deok su",
+   "reason": "계획만(미생성). 통통하고 귀여운 캐릭터 남성 목소리."
+  }
+ ],
+ "status": "ElevenLabs 일일 생성 한도(429)로 p01-q 1줄만 반영. 나머지 83줄은 _scratch/voice-fill-20261118/12/remaining.json.",
+ "lines": [
+  {
+   "key": "p01-q",
+   "speaker": "기록 파트너",
+   "voiceId": "R57C1ECBzXRSHUbNYPYx",
+   "voiceName": "Sora",
+   "model": "eleven_v4",
+   "flowId": "L2Tipp7fPPEGoYEIcZdM",
+   "generationId": "nE0vC2ic3ShclobjnuLD",
+   "text": "어디에 신호가 있을까요?",
+   "prompt": "[friendly] 어디에 신호가 있을까요?",
+   "asr": "어디에 신호가 있을까요?",
+   "match": 1.0,
+   "end": 1.0,
+   "lufs": -16.44,
+   "peakDbtp": -3.47,
+   "duration": 2.4,
+   "sha256": "42050a919ca722ee3e2b06e3ac40c42c9fc7193fe6e69ed6e98bafa0bba3cc24",
+   "file": "public/assets/audio/voices/el-p01-q.mp3"
+  }
+ ]
+}
