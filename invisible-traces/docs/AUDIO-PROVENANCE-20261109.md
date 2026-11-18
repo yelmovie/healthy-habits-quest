@@ -29,7 +29,7 @@
 
 | 자산 | 사용 위치 | 출처 | 비고 |
 | --- | --- | --- | --- |
-| 배경음 2곡 (Suno 생성) | audio/bgm/main-theme.mp3 (첫 탭부터 홈·지도·활동 반복), audio/bgm/final-theme.mp3 (엔딩·인증서 1회, 지도 파이널 영상 대화상자가 열린 동안) | 2026-11-17 사용자가 Suno로 생성해 제공. 프롬프트는 _shared/music-prompts-10-16.html | 원본은 invisible-traces/references/suno 보관(Git 제외). 상업 이용 근거(생성 당시 Suno 유료 요금제) 확인 필요 |
+| 배경음 2곡 (Suno 생성) | audio/bgm/main-theme.mp3 (첫 탭부터 홈·지도·활동 반복), audio/bgm/final-theme.mp3 (엔딩·인증서 1회, 지도 파이널 영상 대화상자가 열린 동안) | 2026-11-17 사용자가 Suno로 생성해 제공. 프롬프트는 _shared/music-prompts-10-16.html | 원본은 invisible-traces/references/suno 보관(Git 제외). 상업 이용 근거: 생성 당시 Suno Premier 유료 요금제(2026-11-18 사용자 확인) |
 
 인물 목소리가 나오는 동안 배경음은 1/4로 줄어든다. 소리 피드백을 끄거나 탭을 숨기면 멈춘다. 지도 파이널 영상은 계속 무음이다.
 
