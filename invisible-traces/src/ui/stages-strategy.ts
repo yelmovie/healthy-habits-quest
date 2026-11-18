@@ -5,6 +5,9 @@ import {icon} from './icons';
 import {btn,chip,image,note,actionName,playbackControls,windowIllustration} from './render-parts';
 import type {View} from './render';
 
+// 받침이 있으면 '을', 없으면 '를'.
+const objectParticle=(word:string)=>(word.charCodeAt(word.length-1)-0xac00)%28>0?'을':'를';
+
 // P01과 같은 장소 그림을 되풀이하지 않도록, 작전 화면에는 해결할 문제가 보이는 장면을 쓴다.
 const PLAN_SCENES:Record<string,string>={classroom:'plan-classroom-20261116',cafeteria:'plan-cafeteria-20261116',gym:'plan-gym-20261116'};
 // 행동 카드에 이미 쓰는 실험 그림을 작은 그림으로 붙여, 글자만 있는 카드보다 고르기 쉽게 한다.
@@ -87,7 +90,7 @@ function strategyBoard(s:State,v:View){
  const result=planResult(s.strategy.placements),cost=planCost(s.strategy.placements);
  const contexts:Record<string,string>={classroom:'함께 지내는 공간의 공기 흐름',cafeteria:'공용 음식에 쓰는 도구',gym:'체육 활동 뒤 간식 먹기 전의 손'};
  const activeSite=SITES.find(x=>x.id===v.focus)?.id??SITES[0].id;
- const feedback=s.strategy.simulated?(result.success?'세 장소의 대응안이 완성됐어요.':`${SITES.filter(x=>!result.resolved.includes(x.id)).map(x=>x.name).join(' · ')}의 남은 연결을 살펴보세요.`):v.action?`‘${actionName(v.action)}’을 적용할 장소를 눌러요.`:'행동을 고른 뒤 장소를 눌러 배치해요.';
+ const feedback=s.strategy.simulated?(result.success?'세 장소의 대응안이 완성됐어요.':`${SITES.filter(x=>!result.resolved.includes(x.id)).map(x=>x.name).join(' · ')}의 남은 연결을 살펴보세요.`):v.action?`‘${actionName(v.action)}’${objectParticle(actionName(v.action))} 적용할 장소를 눌러요.`:'행동을 고른 뒤 장소를 눌러 배치해요.';
  return `<div class="strategy-activity strategy-planning"><div class="strategy-toolbar"><div class="strategy-energy"><b>${5-cost}<small>/ 5</small></b><span>남은 에너지</span><span class="energy-cells" aria-hidden="true">${[0,1,2,3,4].map(i=>`<i class="${i<5-cost?'available':''}"></i>`).join('')}</span></div>${btn(`${icon('people',20)}현장 질문 <b>${3-s.strategy.asked.length}</b>`,'questions','small')}<div class="strategy-selection-hint ${result.success&&s.strategy.simulated?'success':''}" role="status" ${s.strategy.simulated?'':'hidden'}>${icon(s.strategy.simulated?(result.success?'check':'search'):v.action?ACTION_ICONS[v.action]:'hand',20)}<span>${feedback}</span></div></div>
  <div class="strategy-place-tabs">${SITES.map((x,i)=>btn(`${i+1} ${x.name}`,'focus',activeSite===x.id?'small selected':'small',`data-id="${x.id}"`)).join('')}</div>
  <div class="strategy-zones">${SITES.map((x,i)=>{const placed=s.strategy.placements.filter(p=>p.site===x.id);const resolved=s.strategy.simulated&&result.resolved.includes(x.id);return `<section class="strategy-zone-card ${x.id===activeSite?'focused':''}"><button class="strategy-zone ${s.strategy.simulated?(resolved?'resolved':'remaining'):''} ${v.action?'next-target':''}" data-action="place" data-id="${x.id}" data-drop="strategy"><span class="strategy-zone-picture">${image(PLAN_SCENES[x.id]??x.image)}<span>${icon(x.icon,28)}</span></span><span class="strategy-zone-title"><strong>${x.name}</strong>${s.strategy.simulated?icon(resolved?'check':'search',21):''}</span><span class="strategy-zone-context">${contexts[x.id]}</span></button><div class="strategy-placement-tags">${placed.map(p=>btn(`${icon(ACTION_ICONS[p.actionId],17)}<span>${actionName(p.actionId)}</span>${icon('close',15)}`,'remove-placement','tiny',`data-id="${placementKey(p)}" aria-label="${x.name} ${actionName(p.actionId)} 배치 취소"`)).join('')}</div></section>`;}).join('')}</div>
