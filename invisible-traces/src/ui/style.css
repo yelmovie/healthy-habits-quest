@@ -39,6 +39,7 @@
   --shadow: 0 10px 30px rgba(16, 62, 67, .10);
   --shadow-sm: 0 3px 10px rgba(16, 62, 67, .08);
   --topbar-h: 68px;
+  --scrim: rgba(16, 62, 67, .28); /* 팝업 뒤 배경: 0.3 이하, 흐림 없음 (2026-11-17 결정) */
   --app-h: var(--app-height, 100dvh);
   --font: "NanumSquareNeo", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", system-ui, sans-serif;
   color-scheme: light;
@@ -626,7 +627,7 @@ select { min-height: 48px; padding: .4rem 2.2rem .4rem .9rem; border: 2px solid 
 .ending.certificate .ending-card { border: 6px double var(--teal); }
 
 /* ---------- 모달·토스트 ---------- */
-.modal-backdrop { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 1.2rem; background: rgba(16, 62, 67, .45); backdrop-filter: blur(3px); animation: fade .2s; }
+.modal-backdrop { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 1.2rem; background: var(--scrim); animation: fade .2s; }
 .modal {
   position: relative; display: flex; flex-direction: column; gap: .9rem;
   width: min(640px, 100%); max-height: calc(var(--app-h) - 2.4rem); overflow-y: auto;

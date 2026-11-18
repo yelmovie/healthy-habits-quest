@@ -172,8 +172,8 @@ body.on-activity.has-stage-bg :is(.source-card,.target-card,.impact-effect,.impa
 
 /* ---------- 팝업·토스트·글자 위계 (yelsam-design: Modal scale .95→1, duration-slow, Glassmorphism) ---------- */
 :root { --ease-out: cubic-bezier(.16, 1, .3, 1); --dur-slow: 400ms; --dur-base: 250ms; --modal-radius: 28px; }
-.modal-backdrop { background: radial-gradient(ellipse at 50% 30%, rgba(16,62,67,.32), rgba(16,62,67,.55)); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
-.modal { width: min(680px, 100%); gap: 1rem; padding: 1.6rem 1.6rem 1.4rem; border-radius: var(--modal-radius); border: 1px solid rgba(255,255,255,.9); background: linear-gradient(180deg, rgba(232,248,246,.97) 0, rgba(255,255,255,.97) 120px); box-shadow: 0 30px 70px rgba(16,62,67,.32), inset 0 1px 0 #fff; animation: modal-in var(--dur-slow) var(--ease-out); }
+.modal-backdrop { background: var(--scrim); }
+.modal { width: min(640px, 100%); max-height: min(calc(var(--app-h) - 2.4rem), 72dvh); gap: 1rem; padding: 1.6rem 1.6rem 1.4rem; border-radius: var(--modal-radius); border: 1px solid rgba(255,255,255,.9); background: linear-gradient(180deg, rgba(232,248,246,.97) 0, rgba(255,255,255,.97) 120px); box-shadow: 0 30px 70px rgba(16,62,67,.32), inset 0 1px 0 #fff; animation: modal-in var(--dur-slow) var(--ease-out); }
 @keyframes modal-in { from { opacity: 0; transform: translateY(10px) scale(.95); } }
 .modal h2 { font-size: 1.35rem; line-height: 1.35; letter-spacing: -.01em; }
 .modal-close { top: .9rem; right: .9rem; width: 48px; height: 48px; }
