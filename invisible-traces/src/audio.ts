@@ -12,39 +12,44 @@ const CUE_FILES:Partial<Record<Cue,{file:string;gain:number;rate?:number}>>={
  cardWhoosh:{file:'wind-whoosh-03.mp3',gain:.45},cardReveal:{file:'reward-01.mp3',gain:.4},cardEpic:{file:'reward-03.mp3',gain:.4},
  cardSlot:{file:'pickup-01.mp3',gain:.55},cardComplete:{file:'victory-jingle-01.mp3',gain:.4},
 };
+// Map villain fight cues keep playing under a character voice; a voice never mutes or drops them. Card cues are not here.
+const COMBAT=new Set<Cue>(['swing','hit1','hit2','finish','exit','appear','bump']);
 // Synth fallback when a sample cannot load or decode.
 const NOTES:Record<Cue,number[]>={tap:[440],scan:[392,523.25],success:[523.25,659.25,783.99],swing:[659.25],hit1:[440],hit2:[523.25],finish:[523.25,783.99],exit:[783.99,659.25,523.25],appear:[392,523.25],bump:[329.63],
  cardWhoosh:[392,587.33],cardReveal:[659.25,987.77],cardEpic:[523.25,783.99,1046.5],cardSlot:[880],cardComplete:[523.25,659.25,783.99,1046.5]};
 export function createResearchAudio(enabled:()=>boolean,base='./'){
  let context:AudioContext|null=null,quiet=false,request=0;
- const nodes=new Set<{src:AudioScheduledSourceNode;gain:GainNode}>();
+ const nodes=new Set<{src:AudioScheduledSourceNode;gain:GainNode;combat:boolean}>();
  const bytes=new Map<string,Promise<ArrayBuffer|null>>(),buffers=new Map<string,Promise<AudioBuffer|null>>();
  const fetchFile=(file:string)=>{let p=bytes.get(file);if(!p){p=fetch(base+'assets/audio/sfx/'+file).then(r=>r.ok?r.arrayBuffer():null).catch(()=>null);bytes.set(file,p);}return p;};
  function decode(ctx:AudioContext,file:string){let p=buffers.get(file);if(!p){p=fetchFile(file).then(data=>data?ctx.decodeAudioData(data.slice(0)):null).catch(()=>null);buffers.set(file,p);}return p;}
- function stop(){request++;for(const {src,gain} of nodes){src.onended=null;try{src.stop();}catch{}src.disconnect();gain.disconnect();}nodes.clear();}
- function track(src:AudioScheduledSourceNode,gain:GainNode){const node={src,gain};nodes.add(node);src.onended=()=>{nodes.delete(node);src.disconnect();gain.disconnect();};}
- const allowed=(ticket:number)=>ticket===request&&enabled()&&!quiet&&!document.hidden&&context?.state==='running';
+ function silence(node:{src:AudioScheduledSourceNode;gain:GainNode}){node.src.onended=null;try{node.src.stop();}catch{}node.src.disconnect();node.gain.disconnect();}
+ function stop(){request++;for(const node of nodes)silence(node);nodes.clear();}
+ function track(src:AudioScheduledSourceNode,gain:GainNode,combat:boolean){const node={src,gain,combat};nodes.add(node);src.onended=()=>{nodes.delete(node);src.disconnect();gain.disconnect();};}
+ const allowed=(ticket:number,combat=false)=>ticket===request&&enabled()&&(!quiet||combat)&&!document.hidden&&context?.state==='running';
  /** layer=true keeps the cue already sounding (the swing under its hit, the hit under the exit). */
  async function play(kind:Cue='tap',layer=false){
-  if(!layer)stop();if(!enabled()||quiet||document.hidden)return;
+  const combat=COMBAT.has(kind);
+  if(quiet&&!combat)return;
+  if(!layer)stop();if(!enabled()||document.hidden)return;
   const ticket=request;
   try{
    context??=new AudioContext();if(context.state==='suspended')await context.resume();
-   if(!allowed(ticket))return;
+   if(!allowed(ticket,combat))return;
    const sample=CUE_FILES[kind];
    if(sample?.file){
     const buffer=await decode(context,sample.file);
-    if(!allowed(ticket))return;
+    if(!allowed(ticket,combat))return;
     if(buffer){
      const src=context.createBufferSource(),gain=context.createGain();
      src.buffer=buffer;if(sample.rate)src.playbackRate.value=sample.rate;gain.gain.value=sample.gain;
-     src.connect(gain);gain.connect(context.destination);track(src,gain);src.start();return;
+     src.connect(gain);gain.connect(context.destination);track(src,gain,combat);src.start();return;
     }
    }
    // Gentle glass-like discovery; neutral scan, no alarm or illness sound.
    NOTES[kind].forEach((hz,i)=>{const osc=context!.createOscillator(),gain=context!.createGain(),t=context!.currentTime+i*.09;
     osc.type='sine';osc.frequency.setValueAtTime(hz,t);gain.gain.setValueAtTime(0,t);gain.gain.linearRampToValueAtTime(.035,t+.008);gain.gain.exponentialRampToValueAtTime(.0001,t+.18);
-    osc.connect(gain);gain.connect(context!.destination);track(osc,gain);osc.start(t);osc.stop(t+.2);
+    osc.connect(gain);gain.connect(context!.destination);track(osc,gain,combat);osc.start(t);osc.stop(t+.2);
    });
   }catch{/* Captions and visual feedback remain available. */}
  }
@@ -52,7 +57,8 @@ export function createResearchAudio(enabled:()=>boolean,base='./'){
  function preload(kinds:Cue[]){for(const kind of kinds){const file=CUE_FILES[kind]?.file;if(file){if(context)void decode(context,file);else void fetchFile(file);}}}
  function hidden(){if(document.hidden){stop();void context?.suspend().catch(()=>{});}}
  document.addEventListener('visibilitychange',hidden);window.addEventListener('pagehide',stop);
- return {play,preload,stop,quiet(value:boolean){quiet=value;if(value)stop();},sync(){if(!enabled())stop();},destroy(){stop();document.removeEventListener('visibilitychange',hidden);window.removeEventListener('pagehide',stop);void context?.close().catch(()=>{});}};
+ return {play,preload,stop,// A voice starting stops research and interface cues but lets fight cues (and their pending loads) ring on.
+  quiet(value:boolean){quiet=value;if(value)for(const node of nodes)if(!node.combat){silence(node);nodes.delete(node);}},sync(){if(!enabled())stop();},destroy(){stop();document.removeEventListener('visibilitychange',hidden);window.removeEventListener('pagehide',stop);void context?.close().catch(()=>{});}};
 }
 // Suno background music (references/suno). The main theme loops from the first tap; the final theme
 // plays once on the ending/certificate and while the map finale dialog is open, then the main theme resumes.

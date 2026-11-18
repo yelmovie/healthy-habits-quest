@@ -3,6 +3,7 @@ import {createNarrationPlayer} from '../narration';
 import {icon} from './icons';
 // Captions remain the source of truth. One replay control avoids moving activity cards.
 // Lines marked keep (map villain bubbles) finish even after their short-lived bubble hides.
+// Text inside .narration-wait (a villain hit or exit line during its fight cue) is read once the class goes.
 export function mountNarration(options:{enabled:()=>boolean;quiet:(value:boolean)=>void;context:()=>string}){
  const base=import.meta.env.BASE_URL;
  let seen=new Set<string>(),context='',current:string|null=null,scheduled=false,pending:string|null=null,queue:string[]=[],button:HTMLButtonElement|null=null;
@@ -16,7 +17,7 @@ export function mountNarration(options:{enabled:()=>boolean;quiet:(value:boolean
   if(button.getAttribute('aria-label')!==label){button.setAttribute('aria-label',label);button.title=label;button.innerHTML=icon(active?'pause':'voice',22);}
   button.setAttribute('aria-pressed',String(active));button.disabled=!current;
  }
- function visible(el:HTMLElement){return !(el.closest('details:not([open])')&&!el.closest('summary'))&&!el.closest('[hidden], [inert]')&&el.getClientRects().length>0&&getComputedStyle(el).visibility!=='hidden'&&!el.closest('#toast:not(.visible)');}
+ function visible(el:HTMLElement){return !(el.closest('details:not([open])')&&!el.closest('summary'))&&!el.closest('[hidden], [inert], .narration-wait')&&el.getClientRects().length>0&&getComputedStyle(el).visibility!=='hidden'&&!el.closest('#toast:not(.visible)');}
  function speak(id:string){current=id;void player.play(base+byId.get(id)!.src);paint();}
  function next(){const id=queue.shift();if(id)speak(id);}
  function scan(){scheduled=false;const overlay=document.querySelector('dialog[open], #modal-root .modal');const scope=overlay??document.querySelector('#app');if(!scope)return;
