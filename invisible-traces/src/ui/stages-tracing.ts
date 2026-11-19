@@ -49,7 +49,7 @@ export function tracingPages(s: State, v: View): string {
     const labs = LABS.filter(l => l.id !== 'contact');
     const next = labs.find(l => !s.labs.done.includes(l.id))?.id ?? 'synthesis';
     const tabs = [...labs, { id: 'synthesis', name: '종합', icon: 'link' }];
-    return `<section class="tracing-page tracing-p06"><div class="lab-tabs tracing-lab-tabs" aria-label="실험 선택">${tabs.map(l => btn(`${icon(l.icon, 21)}<span>${l.name}</span>${s.labs.done.includes(l.id) || l.id === 'synthesis' && synthesisReady(s.labs.synthesis) ? icon('check', 16) : ''}`, 'lab', `${v.lab === l.id ? 'lab-tab selected' : 'lab-tab'} ${next === l.id && v.lab !== l.id ? 'next-target' : ''}`, `data-id="${l.id}" aria-pressed="${v.lab === l.id}"`)).join('')}</div>
+    return `<section class="tracing-page tracing-p06"><div class="lab-tabs tracing-lab-tabs" aria-label="실험 선택">${tabs.map(l => btn(`${icon(l.icon, 21)}<span>${l.name}</span>${s.labs.done.includes(l.id) || l.id === 'synthesis' && synthesisReady(s.labs.synthesis) ? icon('check', 16) : ''}`, 'lab', v.lab === l.id ? 'lab-tab selected' : 'lab-tab', `data-id="${l.id}" aria-pressed="${v.lab === l.id}"`)).join('')}</div>
       <section class="lab-device tracing-device tracing-device-${v.lab}">${labDevice(s, v)}</section>
       ${next !== v.lab && (s.labs.done.includes(v.lab) || v.lab === 'contact') ? `<div class="tracing-lab-play">${btn(`<span>${next === 'synthesis' ? '종합 문제 풀기' : `다음 실험: ${LABS.find(l => l.id === next)?.name}`}</span>${icon('arrow', 20)}`, 'lab', 'primary next-target', `data-id="${next}"`)}</div>` : ''}
     </section>`;
@@ -89,12 +89,12 @@ const heading = (title: string, term = '') => `<h2 class="tracing-device-heading
         ${result('늦게 손을 씻어도 이미 다른 물체에 옮겨진 흔적은 남아요.', s.labs.done.includes('contact'), '옮겨진 흔적은 남아요.')}`;
     case 'droplet':
       return `${heading('옷소매로 입과 코를 가리면?', '비말은 기침·재채기 때 튀는 작은 침방울이에요.')}<div class="tracing-device-art">${coughFigure(!!value, true)}</div>
-        <div class="tracing-device-action">${value ? '' : `<span class="sleeve-chip next-target" draggable="true" data-drag="sleeve" data-id="sleeve" aria-hidden="true">${icon('hand', 24)} 옷소매를 입으로 끌어요</span>`}${btn(`${icon(value ? 'undo' : 'air', 22)} ${value ? '가리기 전 보기' : '눌러서 가리기'}`, 'lab-set', value ? 'primary small' : 'secondary small', `data-id="droplet" data-value="${value ? 0 : 1}" aria-label="${value ? '가리기 전 보기' : '옷소매로 입과 코 가리기'}"`)}</div>
+        <div class="tracing-device-action">${value ? btn(`${icon('undo', 22)} 가리기 전 보기`, 'lab-set', 'primary small', 'data-id="droplet" data-value="0" aria-label="가리기 전 보기"') : btn(`${icon('hand', 24)} 옷소매를 입으로 끌어요`, 'lab-set', 'sleeve-chip next-target', 'data-id="droplet" data-value="1" draggable="true" data-drag="sleeve" aria-label="옷소매로 입과 코 가리기. 눌러도 가려져요."')}</div>
         ${result('흔적이 퍼지는 범위가 줄었어요.', !!value, '흔적 범위가 줄었어요.', !!value)}`;
     case 'air':
       return `${heading('창문을 열면 무엇이 달라질까요?')}
         <div class="tracing-device-art tracing-room"><div class="window-demo illustrated-window tracing-window ${value ? 'open' : ''}" data-gesture="window" aria-label="오른쪽으로 밀어 여는 창문">${windowIllustration(!!value)}</div></div>
-        <div class="tracing-device-action device-controls tracing-device-controls">${btn('닫기', 'lab-set', !value ? 'small selected' : 'small', 'data-id="air" data-value="0" aria-label="창문 닫힘"')}<input aria-label="창문 열기" type="range" min="0" max="1" step="1" data-range="window" value="${value}">${btn('열기', 'lab-set', value ? 'small selected' : 'small', 'data-id="air" data-value="1" aria-label="창문 열기"')}</div>
+        <div class="tracing-device-action device-controls tracing-device-controls">${btn('닫기', 'lab-set', !value ? 'small selected' : 'small', 'data-id="air" data-value="0" aria-label="창문 닫힘"')}${btn('열기', 'lab-set', value ? 'small selected' : 'small', 'data-id="air" data-value="1" aria-label="창문 열기"')}</div>
         ${result('바깥 공기와 바뀌며 공기 중 흔적이 줄어요.', !!value, '공기 흐름이 생겨요.', !!value)}`;
     case 'water':
       return `${heading('맑아 보이면 모두 괜찮을까요?')}
@@ -105,8 +105,7 @@ const heading = (title: string, term = '') => `<h2 class="tracing-device-heading
         <div class="tracing-device-action tracing-synthesis-choices">${['coughEtiquette', 'ventilation', 'washHands'].map(id => btn(`${icon(s.labs.synthesis.includes(id) ? 'check' : id === 'ventilation' ? 'window' : id === 'coughEtiquette' ? 'air' : 'hand', 25)}<span>${actionName(id)}</span>`, 'synthesis', s.labs.synthesis.includes(id) ? 'small selected' : 'small', `data-id="${id}" aria-pressed="${s.labs.synthesis.includes(id)}"`)).join('')}</div>${result(synthesisReady(s.labs.synthesis) ? '기침 예절과 환기는 각각의 상황을 바꿔요.' : '기침과 닫힌 공간을 각각 바꾸는 두 행동을 골라요.', synthesisReady(s.labs.synthesis), undefined, s.labs.synthesis.length > 0)}`;
     default:
       return `${heading('공용 음식은 어떻게 덜어 먹을까요?', '타액은 입속의 침이에요.')}
-        <div class="tracing-device-art serving-demo tracing-serving ${value ? 'separated' : ''}"><div class="shared-bowl">${foodIllustration()}<b>공용 음식</b></div><div class="serving-tool" draggable="true" data-drag="serving" data-id="serve">${icon('plate', 38)}<span>덜기 도구</span>${icon('arrow', 24)}</div><button class="personal-plate" data-action="lab-set" data-id="saliva" data-value="1" data-drop="serving">${value ? foodIllustration(true) : '<span class="tracing-empty-plate" aria-hidden="true"></span>'}<b>개인 접시</b></button></div>
-        <div class="tracing-device-action">${btn(`${icon(value ? 'check' : 'arrow', 20)} 개인 접시에 덜기`, 'lab-set', 'primary small', 'data-id="saliva" data-value="1"')}</div>
+        <div class="tracing-device-art serving-demo tracing-serving ${value ? 'separated' : ''}"><div class="shared-bowl">${foodIllustration()}<b>공용 음식</b></div><div class="serving-tool" draggable="true" data-drag="serving" data-id="serve">${icon('plate', 38)}<span>덜기 도구</span>${icon('arrow', 24)}</div><button class="personal-plate ${value ? '' : 'next-target'}" data-action="lab-set" data-id="saliva" data-value="1" data-drop="serving" aria-label="개인 접시에 덜기">${value ? foodIllustration(true) : '<span class="tracing-empty-plate" aria-hidden="true"></span>'}<b>개인 접시</b></button></div>
         ${result('개인 숟가락과 공용 음식의 접촉이 줄었어요.', !!value, '접촉이 줄었어요.', !!value)}`;
   }
 }

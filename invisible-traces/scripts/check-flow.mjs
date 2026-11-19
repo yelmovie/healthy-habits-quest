@@ -86,7 +86,8 @@ try {
 
   for (const lab of ['droplet', 'air', 'saliva']) {
     await click(`.lab-tabs [data-action="lab"][data-id="${lab}"]`, `P06 tab ${lab}`);
-    await click(`.tracing-device-action [data-action="lab-set"][data-id="${lab}"][data-value="1"]`, `P06 ${lab}`);
+    // 비말·환기는 실험 버튼, 덜기는 개인 접시 자체를 누른다(같은 일을 하는 아래 버튼은 2026-11-18에 뺐다).
+    await click(`.tracing-device [data-action="lab-set"][data-id="${lab}"][data-value="1"]`, `P06 ${lab}`);
   }
   await click('.lab-tabs [data-action="lab"][data-id="water"]', 'P06 tab water');
   await click('[data-action="water"][data-id="1"]', 'P06 water');

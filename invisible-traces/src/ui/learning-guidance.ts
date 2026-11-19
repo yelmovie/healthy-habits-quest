@@ -35,7 +35,7 @@ export function nextInstruction(s: State, v: View): string {
         droplet: '옷소매를 기침하는 친구의 입으로 끌어 흔적 범위를 비교해요.',
         air: '열기를 눌러 창문 전후를 비교해요.',
         water: '관리 정보를 읽고 마실 물을 골라요.',
-        saliva: '개인 접시에 덜기를 눌러 도구의 역할을 봐요.',
+        saliva: '덜기 도구를 개인 접시로 끌거나 개인 접시를 눌러 도구의 역할을 봐요.',
       };
       return instructions[v.lab] ?? '살펴볼 실험을 골라요.';
     }

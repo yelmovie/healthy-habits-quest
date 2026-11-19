@@ -23,7 +23,7 @@
 .learning-focus > span { min-width: 0; }
 /* 페이지 질문과 개념을 한 줄 띠로: [개념 칩] 질문 · 개념 설명 */
 .learning-focus.has-question { flex-wrap: wrap; align-items: baseline; column-gap: 12px; row-gap: 2px; }
-.learning-focus.has-question mark { padding: 2px 10px; border-radius: 999px; background: #c3e9d5; box-shadow: none; }
+.learning-focus.has-question mark { padding: 2px 10px; border-radius: 999px; background: #c3e9d5; color: #075e59; box-shadow: none; }
 .activity-layout .learning-focus .mission-question,
 body.on-activity.has-stage-bg .learning-focus .mission-question { flex: none; width: auto; max-width: 100%; margin: 0; padding: 0; border-radius: 0; background: none; box-shadow: none; color: var(--ink); font-size: 1.05rem; font-weight: 700; line-height: 1.35; }
 .learning-focus .focus-description { flex: 1 1 18em; color: var(--ink-2); }
