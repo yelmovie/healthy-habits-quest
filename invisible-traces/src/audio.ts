@@ -31,7 +31,9 @@ const STEP_FILES=['step-01.mp3','step-02.mp3'],STEP_GAIN=.18;
 const NOTES:Record<Cue,number[]>={tap:[440],scan:[392,523.25],success:[523.25,659.25,783.99],swing:[659.25],hit1:[440],hit2:[523.25],finish:[523.25,783.99],exit:[783.99,659.25,523.25],appear:[392,523.25],bump:[329.63],
  cardWhoosh:[392,587.33],cardReveal:[659.25,987.77],cardEpic:[523.25,783.99,1046.5],cardSlot:[880],cardComplete:[523.25,659.25,783.99,1046.5],unlock:[659.25,987.77,1318.51]};
 type Playing={src:AudioScheduledSourceNode;gain:GainNode;keep:boolean;fx:boolean;cue:Cue;id:number};
-export function createResearchAudio(enabled:()=>boolean,base='./'){
+/** `level` is the effects size from the settings (0..1, default 1 = the sizes below unchanged); it multiplies every cue and footstep. */
+export function createResearchAudio(enabled:()=>boolean,base='./',level:()=>number=()=>1){
+ const size=()=>Math.max(0,Math.min(1,level()||0)),on=()=>enabled()&&size()>0;
  let context:AudioContext|null=null,quiet=false,request=0,uiRequest=0,plays=0,steps=0,feedbackAt=-Infinity;
  const nodes=new Set<Playing>();let footstep:{src:AudioScheduledSourceNode;gain:GainNode}|null=null;
  const bytes=new Map<string,Promise<ArrayBuffer|null>>(),buffers=new Map<string,Promise<AudioBuffer|null>>();
@@ -48,13 +50,13 @@ export function createResearchAudio(enabled:()=>boolean,base='./'){
   if(node.fx){const others=[...new Set([...nodes].filter(n=>n.fx&&n.id!==id).map(n=>n.id))];while(others.length>=FX_MAX){const oldest=others.shift();for(const n of nodes)if(n.id===oldest)drop(n);}}
   nodes.add(node);src.onended=()=>{nodes.delete(node);src.disconnect();gain.disconnect();};
  }
- const allowed=(ticket:{all:number;ui:number},keep:boolean,fx:boolean)=>ticket.all===request&&(fx||ticket.ui===uiRequest)&&enabled()&&(!quiet||keep)&&!document.hidden&&context?.state==='running';
+ const allowed=(ticket:{all:number;ui:number},keep:boolean,fx:boolean)=>ticket.all===request&&(fx||ticket.ui===uiRequest)&&on()&&(!quiet||keep)&&!document.hidden&&context?.state==='running';
  /** `layer` is kept for callers; fight, card and unlock cues always layer, an interface cue cuts the one before it. */
  async function play(kind:Cue='tap',layer=false){
   // `keep` marks every cue that rings on under a voice: the fight cues and the feedback chimes.
   const keep=COMBAT.has(kind)||FEEDBACK.has(kind),fx=FX.has(kind);
   if(quiet&&!keep)return;
-  if(!fx&&!layer)stopInterface();if(!enabled()||document.hidden)return;
+  if(!fx&&!layer)stopInterface();if(!on()||document.hidden)return;
   if(FEEDBACK.has(kind))feedbackAt=performance.now();
   const ticket={all:request,ui:uiRequest},id=++plays;
   try{
@@ -66,28 +68,28 @@ export function createResearchAudio(enabled:()=>boolean,base='./'){
     if(!allowed(ticket,keep,fx))return;
     if(buffer){
      const start=(data:AudioBuffer,level:number,rate=1,at=0)=>{const src=context!.createBufferSource(),gain=context!.createGain();
-      src.buffer=data;if(rate!==1)src.playbackRate.value=rate;gain.gain.value=level;src.connect(gain);gain.connect(context!.destination);track(src,gain,kind,id);src.start(at);};
+      src.buffer=data;if(rate!==1)src.playbackRate.value=rate;gain.gain.value=level*size();src.connect(gain);gain.connect(context!.destination);track(src,gain,kind,id);src.start(at);};
      start(buffer,sample.gain,sample.rate);if(extra&&sample.then)start(extra,sample.then.gain,1,context.currentTime+sample.then.at);return;
     }
    }
    // Gentle glass-like discovery; neutral scan, no alarm or illness sound.
    NOTES[kind].forEach((hz,i)=>{const osc=context!.createOscillator(),gain=context!.createGain(),t=context!.currentTime+i*.09;
-    osc.type='sine';osc.frequency.setValueAtTime(hz,t);gain.gain.setValueAtTime(0,t);gain.gain.linearRampToValueAtTime(.035,t+.008);gain.gain.exponentialRampToValueAtTime(.0001,t+.18);
+    osc.type='sine';osc.frequency.setValueAtTime(hz,t);gain.gain.setValueAtTime(0,t);gain.gain.linearRampToValueAtTime(Math.max(.0002,.035*size()),t+.008);gain.gain.exponentialRampToValueAtTime(.0001,t+.18);
     osc.connect(gain);gain.connect(context!.destination);track(osc,gain,kind,id);osc.start(t);osc.stop(t+.2);
    });
   }catch{/* Captions and visual feedback remain available. */}
  }
  /** One footstep on its own channel: it never cuts another cue and nothing but the next footstep cuts it. Half as loud under a voice. */
  async function step(){
-  if(!enabled()||document.hidden)return;
+  if(!on()||document.hidden)return;
   const ticket=request,file=STEP_FILES[steps++%STEP_FILES.length];
   try{
    context??=new AudioContext();if(context.state==='suspended')await context.resume();
    const buffer=await decode(context,file);
-   if(!buffer||ticket!==request||!enabled()||document.hidden||context.state!=='running')return;
+   if(!buffer||ticket!==request||!on()||document.hidden||context.state!=='running')return;
    if(footstep)silence(footstep);
    const src=context.createBufferSource(),gain=context.createGain(),node={src,gain};
-   src.buffer=buffer;src.playbackRate.value=1+(Math.random()-.5)*.1;gain.gain.value=STEP_GAIN*(quiet?.5:1);
+   src.buffer=buffer;src.playbackRate.value=1+(Math.random()-.5)*.1;gain.gain.value=STEP_GAIN*size()*(quiet?.5:1);
    src.connect(gain);gain.connect(context.destination);footstep=node;
    src.onended=()=>{if(footstep===node)footstep=null;src.disconnect();gain.disconnect();};src.start();
   }catch{/* Walking stays silent. */}
@@ -101,9 +103,9 @@ export function createResearchAudio(enabled:()=>boolean,base='./'){
   /** True while that cue is still sounding (the full-set jingle holds the map finale until it ends). */
   ringing(cue:Cue){for(const node of nodes)if(node.cue===cue)return true;return false;},
   /** Milliseconds a voice should still wait so the feedback chime that just started is heard first. */
-  voiceWait(){return enabled()?Math.max(0,Math.ceil(feedbackAt+VOICE_HOLD-performance.now())):0;},
+  voiceWait(){return on()?Math.max(0,Math.ceil(feedbackAt+VOICE_HOLD-performance.now())):0;},
   // A voice starting stops interface cues but lets fight, card, unlock and feedback cues (and their pending loads) ring on.
-  quiet(value:boolean){quiet=value;if(value)for(const node of nodes)if(!node.keep&&!node.fx)drop(node);},sync(){if(!enabled())stop();},destroy(){stop();document.removeEventListener('visibilitychange',hidden);window.removeEventListener('pagehide',stop);void context?.close().catch(()=>{});}};
+  quiet(value:boolean){quiet=value;if(value)for(const node of nodes)if(!node.keep&&!node.fx)drop(node);},sync(){if(!on())stop();},destroy(){stop();document.removeEventListener('visibilitychange',hidden);window.removeEventListener('pagehide',stop);void context?.close().catch(()=>{});}};
 }
 // Suno background music (references/suno). The main theme loops from the first tap; the final theme
 // plays once on the ending/certificate and while the map finale dialog is open, then the main theme resumes.

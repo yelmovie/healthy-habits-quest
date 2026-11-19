@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { DATA, LABS } from '../src/data/game';
-import { fresh, derive, contactAt, addPlacement, planResult, planCost, sanitize, canEnter, fixtureFor, applyPlacement, placementKey, nextPlacement, MUSIC_VOLUME, type State } from '../src/simulation/model';
+import { fresh, derive, contactAt, addPlacement, planResult, planCost, sanitize, canEnter, fixtureFor, applyPlacement, placementKey, nextPlacement, MUSIC_VOLUME, SFX_VOLUME, type State } from '../src/simulation/model';
 
 const solvedPlan = () => [{ actionId: 'ventilation', site: 'classroom' }, { actionId: 'portionFood', site: 'cafeteria' }, { actionId: 'washHands', site: 'gym' }];
 const roundTrip = (s: State) => sanitize(JSON.parse(JSON.stringify(s)));
@@ -92,7 +92,7 @@ test('저장 복구: 손상되거나 조작된 값은 버리고 허용된 값만
 
 test('소리 설정: 「소리 피드백」 하나이던 저장을 배경 음악·효과음으로 이어받는다', () => {
   const read = (settings: unknown) => sanitize({ ...fresh(), settings }).settings;
-  assert.deepEqual(read({ sound: false, reduced: false, large: true }), { music: false, sfx: false, musicVolume: MUSIC_VOLUME, reduced: false, large: true }, '꺼 둔 소리는 둘 다 꺼짐');
+  assert.deepEqual(read({ sound: false, reduced: false, large: true }), { music: false, sfx: false, musicVolume: MUSIC_VOLUME, sfxVolume: SFX_VOLUME, voice: false, reduced: false, large: true }, '꺼 둔 소리는 둘 다 꺼짐');
   assert.deepEqual(read({ sound: true, reduced: false, large: false }), fresh().settings, '켜 둔 소리는 둘 다 켜짐·기본 크기');
   assert.deepEqual(read(undefined), fresh().settings, '값이 없으면 둘 다 켜짐');
   assert.equal(MUSIC_VOLUME, 30, '기본 크기는 나누기 전 고정값 0.3과 같다');
@@ -102,7 +102,7 @@ test('소리 설정: 「소리 피드백」 하나이던 저장을 배경 음악
   assert.equal(read({ musicVolume: -5 }).musicVolume, 0);
   assert.equal(read({ musicVolume: '70' }).musicVolume, MUSIC_VOLUME);
   const saved = JSON.parse(JSON.stringify(sanitize({ ...fresh(), settings: { sound: false } })));
-  assert.deepEqual(Object.keys(saved.settings).sort(), ['large', 'music', 'musicVolume', 'reduced', 'sfx']);
+  assert.deepEqual(Object.keys(saved.settings).sort(), ['large', 'music', 'musicVolume', 'reduced', 'sfx', 'sfxVolume', 'voice']);
   assert.deepEqual(sanitize(saved).settings, saved.settings, '다시 읽어도 그대로');
   const demo = fixtureFor(5, { sound: false, reduced: true, large: false }).settings;
   assert.deepEqual([demo.music, demo.sfx, demo.reduced], [false, false, true], '점검용 시연 설정도 같은 규칙');
@@ -167,4 +167,20 @@ test('콘텐츠: 검수 상태와 출처가 데이터에 남아 있다', () => {
   if (!DATA.review.needsReview) assert.ok(DATA.review.reviewedBy && DATA.review.reviewedAt);
   assert.ok(DATA.review.scope.length > 0);
   assert.ok(DATA.sources.curriculum.startsWith('https://') && DATA.sources.prevention.startsWith('https://'));
+});
+
+test('소리 3차: 목소리 스위치와 효과음 크기를 3차 전 저장에서 이어받는다', () => {
+  const read = (settings: unknown) => sanitize({ ...fresh(), settings }).settings;
+  assert.deepEqual([fresh().settings.voice, fresh().settings.sfxVolume], [true, SFX_VOLUME], '새 학생은 목소리 켜짐·효과음 크기 기본');
+  assert.equal(SFX_VOLUME, 100, '기본 100%는 3차 전 효과음 크기 그대로');
+  const off = read({ music: true, sfx: false, musicVolume: 40, reduced: false, large: false });
+  assert.deepEqual([off.music, off.sfx, off.voice, off.sfxVolume, off.musicVolume], [true, false, false, SFX_VOLUME, 40], '효과음 꺼짐 저장 → 목소리도 꺼짐');
+  const on = read({ music: false, sfx: true, musicVolume: 30, reduced: false, large: false });
+  assert.deepEqual([on.music, on.sfx, on.voice, on.sfxVolume], [false, true, true, SFX_VOLUME], '효과음 켜짐 저장 → 목소리 켜짐');
+  const none = read({ reduced: true });
+  assert.deepEqual([none.music, none.sfx, none.voice, none.sfxVolume], [true, true, true, SFX_VOLUME], '값 없음 → 전부 켜짐');
+  const split = read({ sfx: false, voice: true, sfxVolume: 35 });
+  assert.deepEqual([split.sfx, split.voice, split.sfxVolume], [false, true, 35], '새 값이 있으면 새 값이 우선');
+  assert.equal(read({ sfxVolume: 140 }).sfxVolume, 100);
+  assert.equal(read({ sfxVolume: '50' }).sfxVolume, SFX_VOLUME);
 });

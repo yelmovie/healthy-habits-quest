@@ -35,7 +35,7 @@ export function mountNarration(options:{enabled:()=>boolean;quiet:(value:boolean
  function firstInput(){const ids=retry;if(!ids)return;retry=null;setTimeout(()=>{const left=ids.filter(id=>seen.has(id));if(left.length&&!player.active&&!hold&&!document.hidden&&options.enabled()){queue=left;next();}},0);}
  function next(){const id=queue.shift();if(id)speak(id);}
  // While a line is held it already counts as the current one, so a rescan during the hold does not drop it.
- function start(){const wait=options.delay?.()??0;if(wait>0&&queue.length){current=queue[0];hold=setTimeout(()=>{hold=null;next();},wait);}else next();}
+ function start(){const wait=options.enabled()?options.delay?.()??0:0;if(wait>0&&queue.length){current=queue[0];hold=setTimeout(()=>{hold=null;next();},wait);}else next();}
  function scan(){scheduled=false;const overlay=document.querySelector('dialog[open], #modal-root .modal');const scope=overlay??document.querySelector('#app');if(!scope)return;
   // The achievement card holds the app inert without being one of the dialogs read here. Lines already read stay read,
   // so closing the card does not read the villain's exit line a second time.

@@ -13,7 +13,8 @@ import {tracingPages,synthesisReady} from './stages-tracing';
 import {strategyPages} from './stages-strategy';
 export {comparisonBoard,comparisonTasks} from './stages-strategy';
 /** 머리글 소리 버튼은 배경 음악과 효과음(목소리 포함)을 함께 켜고 끈다. 둘 중 하나라도 켜져 있으면 켜짐이다. */
-export const soundOn=(s:State)=>s.settings.music||s.settings.sfx;
+/** 헤더 소리 버튼: 배경 음악·효과음·목소리 중 하나라도 켜져 있으면 「끄기」. */
+export const soundOn=(s:State)=>s.settings.music||s.settings.sfx||s.settings.voice;
 /** `cards`는 소리 버튼 바로 앞에 넣는 성취 카드 칸(지도 화면에서만 main.ts가 넘긴다). */
 /** `focus`는 활동 화면의 개념·질문 띠(shell이 만든 것). 넓은 가로 화면에서는 위 띠 가운데에 이 사본을 보이고 아래 띠는 숨긴다(CSS). */
 export function header(s:State,sandbox:boolean,cards='',focus=''){

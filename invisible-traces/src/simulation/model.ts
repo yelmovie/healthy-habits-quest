@@ -4,7 +4,7 @@ export type Route = 'C00'|'C01'|`P${string}`;
 export interface Placement { actionId:string; site:string }
 export interface State {
  version:1; contentVersion:string; route:Route; lastRoute:Route;
- settings:{music:boolean;sfx:boolean;musicVolume:number;reduced:boolean;large:boolean};
+ settings:{music:boolean;sfx:boolean;musicVolume:number;sfxVolume:number;voice:boolean;reduced:boolean;large:boolean};
  found:string[]; clues:string[]; relations:Record<string,string>; impacts:Record<string,string>;
  timeline:{tick:number;source:string;intervention:number|null;tried:number[]};
  labs:{active:string;done:string[];values:Record<string,number>;synthesis:string[]};
@@ -15,7 +15,9 @@ export interface State {
 }
 /** 배경 음악 크기 기본값(%). 30%가 스위치를 나누기 전의 고정 크기(0.3)와 같다. */
 export const MUSIC_VOLUME=30;
-export const fresh = ():State => ({version:1,contentVersion:DATA.contentVersion,route:'C00',lastRoute:'C01',settings:{music:true,sfx:true,musicVolume:MUSIC_VOLUME,reduced:false,large:false},found:[],clues:[],relations:{},impacts:{},timeline:{tick:5,source:'',intervention:null,tried:[]},labs:{active:'contact',done:[],values:{},synthesis:[]},experiment:{action:'',prediction:'',tick:0,pinned:'',explanation:'',baselineSeen:false},strategy:{asked:[],placements:[],simulated:false},final:{phase:'report',applied:[],hands:[],coreClaimed:false},restoration:{},mapHits:{},completed:[],evidence:[]});
+/** 효과음 크기 기본값(%). 100%가 3차 전에 나던 효과음 크기 그대로다(각 소리의 gain에 곱한다). */
+export const SFX_VOLUME=100;
+export const fresh = ():State => ({version:1,contentVersion:DATA.contentVersion,route:'C00',lastRoute:'C01',settings:{music:true,sfx:true,musicVolume:MUSIC_VOLUME,sfxVolume:SFX_VOLUME,voice:true,reduced:false,large:false},found:[],clues:[],relations:{},impacts:{},timeline:{tick:5,source:'',intervention:null,tried:[]},labs:{active:'contact',done:[],values:{},synthesis:[]},experiment:{action:'',prediction:'',tick:0,pinned:'',explanation:'',baselineSeen:false},strategy:{asked:[],placements:[],simulated:false},final:{phase:'report',applied:[],hands:[],coreClaimed:false},restoration:{},mapHits:{},completed:[],evidence:[]});
 export function contactAt(tick:number,intervention:number|null=null): Set<string> {
  const trace = new Set(DATA.p05.initialTrace);
  const events:({tick:number;id:string;from?:string;to?:string;wash?:boolean})[] = DATA.p05.events.map(e=>({...e}));
@@ -66,10 +68,11 @@ const num=(v:unknown,min:number,max:number,def:number)=>typeof v==='number'&&Num
 const str=(v:unknown,allowed:string[],def='')=>typeof v==='string'&&allowed.includes(v)?v:def;
 /** 「소리 피드백」 하나(sound)만 있던 저장과 점검 스크립트의 설정도 받는다. */
 export type SettingsInput=Partial<State['settings']>&{sound?:boolean};
-/** 설정 읽기. 배경 음악·효과음 값이 없으면 예전 sound에서 이어받는다: 꺼짐이면 둘 다 꺼짐, 켜짐이거나 값이 없으면 둘 다 켜짐. */
+/** 설정 읽기. 배경 음악·효과음 값이 없으면 예전 sound에서 이어받는다: 꺼짐이면 둘 다 꺼짐, 켜짐이거나 값이 없으면 둘 다 켜짐.
+ * 목소리 값이 없는 저장(3차 전)은 그때의 효과음 스위치를 따른다(그때까지 안내 목소리가 효과음 스위치를 따랐다). 효과음 크기가 없으면 기본값. */
 export function readSettings(input:unknown):State['settings'] {
- const r=record(input),on=(v:unknown)=>typeof v==='boolean'?v:r.sound!==false;
- return {music:on(r.music),sfx:on(r.sfx),musicVolume:num(r.musicVolume,0,100,MUSIC_VOLUME),reduced:r.reduced===true,large:r.large===true};
+ const r=record(input),on=(v:unknown)=>typeof v==='boolean'?v:r.sound!==false,sfx=on(r.sfx);
+ return {music:on(r.music),sfx,musicVolume:num(r.musicVolume,0,100,MUSIC_VOLUME),sfxVolume:num(r.sfxVolume,0,100,SFX_VOLUME),voice:typeof r.voice==='boolean'?r.voice:sfx,reduced:r.reduced===true,large:r.large===true};
 }
 export function sanitize(input:unknown):State {
  const r=record(input);if(r.version!==1||r.contentVersion!==DATA.contentVersion)throw new Error('이전 형식의 기록이 있어요. 새 연구를 시작하거나 원래 버전에서 확인해 주세요.');

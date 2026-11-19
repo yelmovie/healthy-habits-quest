@@ -110,3 +110,18 @@ test('after the final theme ends on the ending screen the main theme carries on 
  music.scene('main');await fade();assert.equal(main.volume,.3);
  music.destroy();
 });
+
+test('the effects size multiplies every cue and footstep; 100% keeps the sizes from before, 0% is off',async()=>{
+ let size=1;const audio=createResearchAudio(()=>true,'./',()=>size);
+ await audio.play('success');await settle();assert.equal(ctx.gains.at(-1)!.gain.value,.5,'100%: the correct chime keeps its 0.5');
+ await audio.step();await settle();assert.equal(ctx.gains.at(-1)!.gain.value,.18,'100%: a step keeps its 0.18');
+ size=.4;
+ await audio.play('finish',true);await settle();assert.ok(Math.abs(ctx.gains.at(-1)!.gain.value-.4)<1e-9,'40% of the heavy hit (1.0)');
+ await audio.play('unlock');await settle();
+ assert.ok(Math.abs(ctx.gains.at(-2)!.gain.value-.2)<1e-9&&Math.abs(ctx.gains.at(-1)!.gain.value-.16)<1e-9,'both unlock layers scale');
+ await audio.step();await settle();assert.ok(Math.abs(ctx.gains.at(-1)!.gain.value-.072)<1e-9,'40% of a step');
+ size=0;audio.sync();const count=ctx.sources.length;
+ await audio.play('success');await audio.step();await settle();
+ assert.equal(ctx.sources.length,count,'0%: nothing plays');assert.equal(audio.voiceWait(),0);
+ audio.destroy();
+});
