@@ -78,3 +78,19 @@ body.on-activity.has-stage-bg .learning-focus .mission-question { flex: none; wi
   .large-text .activity-layout .page-content > .tracing-p06 { min-height: 600px; flex-shrink: 0; }
 }
 @media print { .learning-focus, .ending-share { display: none; } }
+
+/* 넓은 가로 화면: 개념·질문 띠를 위 띠 가운데로 올려 한 띠로 합친다(놀이 영역이 그만큼 커진다).
+   위 띠 사본(.topbar-focus)은 여기서만 보이고, 아래 띠(.learning-focus)는 숨긴다. 글이 길면 위 띠가 늘어난다(잘리지 않음). */
+.topbar-focus { display: none; }
+@media (min-width: 1000px) and (min-height: 561px) {
+  html:not(:has(body.large-text)) .activity-topbar:has(> .topbar-focus) { grid-template-columns: 48px auto minmax(0, 1fr) auto; height: auto; min-height: 64px; padding-block: 6px; }
+  html:not(:has(body.large-text)) .activity-topbar > .tools { grid-column: -2; }
+  html:not(:has(body.large-text)) .activity-topbar:has(> .topbar-focus) .activity-heading { flex-direction: column; align-items: flex-start; gap: 2px; }
+  html:not(:has(body.large-text)) .activity-topbar:has(> .topbar-focus) .activity-mission { padding: 0 10px; line-height: 1.4; }
+  html:not(:has(body.large-text)) .activity-topbar:has(> .topbar-focus) .activity-heading h1 { font-size: 1.15rem; white-space: nowrap; }
+  html:not(:has(body.large-text)) .topbar-focus { display: block; min-width: 0; padding-left: 14px; border-left: 2px solid #c7ded6; color: var(--ink-2); font-size: 1rem; line-height: 1.35; overflow-wrap: break-word; }
+  html:not(:has(body.large-text)) .topbar-focus mark { display: inline-block; margin-right: 8px; padding: 0 10px; border-radius: 999px; background: #c3e9d5; color: #075e59; font-weight: 850; box-shadow: none; }
+  html:not(:has(body.large-text)) .topbar-focus .mission-question { display: inline; margin: 0 8px 0 0; padding: 0; border-radius: 0; background: none; box-shadow: none; color: var(--ink); font-size: 1rem; font-weight: 700; line-height: 1.35; }
+  html:not(:has(body.large-text)):has(.topbar-focus) .activity-layout .learning-focus { display: none; }
+  html:not(:has(body.large-text)):has(.topbar-focus) .activity-layout .play-main:has(> .learning-focus) { grid-template-rows: minmax(0, 1fr) auto; }
+}

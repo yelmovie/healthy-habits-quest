@@ -59,7 +59,8 @@ function render(keepTimer=false){disposeNpc?.();if(!keepTimer){stop();playbackSe
  if(state.route==='P07'&&!state.experiment.baselineSeen){state.experiment.baselineSeen=true;persist();}
  // P09에서 방금 본 계획을 다시 보여 주는 확인 화면은 건너뛰고 바로 실천한다.
  if(state.route==='P10'&&state.final.phase==='report'&&state.completed.includes('P09')){state.final.phase='apply';persist();}
- root.innerHTML=header(state,!!archive,state.route==='C01'?rewardSlotsHtml((archive??state).mapHits):'')+(state.route==='C00'?home(state):state.route==='C01'?map(state,view):shell(state,view,pageContent(state,view)));
+ const body=state.route==='C00'?home(state):state.route==='C01'?map(state,view):shell(state,view,pageContent(state,view));
+ root.innerHTML=header(state,!!archive,state.route==='C01'?rewardSlotsHtml((archive??state).mapHits):'',body.match(/<aside class="learning-focus[\s\S]*?<\/aside>/)?.[0]??'')+body;
  if(state.route==='C00')disposeNpc=mountNpcGuide(root.querySelector('.title-actions'),{text:'보이지 않는 흔적을 함께 찾아보자. 증거를 살펴 감염이 퍼지는 경로를 생각하고, 생활 속에서 실천할 예방 방법을 골라 보자.',stop:()=>narration.stop(),reduced:()=>state.settings.reduced});
  if(protectedSave||saveWarning){const warning=document.createElement('div');warning.className='storage-warning';warning.setAttribute('role','status');warning.textContent=saveError()??'현재 탐구는 임시 상태예요. 창을 닫기 전에 연구 기록을 확인해 주세요.';root.prepend(warning);}
  if(state.route==='C01'){void mountMap();mountWindowRestoration(root.querySelector('.map-page')!,state,persist,()=>sound('success'));}
