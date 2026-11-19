@@ -28,11 +28,15 @@ export function mountNarration(options:{enabled:()=>boolean;quiet:(value:boolean
   button.setAttribute('aria-pressed',String(active));button.disabled=!current;
  }
  function visible(el:HTMLElement){return !(el.closest('details:not([open])')&&!el.closest('summary'))&&!el.closest('[hidden], [inert], .narration-wait')&&el.getClientRects().length>0&&getComputedStyle(el).visibility!=='hidden'&&!el.closest('#toast:not(.visible)');}
- // 첫 입력 전에는 브라우저가 소리를 막는다. 그때 막힌 줄(타이틀 대사)은 「읽은 줄」로 버리지 않고 첫 입력 뒤 한 번 다시 읽는다.
- let retry:string[]|null=null;
- function speak(id:string){current=id;const rest=[...queue];void player.play(base+byId.get(id)!.src).then(ok=>{if(!ok&&current===id&&!(navigator as Navigator&{userActivation?:{hasBeenActive:boolean}}).userActivation?.hasBeenActive)retry=[id,...rest];});paint();}
- // 입력이 화면을 바꿨으면(시작 버튼 등) 그 클릭 처리 뒤에 줄이 화면에 남아 있을 때만 읽는다.
- function firstInput(){const ids=retry;if(!ids)return;retry=null;setTimeout(()=>{const left=ids.filter(id=>seen.has(id));if(left.length&&!player.active&&!hold&&!document.hidden&&options.enabled()){queue=left;next();}},0);}
+ // 첫 입력 전에는 브라우저가 소리를 막는다(새로고침 직후 포함). 그때 읽을 줄(타이틀 대사 등)은 재생을 시도하지 않고 미뤄 두며
+ // 「읽은 줄」로 버리지 않는다. 첫 입력 0.4초 뒤 같은 화면에 그 줄이 남아 있고 다른 대사가 없을 때 한 번 읽는다.
+ let retry:{ids:string[];context:string}|null=null,acted=false;
+ const activated=()=>(navigator as Navigator&{userActivation?:{hasBeenActive:boolean}}).userActivation?.hasBeenActive??acted;
+ function speak(id:string){current=id;const rest=[...queue];
+  if(!activated()){retry={ids:[id,...rest],context};queue=[];paint();return;}
+  void player.play(base+byId.get(id)!.src).then(ok=>{if(!ok&&current===id&&!activated())retry={ids:[id,...rest],context};});paint();}
+ // 입력이 화면을 바꿨거나(시작 버튼 등) 대화창·다른 대사가 나왔으면 읽지 않는다.
+ function firstInput(){acted=true;const pend=retry;if(!pend)return;retry=null;setTimeout(()=>{const left=pend.ids.filter(id=>seen.has(id));if(context===pend.context&&left.length&&!player.active&&!hold&&!document.hidden&&options.enabled()){queue=left;next();}},400);}
  function next(){const id=queue.shift();if(id)speak(id);}
  // While a line is held it already counts as the current one, so a rescan during the hold does not drop it.
  function start(){const wait=options.enabled()?options.delay?.()??0:0;if(wait>0&&queue.length){current=queue[0];hold=setTimeout(()=>{hold=null;next();},wait);}else next();}
