@@ -43,7 +43,7 @@ function layoutSpeech(host, entries){
 const REPEAT=380;
 // Wind-up before contact (70-120ms); the hit sound and the meter land together on the strike.
 const STRIKE=90,EXIT_SOUND=230;
-// Hit and exit lines start this long after the swing (see speak).
+// Hit and exit lines start this long after the hit sound (the strike), so the swing, the hit and the exit cue lead.
 const VOICE_AFTER_SFX=300;
 const CUES={
   cap:'M9 10h14v12H9zm3-4h8v4h-8z', pane:'M6 7h20v18H6zm4 4v10h12V11z',
@@ -114,7 +114,7 @@ export function mountMapEncounters({
   const timers=new Set();
   function later(fn,ms){if(ms<=0){fn();return;}const id=view.setTimeout(()=>{timers.delete(id);if(!closed)fn();},ms);timers.add(id);}
 
-  // A hit or exit line is read aloud this long after the swing so the fight cue is heard first; the narration
+  // A hit or exit line is read aloud 300 ms after the hit sound so the fight cue is heard first; the narration
   // skips text inside .narration-wait until then. A taunt (no fight cue) is read at once.
   let speech=0;
   function speak(foe,text,time,wait=0){
@@ -142,7 +142,7 @@ export function mountMapEncounters({
     saved={...saved,[foe.s.id]:n};onSave({...saved});
     tone('swing',n);later(()=>tone(n===HITS?'finish':'hit',n),strike);
     if(n===HITS)later(()=>tone('exit',n),strike+EXIT_SOUND);
-    speak(foe, n===HITS?foe.s.finish??'앗, 물러날게!':foe.s.hit?.[n-1]??(n===1?'앗, 들켰네!':'이번 건 제법인데!'),time+(n===HITS?2750:1800),VOICE_AFTER_SFX);
+    speak(foe, n===HITS?foe.s.finish??'앗, 물러날게!':foe.s.hit?.[n-1]??(n===1?'앗, 들켰네!':'이번 건 제법인데!'),time+(n===HITS?2750:1800),strike+VOICE_AFTER_SFX);
     live.textContent+=n===HITS?' 세 번 명중! 악당이 물러나요.':` ${n}번 명중. ${HITS-n}번 남았어요.`;
     if(n===HITS&&requiredFoes>0&&stages.length===requiredFoes&&stages.every(s=>(saved[s.id]??record[s.id])===HITS))finaleAt=time+2920;
     update({...last,now:time});

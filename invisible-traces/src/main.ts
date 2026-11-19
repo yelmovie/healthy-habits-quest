@@ -37,7 +37,8 @@ const music=createMusic(()=>state.settings.music,import.meta.env.BASE_URL,()=>st
 const narration=mountNarration({enabled:()=>state.settings.sfx,quiet:v=>{researchAudio.quiet(v);music.quiet(v);},context:()=>state.route,delay:()=>researchAudio.voiceWait()});
 function syncSound(){researchAudio.sync();music.sync();narration.sync();const on=soundOn(state),button=root.querySelector('[data-action="sound"]');if(button&&button.getAttribute('aria-pressed')!==String(on)){button.setAttribute('aria-label',on?'소리 끄기':'소리 켜기');button.setAttribute('aria-pressed',String(on));button.innerHTML=icon(on?'sound':'mute');}}
 function sound(kind:Cue='tap'){void researchAudio.play(kind);}
-// 성취 카드 소리는 앞 소리(악당 퇴장, 카드 등장)를 끊지 않고 겹쳐 낸다. 지도 파이널이 열리면 완성 징글이 파이널 음악과 겹치지 않게 끊는다.
+// 성취 카드 소리는 앞 소리(악당 퇴장, 카드 등장)를 끊지 않고 겹쳐 낸다. 지도 파이널은 완성 징글이 끝난 뒤에 열리고(encounterHold),
+// 열릴 때 남은 효과음을 정리해 파이널 음악과 겹치지 않게 한다.
 bindRewardSound(cue=>void researchAudio.play(cue,true));
 document.addEventListener('map-finale-music',e=>{if((e as CustomEvent<boolean>).detail)researchAudio.stop();});
 function persist(){if(archive||protectedSave)return;if(!writeSave(state)&&!saveWarning){saveWarning=true;notify(saveError()??'이 기기에 저장하지 못했어요. 창을 닫으면 기록이 사라질 수 있어요.');}}
@@ -74,12 +75,14 @@ async function mountMap(){const currentEpoch=epoch,{open,next,done}=mapStatus(st
  const request=mapRequest=new AbortController(),{signal}=request;
  let loadingCode=true,timer:ReturnType<typeof setTimeout>|undefined;
  const deadline=new Promise<never>((_,reject)=>{timer=setTimeout(()=>{reject(Error('map timeout'));request.abort();},10000);});
- researchAudio.preload(['swing','hit1','hit2','finish','exit','appear','bump','cardWhoosh','cardReveal','cardEpic','cardSlot','cardComplete']);
+ researchAudio.preload(['swing','hit1','hit2','finish','exit','appear','bump','cardWhoosh','cardReveal','cardEpic','cardSlot','cardComplete','unlock'],true);
  const load=async()=>{const {createMap}=await import('./game/pixel-map');if(signal.aborted||epoch!==currentEpoch)return null;loadingCode=false;const parent=document.getElementById('pixel-map');if(!parent)return null;
- return createMap(parent,{signal,start:view.mapSpot??(last?NODES[last.node]:null),overview:view.mapOverview,mapHits:state.mapHits,encountersEnabled:!archive,encounterHold:rewardCardDue,onEncounterSave:patch=>{const won=wonRewardCards(state.mapHits,patch);state.mapHits={...state.mapHits,...patch};persist();won.forEach(awardCard);},onEncounterSound:(kind,hits)=>void researchAudio.play(kind==='hit'?(hits===2?'hit2':'hit1'):kind==='contact'?'bump':kind,kind==='hit'||kind==='finish'||kind==='exit'),newEncounter,reduced:state.settings.reduced||matchMedia('(prefers-reduced-motion: reduce)').matches,open,next,done,newly,celebration:state.completed.includes('P10'),onSelect:n=>void startStage(n),onMove:p=>{view.mapSpot=p;},onStop:mapHint,onView:mode=>{view.mapOverview=mode==='overview';const button=root.querySelector('[data-action=map-view]');if(button){const label=mapViewLabel(mode);button.setAttribute('aria-label',label);button.setAttribute('title',label);}}});
+ return createMap(parent,{signal,start:view.mapSpot??(last?NODES[last.node]:null),overview:view.mapOverview,mapHits:state.mapHits,encountersEnabled:!archive,encounterHold:()=>rewardCardDue()||researchAudio.ringing('cardComplete'),onStep:mapStep,onEncounterSave:patch=>{const won=wonRewardCards(state.mapHits,patch);state.mapHits={...state.mapHits,...patch};persist();won.forEach(awardCard);},onEncounterSound:(kind,hits)=>void researchAudio.play(kind==='hit'?(hits===2?'hit2':'hit1'):kind==='contact'?'bump':kind,kind==='hit'||kind==='finish'||kind==='exit'),newEncounter,reduced:state.settings.reduced||matchMedia('(prefers-reduced-motion: reduce)').matches,open,next,done,newly,celebration:state.completed.includes('P10'),onSelect:n=>void startStage(n),onMove:p=>{view.mapSpot=p;},onStop:mapHint,onView:mode=>{view.mapOverview=mode==='overview';const button=root.querySelector('[data-action=map-view]');if(button){const label=mapViewLabel(mode);button.setAttribute('aria-label',label);button.setAttribute('title',label);}}});
  };
  try{const h=await Promise.race([load(),deadline]);if(!h)return null;
- if(epoch!==currentEpoch){h.destroy();return null;}pendingMapRestore=pendingMapRestore.filter(i=>!newly.includes(i));if(pendingMapEncounter===newEncounter)pendingMapEncounter=null;mapHandle=h;return h;
+ if(epoch!==currentEpoch){h.destroy();return null;}pendingMapRestore=pendingMapRestore.filter(i=>!newly.includes(i));
+ // 방금 마친 미션의 건물이 되살아나고 다음 장소가 열리는 순간 한 번(메모리의 대기 목록이라 다시 그리거나 새로고침해도 다시 나지 않는다).
+ if(newly.length)void researchAudio.play('unlock');if(pendingMapEncounter===newEncounter)pendingMapEncounter=null;mapHandle=h;return h;
  }catch{
   if(epoch===currentEpoch){
    const parent=document.getElementById('pixel-map');
@@ -91,6 +94,8 @@ async function mountMap(){const currentEpoch=epoch,{open,next,done}=mapStatus(st
   return null;
  }finally{clearTimeout(timer);}
 }
+// 지도 발자국: 대화창·안내창·카드·파이널 창·창문 복구 패널이 떠 있는 동안에는 내지 않는다.
+function mapStep(){if(root.inert||modalRoot.firstChild||document.querySelector('dialog[open], .rc-layer')||root.querySelector('.window-restoration[open]'))return;void researchAudio.step();}
 // 악당의 세 번째 타격이 저장되면 퇴장 연출 뒤 성취 카드를 연다. 카드가 열려 있는 동안 #app이 inert라서
 // 걷기·악당·전체 격퇴 파이널이 카드를 닫을 때까지 기다린다. 그 사이 지도를 떠났으면 칸만 채운다.
 // 퇴장 대사가 나오는 동안에는 카드 소리가 나지 않으므로 대사가 끝난 뒤 카드를 연다. 대사가 끝나지 않아도 9초 뒤에는 연다.

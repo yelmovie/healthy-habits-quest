@@ -10,7 +10,16 @@ export function mountNarration(options:{enabled:()=>boolean;quiet:(value:boolean
  let seen=new Set<string>(),context='',current:string|null=null,scheduled=false,pending:string|null=null,queue:string[]=[],button:HTMLButtonElement|null=null,hold:ReturnType<typeof setTimeout>|null=null;
  const byId=new Map(lines.map(line=>[line.id,line]));
  const player=createNarrationPlayer({enabled:()=>options.enabled()&&!document.hidden,quiet:options.quiet,create:src=>new Audio(src),changed:paint,finished:next});
- function stop(){if(hold){clearTimeout(hold);hold=null;}queue=[];player.stop();}
+ let deferred:ReturnType<typeof setTimeout>|null=null;
+ function stop(){if(hold){clearTimeout(hold);hold=null;}if(deferred){clearTimeout(deferred);deferred=null;}queue=[];player.stop();}
+ // 악당 반응 대사와 다른 인물 대사는 서로 끊지 않는다(최대 2초 기다림). 악당 대사가 그동안 화면에서 사라졌거나
+ // 2초가 지나도 다른 대사가 이어지면 악당 대사는 건너뛰고, 안내 대사는 2초 뒤에 시작한다.
+ const villain=(id:string)=>id.startsWith('villain-');
+ function after(ids:string[],dropAtLimit:boolean){if(deferred)clearTimeout(deferred);const limit=performance.now()+2000;
+  const tick=()=>{deferred=null;const left=ids.filter(id=>seen.has(id));if(!left.length||document.hidden)return;
+   if(player.active&&performance.now()<limit){deferred=setTimeout(tick,100);return;}
+   if(player.active&&dropAtLimit)return;stop();queue=left;start();};
+  deferred=setTimeout(tick,100);}
  function paint(){
   const scene=document.querySelector<HTMLElement>('.npc-stage-dialog[open] .npc-stage');
   if(scene){scene.dataset.speaking=String(player.playing&&scene.dataset.lineId===current);const change=scene.querySelector<HTMLButtonElement>('[data-npc-switch]');if(change)change.disabled=!!player.active;}
@@ -19,7 +28,11 @@ export function mountNarration(options:{enabled:()=>boolean;quiet:(value:boolean
   button.setAttribute('aria-pressed',String(active));button.disabled=!current;
  }
  function visible(el:HTMLElement){return !(el.closest('details:not([open])')&&!el.closest('summary'))&&!el.closest('[hidden], [inert], .narration-wait')&&el.getClientRects().length>0&&getComputedStyle(el).visibility!=='hidden'&&!el.closest('#toast:not(.visible)');}
- function speak(id:string){current=id;void player.play(base+byId.get(id)!.src);paint();}
+ // 첫 입력 전에는 브라우저가 소리를 막는다. 그때 막힌 줄(타이틀 대사)은 「읽은 줄」로 버리지 않고 첫 입력 뒤 한 번 다시 읽는다.
+ let retry:string[]|null=null;
+ function speak(id:string){current=id;const rest=[...queue];void player.play(base+byId.get(id)!.src).then(ok=>{if(!ok&&current===id&&!(navigator as Navigator&{userActivation?:{hasBeenActive:boolean}}).userActivation?.hasBeenActive)retry=[id,...rest];});paint();}
+ // 입력이 화면을 바꿨으면(시작 버튼 등) 그 클릭 처리 뒤에 줄이 화면에 남아 있을 때만 읽는다.
+ function firstInput(){const ids=retry;if(!ids)return;retry=null;setTimeout(()=>{const left=ids.filter(id=>seen.has(id));if(left.length&&!player.active&&!hold&&!document.hidden&&options.enabled()){queue=left;next();}},0);}
  function next(){const id=queue.shift();if(id)speak(id);}
  // While a line is held it already counts as the current one, so a rescan during the hold does not drop it.
  function start(){const wait=options.delay?.()??0;if(wait>0&&queue.length){current=queue[0];hold=setTimeout(()=>{hold=null;next();},wait);}else next();}
@@ -40,13 +53,18 @@ export function mountNarration(options:{enabled:()=>boolean;quiet:(value:boolean
     button.onclick=e=>{e.preventDefault();e.stopPropagation();if(player.active)stop();else if(current){stop();speak(current);}};
     host.append(button);
    }}else{button?.remove();button=null;}
-  if(added.length&&!document.hidden&&!closing){stop();queue=added;start();}else if(!current&&found.size)current=[...found][0];paint();
+  const speaking=player.active?current:null;
+  if(added.length&&!document.hidden&&!closing){
+   if(speaking&&!villain(speaking)&&added.every(villain))after(added,true);
+   else if(speaking&&villain(speaking)&&!added.every(villain))after(added,false);
+   else{stop();queue=added;start();}}else if(!current&&found.size)current=[...found][0];paint();
  }
  function schedule(){if(!scheduled){scheduled=true;queueMicrotask(scan);}}
  const observer=new MutationObserver(records=>{if(records.some(r=>!(r.target as Element).closest?.('[data-narration-control]')))schedule();});
  observer.observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['class','open','hidden','inert']});
  function hidden(){if(document.hidden)stop();}function setting(){queueMicrotask(()=>{if(!options.enabled())stop();});}
  document.addEventListener('visibilitychange',hidden);document.addEventListener('change',setting);window.addEventListener('pagehide',stop);schedule();
+ document.addEventListener('pointerup',firstInput,{capture:true});document.addEventListener('keyup',firstInput,{capture:true});
  return {stop,/** A voice line is sounding or about to start. */
-  isSpeaking(){return !!player.active||!!hold;},announce(text:string){pending=lines.find(line=>line.text===text)?.id??null;schedule();},isToastPlaying(){return !!player.active&&!!current&&!!document.querySelector('#toast.visible')?.textContent?.includes(byId.get(current)!.text);},sync(){if(!options.enabled())stop();},destroy(){observer.disconnect();stop();document.removeEventListener('visibilitychange',hidden);document.removeEventListener('change',setting);window.removeEventListener('pagehide',stop);button?.remove();}};
+  isSpeaking(){return !!player.active||!!hold;},announce(text:string){pending=lines.find(line=>line.text===text)?.id??null;schedule();},isToastPlaying(){return !!player.active&&!!current&&!!document.querySelector('#toast.visible')?.textContent?.includes(byId.get(current)!.text);},sync(){if(!options.enabled())stop();},destroy(){observer.disconnect();stop();document.removeEventListener('pointerup',firstInput,{capture:true});document.removeEventListener('keyup',firstInput,{capture:true});document.removeEventListener('visibilitychange',hidden);document.removeEventListener('change',setting);window.removeEventListener('pagehide',stop);button?.remove();}};
 }

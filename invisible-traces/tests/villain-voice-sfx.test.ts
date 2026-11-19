@@ -41,7 +41,7 @@ class El{ownerDocument:any;style={setProperty(){}};dataset:Record<string,string>
  addEventListener(t:string,fn:()=>void){this.listeners[t]=fn;}closest(){return null;}querySelector(){return null;}querySelectorAll(){return [];}contains(){return false;}
  getBoundingClientRect(){return {left:0,top:0,right:0,bottom:0,width:0,height:0};}getClientRects(){return [];}focus(){}}
 
-test('a hit or exit line is held from the narration until 300 ms after the swing; a taunt is not',()=>{
+test('a hit or exit line is held from the narration until 300 ms after the hit sound; a taunt is not',()=>{
  let clock=1000;const timers:{at:number;fn:()=>void}[]=[];
  const view={performance:{now:()=>clock},setTimeout:(fn:()=>void,ms:number)=>{timers.push({at:clock+ms,fn});return timers.length;},clearTimeout(){},addEventListener(){},HTMLElement:El,matchMedia:()=>({matches:false})};
  const doc:any={defaultView:view,hidden:false,activeElement:null,createElement:()=>new El(doc),createElementNS:()=>new El(doc),querySelector:()=>null,querySelectorAll:()=>[]};
@@ -59,8 +59,9 @@ test('a hit or exit line is held from the narration until 300 ms after the swing
   advance(3000);frame();sounds.length=0;attack.listeners.click();
   assert.equal(bubble.textContent,n===3?'퇴장!':['하나!','둘!'][n-1],'the bubble shows at once');
   assert.ok(bubble.classList.contains('narration-wait')&&live.classList.contains('narration-wait'),'the narration waits');
-  advance(299);assert.ok(sounds.includes('swing')&&sounds.includes(n===3?'finish':'hit'));assert.ok(bubble.classList.contains('narration-wait'));
-  advance(1);assert.equal(bubble.classList.contains('narration-wait')||live.classList.contains('narration-wait'),false,'read 300 ms after the swing');
+  advance(90);assert.ok(sounds.includes('swing')&&sounds.includes(n===3?'finish':'hit'),'the hit sound lands on the strike (90 ms)');
+  advance(299);assert.ok(bubble.classList.contains('narration-wait'));
+  advance(1);assert.equal(bubble.classList.contains('narration-wait')||live.classList.contains('narration-wait'),false,'read 300 ms after the hit sound');
  }
  map.destroy();
 });

@@ -11,6 +11,8 @@ export interface MapOptions {
  /** 미션 번호(0부터)별 입장 가능 여부와, 지금 해야 할 미션 번호(없으면 -1). */
  open:boolean[];next:number;done:boolean[];newly:number[];newEncounter:number|null;celebration:boolean;
  mapHits:Record<string,number>;encountersEnabled:boolean;onEncounterSave:(patch:Record<string,number>)=>void;onEncounterSound:(kind:MapEncounterSound,hits:number)=>void;
+ /** 주인공이 실제로 걷는 동안 STEP_EVERY ms마다 한 번. 멈추거나 벽에 막혀 제자리면 부르지 않는다. */
+ onStep?:()=>void;
  /** 성취 카드가 열릴 차례를 기다리는 동안 참. 악당과 전체 격퇴 파이널이 카드 뒤로 밀린다. */
  encounterHold:()=>boolean;
  onSelect:(stage:number)=>void;onMove:(p:Point)=>void;onView:(mode:'follow'|'free'|'overview')=>void;onStop:(place:number)=>void;
@@ -20,6 +22,8 @@ type Direction = 'up'|'down'|'left'|'right';
 
 const VECTORS:Record<Direction,Point> = {up:{x:0,y:-1},down:{x:0,y:1},left:{x:-1,y:0},right:{x:1,y:0}};
 const KEYS:Record<string,Direction> = {ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',w:'up',s:'down',a:'left',d:'right'};
+// 발자국 소리 간격(ms). 걷는 그림은 13px마다 발을 바꿔 소리로 내기엔 너무 빨라서 시간으로 센다.
+const STEP_EVERY = 300;
 const LABEL_TOP = 132, ROAD_TAP = 22, PAVEMENT_TAP = 70, WALK_SPEED = 150, TRAVEL_SPEED = 190, TRAVEL_MAX_SECONDS = 1.8, STRIDE = 13, MATE_GAP = 38, DRAG_START = 6;
 const FRAME = {width:48,height:58}, HERO_STAND = 0, HERO_STEP = [1,2], MATE = 3;
 const TEAM_OUTLINE='team-map-outline', PAD=2;
@@ -54,7 +58,7 @@ export async function createMap(parent:HTMLElement,options:MapOptions):Promise<M
 
  class SchoolMap extends Phaser.Scene {
   hero!:Phaser.GameObjects.Sprite;mate!:Phaser.GameObjects.Sprite;heroShadow!:Phaser.GameObjects.Ellipse;mateShadow!:Phaser.GameObjects.Ellipse;ring!:Phaser.GameObjects.Ellipse;
-  pos:Point=options.start??NODES[START_NODE];held=new Map<string,Direction>();trail:Point[]=[];walked=0;facing=1;
+  pos:Point=options.start??NODES[START_NODE];held=new Map<string,Direction>();trail:Point[]=[];walked=0;facing=1;stepClock=0;
   route:Point[]|null=null;routeDone=0;routeSpeed=TRAVEL_SPEED;arrived:((reached:boolean)=>void)|null=null;
   mode:'follow'|'free'|'overview'=options.overview?'overview':'follow';lastPlace=placeAt(this.pos);
   center:Point={...this.pos};freeZoom=1;
@@ -196,6 +200,8 @@ export async function createMap(parent:HTMLElement,options:MapOptions):Promise<M
    this.mate.setFlipX(this.facing<0);
    this.placeTeam();
    if(walking){this.hero.y-=stride;this.mate.y-=1-stride;if(this.mode==='free')this.setMode('follow');}
+   // 걷기 시작하면 바로 한 걸음, 그 뒤 STEP_EVERY마다. 멈추면 다음 걸음은 다시 바로 난다.
+   if(walking){this.stepClock-=delta;if(this.stepClock<=0){this.stepClock=STEP_EVERY;options.onStep?.();}}else this.stepClock=0;
    if(this.mode==='follow'){
     const zoom=this.followZoom(),ease=options.reduced?1:-Math.expm1(-delta/145);
     this.paintCamera({x:this.pos.x,y:this.pos.y+this.scale.height*.06/zoom},zoom,ease);
