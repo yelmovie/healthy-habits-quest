@@ -26,7 +26,7 @@
 .tracing-sequence .trace-node.source::after { content: none; }
 .trace-source-label { display: inline-flex; visibility: hidden; align-items: center; justify-content: center; gap: .15rem; color: #97500c; font-size: 1rem; font-style: normal; font-weight: 800; line-height: 1.2; }
 .trace-node.source .trace-source-label { visibility: visible; }
-.tracing-intervention { justify-content: center; gap: .6rem; min-height: 0; padding: .8rem; }
+.tracing-intervention { justify-content: safe center; gap: .6rem; min-height: 0; padding: .8rem; overflow-y: auto; overscroll-behavior: contain; }
 .tracing-intervention-label { display: inline-flex; align-items: center; gap: .4rem; font-size: 1rem; }
 .tracing-intervention-label > svg { color: var(--teal-strong); }
 .tracing-choices { display: grid; gap: .45rem; }

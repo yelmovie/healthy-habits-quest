@@ -308,3 +308,8 @@
 }
 .apply-playback { flex-wrap: wrap; align-items: center; gap: .5rem 1rem; }
 .apply-guide { margin: 0; font-weight: 700; color: var(--ink); text-align: center; }
+/* 세로 폰 큰 글자 P07: 고르는 칸이 길어져도 비교 그림이 사라지지 않게 활동 영역을 스크롤로 늘린다. */
+@media (max-width: 640px) and (min-height: 521px) {
+ .large-text .activity-layout .page-content:has(.condition-workspace) { overflow-y: auto; }
+ .large-text .condition-workspace { grid-template-rows: minmax(180px, 1fr) auto; height: auto; min-height: 100%; }
+}

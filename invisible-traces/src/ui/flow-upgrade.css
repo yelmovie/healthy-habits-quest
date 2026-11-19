@@ -55,6 +55,9 @@
   .explain-choices { grid-template-columns: minmax(0, 1fr); }
   .explain-choices .btn { height: auto; min-height: 44px; }
 }
+@media (max-width: 900px) and (min-height: 701px) {
+  .large-text .explain-step { flex-direction: column; align-items: stretch; gap: .35rem; }
+}
 /* 표시한 뒤에는 B 제목 줄의 깃발로 충분하다. 그림을 가리지 않게 숨긴다. */
 .compare-pin.pinned { display: none; }
 
@@ -112,6 +115,7 @@ body.on-activity.has-stage-bg .learning-focus { background: rgba(255,255,255,.8)
   .tracing-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .3rem; }
   .tracing-choices .btn.choice { min-height: 44px; padding: .25rem .4rem; flex-direction: column; align-items: flex-start; justify-content: center; gap: .1rem; font-size: 1rem; line-height: 1.2; }
   .tracing-choices .trial-result { font-size: 1rem; padding: 0 .4rem; }
+  .tracing-choices .btn.choice :is(.choice-full,.choice-short) { max-width: 100%; overflow-wrap: anywhere; }
 }
 body.on-activity.has-stage-bg .page-content { background: transparent; }
 /* 장면 위 카드는 유리처럼 비쳐 배경이 살아 보이게 한다. */
@@ -122,7 +126,7 @@ body.on-activity.has-stage-bg :is(.source-card,.target-card,.impact-effect,.impa
 .tracing-p05 .trace-node .trace-object { position: relative; }
 .tracing-p05 .trace-node .trace-object img { position: absolute; inset: 10%; width: 80%; height: 80%; max-width: none; max-height: none; }
 .choice-short { display: none; }
-@media (max-height: 640px), (max-width: 900px) and (max-height: 1100px) {
+@media (max-height: 800px), (max-width: 900px) and (max-height: 1100px) {
   .large-text .tracing-choices .choice-full { display: none; }
   .large-text .tracing-choices .choice-short { display: inline; }
 }
@@ -150,6 +154,15 @@ body.on-activity.has-stage-bg :is(.source-card,.target-card,.impact-effect,.impa
 
 }
 @media (max-height: 800px) { .large-text .tracing-intervention .soap-shield small { display: none; } }
+/* P05 오른쪽 칸이 글자보다 작아지는 높이: 칸 안이 아니라 활동 영역 전체를 늘려 스크롤한다(방패·결과 문장이 잘리거나 위 띠에 덮이지 않게). */
+@media (max-height: 800px) and (min-width: 641px) {
+  .large-text .activity-layout .page-content:has(.tracing-p05) { overflow-y: auto; }
+  .large-text .tracing-p05 { min-height: 760px; flex-shrink: 0; }
+}
+@media (max-height: 560px) and (min-width: 641px) {
+  .activity-layout .page-content:has(.tracing-p05) { overflow-y: auto; }
+  .tracing-p05 { min-height: 440px; flex-shrink: 0; }
+}
 
 /* P01 돋보기 탐색: 숨은 보라 빛은 희미하게 깜빡이고, 돋보기가 닿으면 환하게 드러난다. */
 .observation-p01 .obs-site-visual { touch-action: none; cursor: crosshair; }
