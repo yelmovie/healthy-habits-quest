@@ -7,7 +7,7 @@
 **공개 배포·최종 기술 검증 완료(2026-11-11).** 타입 검사·빌드·회귀 테스트 51개가 통과했다. 13해상도·기본/큰 글자의 활동 754상태와 공통 화면·팝업 56상태에서 최종 문제 0건을 확인했다. 공개 URL에서도 메인→지도→P01~P10→엔딩·인증서·새로고침·재실험을 끝까지 검증했다. 점수는 9.1/10이며, 교사 콘텐츠 검수와 학교 실기기 확인을 조건으로 남겼다.
 
 - [공개 게임](https://healthy-habits-quest.yelsam.workers.dev/)
-- 최신 납품 점검(2026-11-18, 조건부 배포 가능 91/100): [검토](invisible-traces/docs/reviews/RELEASE-REVIEW-20261118.md) · [점수](invisible-traces/docs/reviews/SCORE-20261118.md) · [놀이 화면 비율·중복 버튼 정리](invisible-traces/docs/LAYOUT-BALANCE-20261118.md)
+- 최신 납품 점검(2026-11-19, 조건부 배포 가능 92/100): [검토](invisible-traces/docs/reviews/RELEASE-REVIEW-20261119.md) · [점수](invisible-traces/docs/reviews/SCORE-20261119.md) · 이전 [2026-11-18 검토](invisible-traces/docs/reviews/RELEASE-REVIEW-20261118.md) · [놀이 화면 비율·중복 버튼 정리](invisible-traces/docs/LAYOUT-BALANCE-20261118.md)
 - [최종 검토와 배포 증거](invisible-traces/docs/reviews/RELEASE-REVIEW-20261111.md) · [점수와 감점 근거](invisible-traces/docs/reviews/SCORE-20261111.md)
 - 공개 URL과 로컬·미리보기 URL은 origin이 달라 탐구 기록이 각각 저장된다.
 
