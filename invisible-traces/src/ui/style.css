@@ -194,7 +194,7 @@ body.on-home .brand, body.on-home .header-center, body.on-home [data-action="rec
 .title-actions .btn.secondary { border-color: #fff; background: rgba(255, 255, 255, .96); box-shadow: 0 5px 0 rgba(16, 62, 67, .28), 0 12px 22px rgba(16, 62, 67, .2); }
 .title-actions .btn:active:not(:disabled) { transform: translateY(4px); }
 .title-foot { display: flex; align-items: center; justify-content: center; gap: .6rem; }
-.title-foot .btn { flex: none; border-color: #fff; background: rgba(255, 255, 255, .94); box-shadow: var(--map-shadow); white-space: nowrap; }
+.title-foot .btn { flex: none; min-height: 48px; border-color: #fff; background: rgba(255, 255, 255, .94); box-shadow: var(--map-shadow); white-space: nowrap; }
 .title-foot span { padding: .35rem .9rem; border-radius: 14px; background: rgba(16, 62, 67, .82); color: #fff; font-size: 1rem; font-weight: 700; }
 
 /* ---------- 조사 지도 ---------- */

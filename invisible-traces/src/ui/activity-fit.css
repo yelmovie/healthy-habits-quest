@@ -17,7 +17,7 @@ body.on-activity { height: var(--app-h); min-height: 0; overflow: hidden; }
 .activity-layout .status-line { font-size: 1rem; line-height: 1.25; }
 .activity-layout .status-line > svg { color: var(--teal-strong); }
 .activity-layout .activity-info { width: 44px; height: 44px; flex: none; border-color: transparent; background: transparent; }
-.activity-layout .actionbar > .btn { min-height: 44px; min-width: 112px; padding: 8px 20px; }
+.activity-layout .actionbar > .btn { min-height: 48px; min-width: 112px; padding: 8px 20px; }
 .playback-controls { position: relative; display: flex; flex: none; align-items: center; justify-content: center; gap: 8px; min-width: 0; min-height: 44px; }
 .playback-controls .playback-toggle { flex: none; min-height: 44px; padding: 8px 16px; font-size: 1rem; }
 .playback-speed { display: flex; align-items: center; gap: 8px; font-size: 1rem; font-weight: 700; color: var(--ink-2); }

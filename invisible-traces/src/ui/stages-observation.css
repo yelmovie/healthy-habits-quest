@@ -3,8 +3,8 @@
 .observation-page :is(button,span,div,aside,strong,small,p,nav) { min-width: 0; }
 .observation-page button { touch-action: none; }
 .observation-page .mission-question { flex: none; margin: 0; line-height: 1.35; }
-.observation-page :is(.obs-focus-tabs,.obs-site-tabs,.obs-clue-pager) { display: flex; gap: .4rem; min-height: 44px; flex: none; }
-.observation-page :is(.obs-focus-tabs,.obs-site-tabs,.obs-clue-pager) .btn { min-height: 44px; padding: .35rem .7rem; line-height: 1.2; }
+.observation-page :is(.obs-focus-tabs,.obs-site-tabs,.obs-clue-pager) { display: flex; gap: .4rem; min-height: 48px; flex: none; }
+.observation-page :is(.obs-focus-tabs,.obs-site-tabs,.obs-clue-pager) .btn { min-height: 48px; padding: .35rem .7rem; line-height: 1.2; }
 .observation-page .obs-focus-tabs { display: none; }
 .observation-page .obs-next { border-color: var(--purple); }
 .observation-page button.obs-next:focus-visible { outline-color: var(--purple); }

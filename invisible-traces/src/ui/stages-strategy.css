@@ -39,7 +39,8 @@
 .comparison-activity .strategy-tasks { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: stretch; gap: .55rem; }
 .strategy-tasks > .btn, .strategy-tasks > select { min-height: 44px; padding-block: .4rem; }
 .strategy-tasks > select { width: 100%; font-size: 1rem; }
-.strategy-planning { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto; gap: .65rem; }
+.strategy-planning { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: min-content minmax(min-content, 1fr) min-content; gap: .65rem; }
+@media screen { .activity-layout .page-content:has(> .strategy-planning) { overflow-y: auto; } }
 .strategy-toolbar { display: flex; align-items: center; gap: .65rem; }
 .strategy-energy { display: flex; flex: none; align-items: center; gap: .4rem; }
 .strategy-energy > b { color: var(--teal-strong); font-size: 1.7rem; line-height: 1; white-space: nowrap; }
