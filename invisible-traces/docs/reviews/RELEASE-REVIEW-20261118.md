@@ -18,7 +18,7 @@ FAIL 0. 이번 점검에서 찾은 두 문제(P01~P05 개념 칩 글자 대비 1
 | 빌드 | `npm run build` | 통과(precache 224파일, 기존 Phaser 큰 청크 경고 유지) |
 | 레이아웃 비율 | `scripts/check-layout-balance.mjs` 3뷰포트 × 12화면 | 활동 높이 72.5~81.2%, 면적 69.6~79.5%, 좌우 빈 띠 1~2%, 18px 미만 글자 0, 페이지 오류 0 |
 | 실제 클릭 완주 | `scripts/check-flow.mjs` | 1280×800·1024×768·915×412·1920×1080 모두 새 기록 → 지도 → P01~P10 → 인증서 완주, 오류 0 |
-| 반응형 겹침 | `scripts/check-responsive-stages.mjs`(1280×800·915×412·390×844, 31상태) | 수정 전 2건(915×412 P06 물 카드 글자 넘침) → 수정 후 결과는 아래 「재검증」 |
+| 반응형 겹침 | `scripts/check-responsive-stages.mjs`(1280×800·915×412·390×844, 31상태) | 수정 전 2건(915×412 P06 물 카드 글자 넘침) → 수정 후 93화면 0건 |
 | 납품 실측 | `scripts/check-release.mjs` | 아래 표 |
 | 운영 대조 | `cmp.sh` + curl SHA-256 | 메인 JS·CSS·index.html·sw.js·precache-manifest.json 모두 MATCH |
 
@@ -45,7 +45,7 @@ FAIL 0. 이번 점검에서 찾은 두 문제(P01~P05 개념 칩 글자 대비 1
 | D 성능 | WARNING | 로딩 실측 양호. Phaser 큰 청크·상시 blur 실기 비용·학교 태블릿 FPS는 이전과 같이 WARNING/NOT TESTED |
 | E 코드 품질 | WARNING | 큰 main.ts·긴 한 줄(이전과 같음). 이번 수정은 템플릿 문자열 몇 곳과 CSS 몇 줄 |
 | F 데이터·안전 | PASS(확인됨) | 저장 구조 불변, 손상 저장 보존, 위조 해금 재계산. 개인정보 수집 없음 |
-| G 배포 | PASS · G19 NOT TESTED | origin/main `5669b38` → Worker 버전 `8aefacc3-8eff-4c2c-bcd6-9820fb2914c3`, 운영 파일 해시 일치. iOS 인쇄 미검증 |
+| G 배포 | PASS · G19 NOT TESTED | origin/main `5669b38` → Worker `8aefacc3…`(운영 주소 실제 클릭 완주 통과) → 최종 `aa84cd4`(폰 가로 물 카드 간격 CSS만) → Worker `1e0074b8-e13d-4e5b-b871-4b20c402f156`, 운영 JS·CSS·index·sw·precache 해시 일치. iOS 인쇄 미검증 |
 
 대비 자동 측정의 「조사 시작하기」(그라데이션)·「신호 광장으로 가기」(그라데이션)·「작전 실행」(비활성)은 2026-11-11과 같은 오탐으로 제외했다. 「감염병」·「병원체」 등 개념 칩 1.32는 오탐이 아니라 실제 문제였다: `learning-guidance.css`의 질문 줄 칩 배경(#c3e9d5)과 `flow-upgrade.css`의 흰 글자가 겹쳐 생겼다(2026-11-18 `3388434` 이후). 칩 글자를 #075e59로 고쳤다.
 
