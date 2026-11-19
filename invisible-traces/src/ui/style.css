@@ -644,6 +644,14 @@ select { min-height: 48px; padding: .4rem 2.2rem .4rem .9rem; border: 2px solid 
 .guide-stages span { color: var(--muted); font-size: 1rem; }
 .setting-row { display: flex; align-items: center; justify-content: space-between; min-height: 56px; padding: .4rem .2rem; border-bottom: 1px solid var(--line); font-weight: 700; cursor: pointer; }
 .setting-row input { width: 28px; height: 28px; accent-color: var(--teal); cursor: pointer; }
+/* 설정의 배경 음악 크기 줄: 이름 · 막대 · 값. 막대는 손가락으로 잡기 쉽게 44px 높이. */
+.setting-volume { gap: .6rem; cursor: default; }
+/* 막대 높이만큼 위아래 여백을 줄여 옆 스위치 줄과 높이를 맞춘다(공통 설정 규칙보다 우선하도록 선택자를 길게 쓴다). */
+html [data-science-settings] .science-settings-audio label.setting-row.setting-volume { padding-block: 3px; }
+.setting-volume > span { flex: none; }
+.setting-volume input[type=range] { flex: 1 1 6rem; min-width: 5rem; height: 44px; margin: 0; }
+.setting-volume input:disabled { opacity: .45; cursor: not-allowed; }
+.setting-volume output { flex: none; min-width: 3.2em; color: var(--muted); font-size: 1rem; text-align: right; font-variant-numeric: tabular-nums; }
 .record-list { display: flex; flex-direction: column; gap: .5rem; }
 .record-entry { display: flex; gap: .7rem; padding: .8rem; border-radius: var(--radius-sm); background: var(--surface-2); color: var(--muted); }
 .record-entry p { font-size: 1rem; }

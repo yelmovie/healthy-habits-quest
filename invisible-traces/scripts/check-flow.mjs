@@ -38,7 +38,7 @@ try {
   await page.evaluate(k => { localStorage.clear(); localStorage.setItem('flow-check', '1'); }, KEY);
   await page.reload();
   await click('[data-action="settings"]', 'settings');
-  await page.locator('[data-setting="sound"]').uncheck();
+  for (const key of ['music', 'sfx']) await page.locator(`[data-setting="${key}"]`).uncheck();
   await click('[data-modal="close"]', 'close settings');
   await click('[data-action="start"]', 'start');
   await page.locator('.map-next-cue').waitFor();

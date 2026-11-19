@@ -12,12 +12,14 @@ import {observationPages} from './stages-observation';
 import {tracingPages,synthesisReady} from './stages-tracing';
 import {strategyPages} from './stages-strategy';
 export {comparisonBoard,comparisonTasks} from './stages-strategy';
+/** 머리글 소리 버튼은 배경 음악과 효과음(목소리 포함)을 함께 켜고 끈다. 둘 중 하나라도 켜져 있으면 켜짐이다. */
+export const soundOn=(s:State)=>s.settings.music||s.settings.sfx;
 /** `cards`는 소리 버튼 바로 앞에 넣는 성취 카드 칸(지도 화면에서만 main.ts가 넘긴다). */
 /** `focus`는 활동 화면의 개념·질문 띠(shell이 만든 것). 넓은 가로 화면에서는 위 띠 가운데에 이 사본을 보이고 아래 띠는 숨긴다(CSS). */
 export function header(s:State,sandbox:boolean,cards='',focus=''){
  const page=PAGES.find(p=>p.id===s.route);
  const onMap=s.route==='C01';
- const tools=`${sandbox&&!onMap?btn(`${icon('undo',20)}<span>본편 복귀</span>`,'exit-replay','small','aria-label="본편 복귀"'):''}${onMap?'':`<button class="icon-btn" data-action="records" aria-label="연구 기록">${icon('file')}</button>`}${cards}<button class="icon-btn" data-action="sound" aria-label="${s.settings.sound?'소리 끄기':'소리 켜기'}" aria-pressed="${s.settings.sound}">${icon(s.settings.sound?'sound':'mute')}</button><button class="icon-btn" data-action="settings" aria-label="설정">${icon('settings')}</button>`;
+ const tools=`${sandbox&&!onMap?btn(`${icon('undo',20)}<span>본편 복귀</span>`,'exit-replay','small','aria-label="본편 복귀"'):''}${onMap?'':`<button class="icon-btn" data-action="records" aria-label="연구 기록">${icon('file')}</button>`}${cards}<button class="icon-btn" data-action="sound" aria-label="${soundOn(s)?'소리 끄기':'소리 켜기'}" aria-pressed="${soundOn(s)}">${icon(soundOn(s)?'sound':'mute')}</button><button class="icon-btn" data-action="settings" aria-label="설정">${icon('settings')}</button>`;
  if(page)return `<header class="topbar activity-topbar"><button class="icon-btn" data-action="map" aria-label="조사 지도로 돌아가기">${icon('map',22)}</button><div class="activity-heading"><span class="activity-mission">미션 ${Number(page.stage.slice(1))} / 5</span><h1>${page.name}</h1></div>${focus.replace('<aside class="learning-focus','<aside class="topbar-focus')}<nav class="tools" aria-label="공통 도구">${tools}</nav></header>`;
  return `<header class="topbar"><button class="brand" data-action="home" aria-label="메인으로"><span class="brand-mark">${icon('search',26)}</span><span>보이지 않는 흔적<small>학교 과학 조사</small></span></button><div class="header-center">${sandbox?chip('flask','다시 실험 · 본편 기록 보존','purple'):onMap?'':chip('file',`연구 기록 <b>${s.evidence.length}</b> / 5`)}</div><nav class="tools" aria-label="공통 도구">${tools}</nav></header>`;
 }

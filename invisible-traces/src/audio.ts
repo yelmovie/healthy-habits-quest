@@ -14,42 +14,48 @@ const CUE_FILES:Partial<Record<Cue,{file:string;gain:number;rate?:number}>>={
 };
 // Map villain fight cues keep playing under a character voice; a voice never mutes or drops them. Card cues are not here.
 const COMBAT=new Set<Cue>(['swing','hit1','hit2','finish','exit','appear','bump']);
+// The correct/record chime and the scan blip answer the student's own action: a voice that follows right away
+// (the toast line, the next page's line) neither cuts nor drops them, and it starts VOICE_HOLD ms after them.
+const FEEDBACK=new Set<Cue>(['success','scan']);
+const VOICE_HOLD=300;
 // Synth fallback when a sample cannot load or decode.
 const NOTES:Record<Cue,number[]>={tap:[440],scan:[392,523.25],success:[523.25,659.25,783.99],swing:[659.25],hit1:[440],hit2:[523.25],finish:[523.25,783.99],exit:[783.99,659.25,523.25],appear:[392,523.25],bump:[329.63],
  cardWhoosh:[392,587.33],cardReveal:[659.25,987.77],cardEpic:[523.25,783.99,1046.5],cardSlot:[880],cardComplete:[523.25,659.25,783.99,1046.5]};
 export function createResearchAudio(enabled:()=>boolean,base='./'){
- let context:AudioContext|null=null,quiet=false,request=0;
- const nodes=new Set<{src:AudioScheduledSourceNode;gain:GainNode;combat:boolean}>();
+ let context:AudioContext|null=null,quiet=false,request=0,feedbackAt=-Infinity;
+ const nodes=new Set<{src:AudioScheduledSourceNode;gain:GainNode;keep:boolean}>();
  const bytes=new Map<string,Promise<ArrayBuffer|null>>(),buffers=new Map<string,Promise<AudioBuffer|null>>();
  const fetchFile=(file:string)=>{let p=bytes.get(file);if(!p){p=fetch(base+'assets/audio/sfx/'+file).then(r=>r.ok?r.arrayBuffer():null).catch(()=>null);bytes.set(file,p);}return p;};
  function decode(ctx:AudioContext,file:string){let p=buffers.get(file);if(!p){p=fetchFile(file).then(data=>data?ctx.decodeAudioData(data.slice(0)):null).catch(()=>null);buffers.set(file,p);}return p;}
  function silence(node:{src:AudioScheduledSourceNode;gain:GainNode}){node.src.onended=null;try{node.src.stop();}catch{}node.src.disconnect();node.gain.disconnect();}
  function stop(){request++;for(const node of nodes)silence(node);nodes.clear();}
- function track(src:AudioScheduledSourceNode,gain:GainNode,combat:boolean){const node={src,gain,combat};nodes.add(node);src.onended=()=>{nodes.delete(node);src.disconnect();gain.disconnect();};}
- const allowed=(ticket:number,combat=false)=>ticket===request&&enabled()&&(!quiet||combat)&&!document.hidden&&context?.state==='running';
+ function track(src:AudioScheduledSourceNode,gain:GainNode,keep:boolean){const node={src,gain,keep};nodes.add(node);src.onended=()=>{nodes.delete(node);src.disconnect();gain.disconnect();};}
+ const allowed=(ticket:number,keep=false)=>ticket===request&&enabled()&&(!quiet||keep)&&!document.hidden&&context?.state==='running';
  /** layer=true keeps the cue already sounding (the swing under its hit, the hit under the exit). */
  async function play(kind:Cue='tap',layer=false){
-  const combat=COMBAT.has(kind);
-  if(quiet&&!combat)return;
+  // `keep` marks every cue that rings on under a voice: the fight cues and the feedback chime.
+  const keep=COMBAT.has(kind)||FEEDBACK.has(kind);
+  if(quiet&&!keep)return;
   if(!layer)stop();if(!enabled()||document.hidden)return;
+  if(FEEDBACK.has(kind))feedbackAt=performance.now();
   const ticket=request;
   try{
    context??=new AudioContext();if(context.state==='suspended')await context.resume();
-   if(!allowed(ticket,combat))return;
+   if(!allowed(ticket,keep))return;
    const sample=CUE_FILES[kind];
    if(sample?.file){
     const buffer=await decode(context,sample.file);
-    if(!allowed(ticket,combat))return;
+    if(!allowed(ticket,keep))return;
     if(buffer){
      const src=context.createBufferSource(),gain=context.createGain();
      src.buffer=buffer;if(sample.rate)src.playbackRate.value=sample.rate;gain.gain.value=sample.gain;
-     src.connect(gain);gain.connect(context.destination);track(src,gain,combat);src.start();return;
+     src.connect(gain);gain.connect(context.destination);track(src,gain,keep);src.start();return;
     }
    }
    // Gentle glass-like discovery; neutral scan, no alarm or illness sound.
    NOTES[kind].forEach((hz,i)=>{const osc=context!.createOscillator(),gain=context!.createGain(),t=context!.currentTime+i*.09;
     osc.type='sine';osc.frequency.setValueAtTime(hz,t);gain.gain.setValueAtTime(0,t);gain.gain.linearRampToValueAtTime(.035,t+.008);gain.gain.exponentialRampToValueAtTime(.0001,t+.18);
-    osc.connect(gain);gain.connect(context!.destination);track(osc,gain,combat);osc.start(t);osc.stop(t+.2);
+    osc.connect(gain);gain.connect(context!.destination);track(osc,gain,keep);osc.start(t);osc.stop(t+.2);
    });
   }catch{/* Captions and visual feedback remain available. */}
  }
@@ -57,25 +63,29 @@ export function createResearchAudio(enabled:()=>boolean,base='./'){
  function preload(kinds:Cue[]){for(const kind of kinds){const file=CUE_FILES[kind]?.file;if(file){if(context)void decode(context,file);else void fetchFile(file);}}}
  function hidden(){if(document.hidden){stop();void context?.suspend().catch(()=>{});}}
  document.addEventListener('visibilitychange',hidden);window.addEventListener('pagehide',stop);
- return {play,preload,stop,// A voice starting stops research and interface cues but lets fight cues (and their pending loads) ring on.
-  quiet(value:boolean){quiet=value;if(value)for(const node of nodes)if(!node.combat){silence(node);nodes.delete(node);}},sync(){if(!enabled())stop();},destroy(){stop();document.removeEventListener('visibilitychange',hidden);window.removeEventListener('pagehide',stop);void context?.close().catch(()=>{});}};
+ return {play,preload,stop,
+  /** Milliseconds a voice should still wait so the feedback chime that just started is heard first. */
+  voiceWait(){return enabled()?Math.max(0,Math.ceil(feedbackAt+VOICE_HOLD-performance.now())):0;},
+  // A voice starting stops interface and card cues but lets fight and feedback cues (and their pending loads) ring on.
+  quiet(value:boolean){quiet=value;if(value)for(const node of nodes)if(!node.keep){silence(node);nodes.delete(node);}},sync(){if(!enabled())stop();},destroy(){stop();document.removeEventListener('visibilitychange',hidden);window.removeEventListener('pagehide',stop);void context?.close().catch(()=>{});}};
 }
 // Suno background music (references/suno). The main theme loops from the first tap; the final theme
 // plays once on the ending/certificate and while the map finale dialog is open, then the main theme resumes.
 export type Music='main'|'final';
 const MUSIC_FILES:Record<Music,string>={main:'assets/audio/bgm/main-theme.mp3',final:'assets/audio/bgm/final-theme.mp3'};
-export function createMusic(enabled:()=>boolean,base='./'){
+/** `level` is the music size from the settings (0..1); 0.3 is the size the theme had before it became adjustable. */
+export function createMusic(enabled:()=>boolean,base='./',level:()=>number=()=>.3){
  const players=new Map<Music,HTMLAudioElement>();
  let current:Music|null=null,started=false,quiet=false,scene:Music='main',mapFinale=false,finalDone=false;
  function player(name:Music){let a=players.get(name);if(!a){a=new Audio(base+MUSIC_FILES[name]);a.preload='auto';a.dataset.track=name;a.onended=()=>{if(name==='final'&&!mapFinale)finalDone=true;};players.set(name,a);}return a;}
  function sync(){
-  const want:Music=mapFinale?'final':scene,silent=!started||!enabled()||document.hidden||want==='final'&&!mapFinale&&finalDone;
+  const want:Music=mapFinale?'final':scene,size=Math.max(0,Math.min(1,level()||0)),silent=!started||!enabled()||size<=0||document.hidden||want==='final'&&!mapFinale&&finalDone;
   for(const [name,a] of players)if(silent||name!==want)a.pause();
   if(silent)return;
   const a=player(want);if(current!==want){if(want==='final')a.currentTime=0;current=want;}
   a.loop=want==='main'||mapFinale;
   // Ducked to a quarter under character voices instead of stopping.
-  a.volume=quiet?.075:.3;
+  a.volume=size*(quiet?.25:1);
   if(a.paused)void a.play().catch(()=>{});
  }
  function start(){if(started)return;started=true;sync();}

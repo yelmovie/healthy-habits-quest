@@ -4,7 +4,7 @@ export type Route = 'C00'|'C01'|`P${string}`;
 export interface Placement { actionId:string; site:string }
 export interface State {
  version:1; contentVersion:string; route:Route; lastRoute:Route;
- settings:{sound:boolean;reduced:boolean;large:boolean};
+ settings:{music:boolean;sfx:boolean;musicVolume:number;reduced:boolean;large:boolean};
  found:string[]; clues:string[]; relations:Record<string,string>; impacts:Record<string,string>;
  timeline:{tick:number;source:string;intervention:number|null;tried:number[]};
  labs:{active:string;done:string[];values:Record<string,number>;synthesis:string[]};
@@ -13,7 +13,9 @@ export interface State {
  final:{phase:'report'|'apply'|'restored'|'ending'|'certificate';applied:string[];hands:string[];coreClaimed:boolean};
  restoration:Record<string,number>; mapHits:Record<string,number>; completed:string[]; evidence:string[];
 }
-export const fresh = ():State => ({version:1,contentVersion:DATA.contentVersion,route:'C00',lastRoute:'C01',settings:{sound:true,reduced:false,large:false},found:[],clues:[],relations:{},impacts:{},timeline:{tick:5,source:'',intervention:null,tried:[]},labs:{active:'contact',done:[],values:{},synthesis:[]},experiment:{action:'',prediction:'',tick:0,pinned:'',explanation:'',baselineSeen:false},strategy:{asked:[],placements:[],simulated:false},final:{phase:'report',applied:[],hands:[],coreClaimed:false},restoration:{},mapHits:{},completed:[],evidence:[]});
+/** 배경 음악 크기 기본값(%). 30%가 스위치를 나누기 전의 고정 크기(0.3)와 같다. */
+export const MUSIC_VOLUME=30;
+export const fresh = ():State => ({version:1,contentVersion:DATA.contentVersion,route:'C00',lastRoute:'C01',settings:{music:true,sfx:true,musicVolume:MUSIC_VOLUME,reduced:false,large:false},found:[],clues:[],relations:{},impacts:{},timeline:{tick:5,source:'',intervention:null,tried:[]},labs:{active:'contact',done:[],values:{},synthesis:[]},experiment:{action:'',prediction:'',tick:0,pinned:'',explanation:'',baselineSeen:false},strategy:{asked:[],placements:[],simulated:false},final:{phase:'report',applied:[],hands:[],coreClaimed:false},restoration:{},mapHits:{},completed:[],evidence:[]});
 export function contactAt(tick:number,intervention:number|null=null): Set<string> {
  const trace = new Set(DATA.p05.initialTrace);
  const events:({tick:number;id:string;from?:string;to?:string;wash?:boolean})[] = DATA.p05.events.map(e=>({...e}));
@@ -62,10 +64,17 @@ const uniq=(v:unknown,allowed:string[],max=100):string[]=>Array.isArray(v)?[...n
 const record=(v:unknown):Record<string,unknown>=>v&&typeof v==='object'&&!Array.isArray(v)?v as Record<string,unknown>:{};
 const num=(v:unknown,min:number,max:number,def:number)=>typeof v==='number'&&Number.isFinite(v)?Math.max(min,Math.min(max,v)):def;
 const str=(v:unknown,allowed:string[],def='')=>typeof v==='string'&&allowed.includes(v)?v:def;
+/** 「소리 피드백」 하나(sound)만 있던 저장과 점검 스크립트의 설정도 받는다. */
+export type SettingsInput=Partial<State['settings']>&{sound?:boolean};
+/** 설정 읽기. 배경 음악·효과음 값이 없으면 예전 sound에서 이어받는다: 꺼짐이면 둘 다 꺼짐, 켜짐이거나 값이 없으면 둘 다 켜짐. */
+export function readSettings(input:unknown):State['settings'] {
+ const r=record(input),on=(v:unknown)=>typeof v==='boolean'?v:r.sound!==false;
+ return {music:on(r.music),sfx:on(r.sfx),musicVolume:num(r.musicVolume,0,100,MUSIC_VOLUME),reduced:r.reduced===true,large:r.large===true};
+}
 export function sanitize(input:unknown):State {
  const r=record(input);if(r.version!==1||r.contentVersion!==DATA.contentVersion)throw new Error('이전 형식의 기록이 있어요. 새 연구를 시작하거나 원래 버전에서 확인해 주세요.');
- const s=fresh(),settings=record(r.settings),tl=record(r.timeline),labs=record(r.labs),ex=record(r.experiment),st=record(r.strategy),fin=record(r.final);
- for(const k of ['sound','reduced','large'] as const)if(typeof settings[k]==='boolean')s.settings[k]=settings[k] as boolean;
+ const s=fresh(),tl=record(r.timeline),labs=record(r.labs),ex=record(r.experiment),st=record(r.strategy),fin=record(r.final);
+ s.settings=readSettings(r.settings);
  s.found=uniq(r.found,DATA.p01.requiredSites);s.clues=uniq(r.clues,DATA.clues.map(c=>c.id),5);
  for(const [a,b]of Object.entries(record(r.relations)))if(DATA.p03.sourceNodes.includes(a)&&['contact','shared-environment','respiratory','meal'].includes(String(b)))s.relations[a]=String(b);
  for(const [a,b]of Object.entries(record(r.impacts)))if(DATA.p04.links.some(x=>x.domain===a&&x.id===b))s.impacts[a]=String(b);
@@ -89,8 +98,8 @@ export function sanitize(input:unknown):State {
  s.route=canEnter(s,route)?route:'C01';if(!canEnter(s,s.lastRoute))s.lastRoute='C01';return s;
 }
 export function canEnter(s:State,route:Route){if(route==='C00'||route==='C01')return true;const i=DATA.pages.findIndex(p=>p.id===route);return i===0||(i>0&&s.completed.includes(DATA.pages[i-1].id));}
-export function fixtureFor(stage:number,settings:State['settings']):State {
- const s=fresh();s.settings={...settings};if(stage>1){s.found=[...DATA.p01.requiredSites];s.clues=[...DATA.p02.requiredClues];}
+export function fixtureFor(stage:number,settings:SettingsInput):State {
+ const s=fresh();s.settings=readSettings(settings);if(stage>1){s.found=[...DATA.p01.requiredSites];s.clues=[...DATA.p02.requiredClues];}
  if(stage>2){for(const b of DATA.p03.acceptedBranches)for(const [from,to]of b.requiresAll)s.relations[from]=to;for(const x of DATA.p04.links)s.impacts[x.domain]=x.id;}
  if(stage>3){s.timeline.source='book';s.timeline.intervention=1.5;s.timeline.tried=[4.5,1.5];s.labs.done=LABS.map(x=>x.id);s.labs.values={droplet:1,air:1,water:1,saliva:1};s.labs.synthesis=['coughEtiquette','ventilation'];}
  if(stage>4){s.experiment={action:'washHands',prediction:'fewer',tick:5,pinned:'before-meal',explanation:'hand-object-contact',baselineSeen:true};}
