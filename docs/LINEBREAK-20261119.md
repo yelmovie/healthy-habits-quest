@@ -42,3 +42,4 @@
 - 커밋 `8a5801c` → Worker `3272d881-6e11-43c4-9ea0-fde5637c0ab9`(2026-11-19). `cmp.sh`: 메인 JS `index-DDw8J3OR.js`·CSS `index-CVYbCHT3.css`·`index.html` MATCH, `sw.js`·`precache-manifest.json` SHA-256 일치. 운영 CSS에 두 보정 규칙이 들어간 것 확인.
 - 운영 주소 1280×800 실측(브라우저 잠금 대기열 때문에 Playwright 대신 크롬에서 같은 출처 iframe으로, 기존 저장 기록은 백업 후 되돌림): P03 위 띠 `text-wrap: balance`, 두 줄 390/465px(전에는 765px / 「있어요.」). 연구 기록 창 800px, 개념 카드 제목 「감염 경로」「기침 예절과 환기」「같은 조건에서 비교」와 단계 이름 세 개가 모두 한 줄.
 - 이어서 전용 차로(`lbk-browser-3`)로 공통 도구 `run.mjs 12 - 18 1280x800`을 운영 주소에 돌렸다: 제목 → NPC 대화 → 지도 → P01 신호 찾기 → 연구 기록까지 18단계, 문제 블록 0개.
+- 추가 수정(2026-11-20, 사용자 승인): 성취 카드 보관함 잠긴 문구 「악당을 물리치면 / 열려요」 → `invisible-traces/src/reward-cards.css` `.rc-locked small` 아래 공통 네 줄(좁은 카드는 낱말마다 한 줄). 커밋 `bf9b127` → Worker `035a14f1-9e8b-4459-8a06-18ff77ecd89f`, cmp.sh JS·CSS·index·sw·precache MATCH. 로컬·운영 모두 1280×800·1920×1080 한 줄, 1024×768 「악당을 / 물리치면 / 열려요」 세 줄, 잠긴 카드 4장 넘침 0.
