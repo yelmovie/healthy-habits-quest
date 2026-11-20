@@ -655,7 +655,7 @@ html [data-science-settings] .science-settings-audio label.setting-row.setting-v
 .setting-volume > span { flex: none; }
 .setting-volume input[type=range] { flex: 1 1 6rem; min-width: 5rem; height: 44px; margin: 0; }
 .setting-volume input:disabled { opacity: .45; cursor: not-allowed; }
-.setting-volume output { flex: none; min-width: 3.2em; color: var(--muted); font-size: 1rem; text-align: right; font-variant-numeric: tabular-nums; }
+.setting-volume output { flex: none; min-width: 3.2em; color: var(--ink-2); font-size: 1rem; text-align: right; font-variant-numeric: tabular-nums; }
 .record-list { display: flex; flex-direction: column; gap: .5rem; }
 .record-entry { display: flex; gap: .7rem; padding: .8rem; border-radius: var(--radius-sm); background: var(--surface-2); color: var(--muted); }
 .record-entry p { font-size: 1rem; }

@@ -106,6 +106,8 @@ body.on-activity.has-stage-bg { --surface: rgba(255,255,255,.8); background: lin
 body.on-activity.has-stage-bg .mission-question { align-self: flex-start; width: fit-content; max-width: 100%; padding: .3rem .85rem; border-radius: 999px; background: rgba(255,255,255,.82); box-shadow: var(--shadow-sm); }
 body.on-activity.has-stage-bg .learning-focus { background: rgba(255,255,255,.8); }
 @media (prefers-reduced-transparency: reduce) { body.on-activity.has-stage-bg { background: var(--bg); } }
+/* 인쇄: 활동 배경 그림과 아이콘 그림자(PDF에서 보라 네모로 찍힘)를 빼고 흰 종이에 인증서만. */
+@media print { body.on-activity.has-stage-bg { background: #fff; } .core-emblem { box-shadow: none; } }
 
 /* P05 작은 화면: 드롭다운 대신 손 씻는 때 버튼 4개를 2×2로 보여 준다(넣어 본 결과가 버튼에 남아야 비교된다). */
 .tracing-intervention-select { display: none; }
@@ -217,8 +219,8 @@ body.on-activity.has-stage-bg :is(.source-card,.target-card,.impact-effect,.impa
 .mission-question { font-size: 1.06rem; font-weight: 600; letter-spacing: -.01em; }
 .mission-question b { color: var(--teal-strong); font-weight: 800; }
 .learning-focus mark { border-radius: 999px; padding: .1rem .6rem; background: var(--teal-action); color: #fff; font-weight: 800; }
-.btn.primary { background: linear-gradient(180deg, #13998f, var(--teal-action)); box-shadow: 0 6px 16px rgba(18,160,151,.3), inset 0 1px 0 rgba(255,255,255,.25); }
-.btn.primary:hover:not(:disabled) { background: linear-gradient(180deg, #11897f, var(--teal-strong)); }
+.btn.primary { background: linear-gradient(180deg, #0e837b, var(--teal-action)); box-shadow: 0 6px 16px rgba(18,160,151,.3), inset 0 1px 0 rgba(255,255,255,.25); }
+.btn.primary:hover:not(:disabled) { background: linear-gradient(180deg, #0c7a73, var(--teal-strong)); }
 .modal .learning-standards summary::after { content: ""; width: 9px; height: 9px; margin-left: auto; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg) translateY(-3px); transition: transform var(--dur-base) var(--ease-out); }
 .modal .learning-standards[open] summary::after { transform: rotate(-135deg); }
 .modal .learning-standards summary::-webkit-details-marker { display: none; }

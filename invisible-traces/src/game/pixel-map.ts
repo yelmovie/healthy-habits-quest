@@ -271,8 +271,12 @@ export async function createMap(parent:HTMLElement,options:MapOptions):Promise<M
  }
 
  const game=new Phaser.Game({type:Phaser.AUTO,parent,width:parent.clientWidth||MAP_SIZE.width,height:parent.clientHeight||MAP_SIZE.height,pixelArt:true,backgroundColor:'#103e43',scale:{mode:Phaser.Scale.RESIZE},input:{activePointers:3},scene:[SchoolMap],audio:{noAudio:true},banner:false,render:{antialias:false}});
+ // Phaser 3.90 의 VisibilityHandler 는 game.start() 안에서 document 에 visibilitychange 를 붙이고 game.destroy() 에서 떼지 않는다.
+ // 지도를 열 때마다 하나씩 쌓이므로, 이 게임의 start() 동안 붙은 것만 기억했다가 destroy 에서 뗀다.
+ const phaserVisibility:EventListenerOrEventListenerObject[]=[],phaser=game as unknown as {start():void},start=phaser.start;
+ phaser.start=function(this:Phaser.Game){const add=document.addEventListener;document.addEventListener=function(this:Document,...args:Parameters<Document['addEventListener']>){if(args[0]==='visibilitychange')phaserVisibility.push(args[1]);return add.apply(this,args);} as Document['addEventListener'];try{start.call(this);}finally{document.addEventListener=add;}};
  const controls=new AbortController(),{signal}=controls;let destroyed=false;
- const destroy=()=>{if(destroyed)return;destroyed=true;encounters.destroy();controls.abort();active?.stopWalking();game.destroy(true);};
+ const destroy=()=>{if(destroyed)return;destroyed=true;encounters.destroy();controls.abort();active?.stopWalking();game.destroy(true);for(const listener of phaserVisibility.splice(0))document.removeEventListener('visibilitychange',listener);};
  const cancel=()=>rejectReady(new Error('map cancelled'));
  if(options.signal?.aborted)cancel();
  else options.signal?.addEventListener('abort',cancel,{once:true});
