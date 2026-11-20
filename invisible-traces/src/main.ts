@@ -21,7 +21,7 @@ import {fresh,derive,canEnter,tryIntervention,timingCompared,EARLY_WASH,fixtureF
 import {demonstrationSteps,playbackDelay,playbackSpeed,type PlaybackKind,type DemoStep} from './simulation/playback';
 import {readSave,writeSave,resetSave,saveError} from './state/storage';
 import {icon,esc} from './ui/icons';
-import {header,home,map,mapStatus,mapViewLabel,shell,pageContent,records,viewFresh,comparisonBoard,comparisonTasks,gateHint,soundOn,type View,btn} from './ui/render';
+import {header,home,map,mapStatus,mapViewLabel,shell,pageContent,records,viewFresh,comparisonBoard,comparisonTasks,gateHint,soundOn,type View,btn,CREDIT} from './ui/render';
 import type {MapHandle} from './game/pixel-map';
 import {NODES,PLACES} from './game/school-map';
 import {SIGNAL_SPOTS} from './ui/stages-observation';
@@ -132,7 +132,7 @@ const VOLUME_KEY={music:'musicVolume',sfx:'sfxVolume'} as const;
 function volumeRow(key:'music'|'sfx'){const value=state.settings[VOLUME_KEY[key]];return `<label class="setting-row setting-volume"><span>${key==='music'?'배경 음악 크기':'효과음 크기'}</span><input type="range" data-setting-volume="${key}" min="0" max="100" step="5" value="${value}" ${state.settings[key]?'':'disabled'}><output>${value}%</output></label>`;}
 function settings(){modal(`<div data-science-settings><h2>설정</h2><div class="science-settings-body"><div class="science-settings-audio">${([['music','배경 음악'],['sfx','효과음'],['voice','목소리'],['reduced','동작 줄이기'],['large','큰 글자']] as const).map(([key,label])=>`<label class="setting-row"><span>${label}</span><span class="switch"><input type="checkbox" role="switch" data-setting="${key}" ${state.settings[key]?'checked':''}><b aria-hidden="true"></b></span></label>${key==='music'||key==='sfx'?volumeRow(key):''}`).join('')}</div>
  <div class="science-settings-actions">${archive&&state.route==='C01'?btnForReplay():''}<button class="btn secondary" data-modal="records">연구 기록 보기</button></div>
- <details><summary>앱 정보 · 배움과 보상</summary><p><b>탐구 목적</b> 학교에서 발견한 보이지 않는 흔적을 관찰하고, 근거를 비교해 대응 방법을 골라요.</p><p><b>미션 보상</b> 다섯 연구 기록을 모아 학교 대응안을 완성해요.</p><p><b>남는 배움</b> 예상과 달라진 결과를 기록하고, 장소에 맞는 실천을 설명할 수 있어요.</p><p>같은 기기와 브라우저에서 이어 할 수 있어요. 이름 같은 개인정보는 저장하지 않아요.</p></details>
+ <details><summary>앱 정보 · 배움과 보상</summary><p><b>탐구 목적</b> 학교에서 발견한 보이지 않는 흔적을 관찰하고, 근거를 비교해 대응 방법을 골라요.</p><p><b>미션 보상</b> 다섯 연구 기록을 모아 학교 대응안을 완성해요.</p><p><b>남는 배움</b> 예상과 달라진 결과를 기록하고, 장소에 맞는 실천을 설명할 수 있어요.</p><p>같은 기기와 브라우저에서 이어 할 수 있어요. 이름 같은 개인정보는 저장하지 않아요.</p><p>${CREDIT}</p></details>
  <details><summary>학생용 가이드</summary><p>신호를 찾고 단서를 비교해 관찰 기록을 남겨요. 카드로 한 번에 한 조건을 바꿔 보고 결과를 비교해요.</p><p>지도에서 방해하는 악당에게 가까이 가면 원형 버튼이나 스페이스바로 공격해요.</p><p>효과음과 목소리는 따로 켜고 끌 수 있어요. 목소리를 꺼도 화면의 안내와 말풍선, 기록을 읽을 수 있어요.</p></details>
  <details><summary>교사용 가이드</summary><p>화면에 나타나는 모형의 흔적은 실제 감염 여부나 감염 확률이 아니에요. 연구 기록으로 학생이 설명한 근거를 확인해 주세요.</p><button class="btn secondary" data-modal="teacher">성취기준과 교사용 도구 보기</button></details>
  <details><summary>이미지·소리·저작권 고지</summary><p>이 프로그램의 이미지는 생성형 이미지로 만든 학습용 장면이에요. 실제 관찰 사진이나 실측 자료가 아니에요.</p></details>
