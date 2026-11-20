@@ -64,3 +64,12 @@
 - 1차 때 브라우저 잠금 대기열 때문에 못 돌린 저장소 점검 두 개를 `lbk-browser-3` 차로에서 `35de02f`(18px·말풍선 balance 포함) dev 서버로 돌렸다.
 - `check-responsive-stages.mjs after`: 13개 크기 × 보통/큰 글자, 806화면 실패 0·문제 0·오류 0(가로 넘침·버튼 가림·글 잘림·작은 버튼 없음).
 - `check-layout-balance.mjs after`: 1280×800·1024×768·1920×1080 활동 화면 높이 78.3~84.9%, 작은 버튼 0. 작은 글(17.5px 미만)은 제목 화면 제작 표기 「기획·제작: 옐샘 & ⓒ 아이스크림미디어」(10~13px) 하나뿐으로, 줄바꿈 작업과 무관한 의도된 표기다.
+
+## 최종 상태 (2026-11-21, 지침 11절)
+
+- 운영: `e7fb6cb` 빌드(메인 JS `index-j8TRQvax.js`, CSS `index-BDEAy9iT.css`, 지도 청크 `pixel-map-CZcFaqRn.js`, `index.html`이 `origin/main` 깨끗한 빌드와 MATCH). `e7fb6cb` 뒤의 `origin/main` 커밋은 문서뿐이다. 운영 CSS에 이 작업의 규칙 전부 포함: 공통 `keep-all`·`pretty`·`balance`, `.topbar-focus` balance, 연구 기록 창 800px, `.map-encounter-say` balance, 잠긴 카드 `container: rc-locked`.
+- 고친 것: 공통 규칙(`8a5801c`), 위 띠 개념 문구 balance·연구 기록 창 폭(`8a5801c`), 잠긴 카드 문구(`bf9b127`), 악당 말풍선 balance(`bbb20f5`). 전 문제 1280 37·1920 29 → 후 오탐만(1280 3·1920 2·1024 7).
+- 폭을 바꾼 수정: 연구 기록 창 640→800px(1차, 당시 지침 4절의 `max-width` 조정으로 배포). 11절 정정(폭·크기·위치 수정은 보고만) 전에 이미 배포돼 그대로 둔다. 1024·1280·1920·915에서 넘침 0, 반응형 806화면 0건.
+- 그대로 둔 것: 두 줄 길이가 비슷한 짧은 라벨(「조사팀과 / 대화하기」, 「남은 / 에너지」 의도된 두 줄 라벨, P05 선택지, P07 예측 버튼, P02 단서 이름 — 버튼·칸·글자 크기를 바꿔야 한 줄이 됨). 음성과 이어진 대사 글은 손대지 않았다(말풍선 `text-wrap: balance` CSS만). 캔버스(Phaser 지도)는 글을 그리지 않아 해당 없음. 영상 자막은 범위 밖.
+- 점검: `npm test` 66 통과, `tsc` 통과, `check-responsive-stages` 806화면 0건, `check-layout-balance` 작은 버튼 0. 콘솔 오류 0.
+- 미확인: 실물 태블릿·전자칠판 화면(할 수 없음).
