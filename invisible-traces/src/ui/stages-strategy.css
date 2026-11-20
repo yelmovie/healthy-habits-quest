@@ -12,7 +12,7 @@
 .condition-constants .chip { white-space: normal; text-align: center; font-size: 1rem; }
 .condition-workspace .prediction-panel { min-height: 0; padding: .8rem; display: grid; grid-template-rows: auto minmax(0, 1fr) auto minmax(0, .5fr); gap: .65rem; }
 .condition-step { display: flex; align-items: center; gap: .45rem; font-size: 1rem; font-weight: 800; }
-.condition-step > b { flex: none; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; color: var(--surface); background: var(--teal-strong); }
+.condition-step > b { flex: none; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; color: #fff; background: var(--teal-strong); }
 .condition-workspace .action-choices { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(44px, 1fr)); gap: .45rem; min-height: 0; }
 .condition-workspace .btn.choice { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .35rem; min-height: 44px; padding: .45rem .35rem; text-align: center; font-size: 1rem; }
 .condition-workspace .btn.choice > svg { flex: none; }
