@@ -2,6 +2,13 @@
 
 최신 대조일 2026-11-20.
 
+## 2026-11-20 영상 구간(Range) 응답
+
+- 운영의 영상 3개(`/assets/cough-etiquette-film.mp4`·`.webm`, `/assets/map-encounters/map-finale.mp4`)가 `Range` 요청에 파일 전체(200)를 줘서, 서비스 워커가 아직 없는 첫 방문의 크롬에서는 `seekable [0,0]`으로 위치 이동이 0초로 돌아갔다(iPad Safari는 206이 없으면 mp4를 재생하지 않는다). 영상 경로만 `invisible-traces/worker/media-range.js`를 거쳐 206 조각으로 응답한다. 지침 `_shared/EXISTING-ISSUES-FIX-20261120.md`, 방식 `_shared/media-range-20261119/README.md`.
+- 워커 연결은 저장소 밖 배포 설정 `_scratch/deploy-20261118/cfg/12.json`(`main`, `assets.binding`, `assets.run_worker_first`)에 있다. **이 설정 없이 배포하면 워커가 빠진다.** 새 영상을 다른 경로에 두면 `run_worker_first`에 그 경로를 추가한다.
+- `public/sw.js`: 206 응답은 Cache에 넣을 수 없어 영상 요청마다 서비스 워커에 처리되지 않은 거부가 남았다. 206은 캐시에 넣지 않고 그대로 돌려준다(오프라인 재생은 설치 때 받아 둔 전체 파일로 한다).
+- 검증: 워커 단위 검사, 타입, 테스트 71개, 빌드. 로컬·운영에서 세 영상 모두 `Range: bytes=0-99` → 206·`Content-Range`, 헤드리스 크롬에서 `seekable` 끝 13.5초·6초와 이동 유지(서비스 워커 없음·있음·오프라인 캐시 세 경로, 연구 기록 창의 실제 영상 포함), 서비스 워커 거부 8 → 0, 콘솔 오류 0, 영상 밖 자산 해시 그대로. 커밋 `f3272d2` → Worker `e3f03e91-b808-406e-8bbf-dd4579230fa6`, 운영 sw·JS·index MATCH. iPad Safari 실기기 재생은 확인하지 못했다.
+
 ## 2026-11-20 시작 화면 제작·저작권 표기
 
 - 시작 화면 우측 하단에 「기획·제작: 옐샘 & ⓒ 아이스크림미디어」 한 줄(10~13px, 누를 수 없음, 좁은 화면에서는 아래 안내 줄 밑 가장자리), 설정 「앱 정보 · 배움과 보상」에 같은 문구 한 줄. 지침 `_shared/CREDIT-LINE-20261120.md`.
