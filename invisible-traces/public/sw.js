@@ -36,7 +36,8 @@ self.addEventListener('fetch', event => {
 async function networkFirst(req) {
   try {
     const res = await fetch(req);
-    if (res.ok) (await caches.open(PREFIX + 'runtime')).put(req, res.clone());
+    // 영상의 구간(Range) 응답 206은 Cache에 넣을 수 없다(put이 거부된다). 그대로 돌려주기만 한다.
+    if (res.ok && res.status !== 206) (await caches.open(PREFIX + 'runtime')).put(req, res.clone());
     return res;
   } catch {
     const hit = await caches.match(req, { ignoreSearch: req.mode === 'navigate', ignoreVary: true });
