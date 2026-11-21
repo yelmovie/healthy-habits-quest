@@ -1,13 +1,71 @@
 {
-  "no": "12", "name": "보이지 않는 흔적", "appCommit": "46d7871", "measuredAt": "2026-11-21T07:24+09:00",
-  "score": {"total": 93, "noDevice": 97,
-    "items": {"learning": 9, "fun": 9, "function": 10, "code": 9, "design": 10, "a11y": 10, "perf": 7, "firstScreen": 10, "data": 10, "deploy": 9}},
-  "structure": {"zones": 5, "activities": 10, "stepsPerActivityMedian": 6.5, "autoRunSeconds": 23},
-  "interaction": {"kinds": ["누르기", "끌기", "시간 막대", "지도 걷기", "악당 공격"], "kindsCount": 5, "zonesWithOwnInteraction": 5},
-  "feedback": {"wrongAnswerLevels": 3, "hintBeforeAnswer": true, "retryGoal": false, "rewardEffects": 5, "transitionEffects": 3},
-  "screen": {"playAreaHeightPctMedian": 80.6, "playAreaAreaPctMedian": 78.1, "bodyTextMinPx": 18.46, "bodyTextMedianPx": 18.46, "imagesOnScreenMedian": 7},
-  "sound": {"bgm": true, "sfx": true, "voice": true, "voiceLines": 127},
-  "weight": {"firstScreenKB": 1381, "distMB": 39},
-  "robust": {"reloadRestores": true, "corruptSaveHandled": true, "offlineRevisit": true, "backButtonStaysInApp": false, "certificatePrintsOnePage": true},
-  "notes": "운영 46d7871(Worker 924dd346) 기준. 자동 완주는 scripts/check-flow.mjs(소리 끔 복사본)로 운영에서 실제 버튼만 눌러 인증서까지 23초(브라우저 시작 포함, 77번 클릭, 오류 0). 단계 수는 그 완주에서 활동마다 누른 조작 수(다음 버튼 제외) 가운데값(P01 6·P02 8·P03 8·P04 6·P05 3·P06 11·P07 2·P08 2·P09 7·P10 11). 화면 값은 1280×800 P02·P05·P07의 .page-content 내용 상자(놀이 영역)·보이는 글자·그림 가운데값. 조작: 누르기(단서·카드·선택지), 끌기(P03·P04 관계/영향, P05 씻는 때, P06 소매, P09 작전, P10 그릇), 시간 막대(P05 되감기·P08 비교), 지도 걷기(방향키·탭·끌기), 지도 악당 공격(탭). 오답: 알림으로 이유+다음에 볼 곳 힌트, 다시 고르기 가능. 보상 효과 5(성취 카드 공개 연출, 학교 복구 창, 연구 기록 정리, 지도 파이널 영상, 인증서), 전환 효과 3(지도 걷기 이동, 창 등장, 결과 자막 등장)은 코드에서 센 값. voiceLines는 voices mp3 126 + 첫 환영 음성 1. 뒤로 가기는 앱 밖으로 나감(진행은 유지, 3-2단계에서 고침). 오프라인 재방문은 서비스워커 precache(11-19 점검 PASS)."
+ "no": "12",
+ "name": "보이지 않는 흔적",
+ "appCommit": "8f74abe",
+ "measuredAt": "2026-11-21T09:40+09:00",
+ "score": {
+  "total": 93,
+  "noDevice": 97,
+  "items": {
+   "learning": 9,
+   "fun": 9,
+   "function": 10,
+   "code": 9,
+   "design": 10,
+   "a11y": 10,
+   "perf": 7,
+   "firstScreen": 10,
+   "data": 10,
+   "deploy": 9
+  }
+ },
+ "structure": {
+  "zones": 5,
+  "activities": 10,
+  "stepsPerActivityMedian": 6.5,
+  "autoRunSeconds": 23
+ },
+ "interaction": {
+  "kinds": [
+   "누르기",
+   "끌기",
+   "시간 막대",
+   "지도 걷기",
+   "악당 공격"
+  ],
+  "kindsCount": 5,
+  "zonesWithOwnInteraction": 5
+ },
+ "feedback": {
+  "wrongAnswerLevels": 3,
+  "hintBeforeAnswer": true,
+  "retryGoal": false,
+  "rewardEffects": 5,
+  "transitionEffects": 3
+ },
+ "screen": {
+  "playAreaHeightPctMedian": 80.6,
+  "playAreaAreaPctMedian": 78.1,
+  "bodyTextMinPx": 18.46,
+  "bodyTextMedianPx": 18.46,
+  "imagesOnScreenMedian": 7
+ },
+ "sound": {
+  "bgm": true,
+  "sfx": true,
+  "voice": true,
+  "voiceLines": 127
+ },
+ "weight": {
+  "firstScreenKB": 1381,
+  "distMB": 39
+ },
+ "robust": {
+  "reloadRestores": true,
+  "corruptSaveHandled": true,
+  "offlineRevisit": true,
+  "backButtonStaysInApp": true,
+  "certificatePrintsOnePage": true
+ },
+ "notes": "운영 8f74abe(Worker 69f04efe) 기준(3-2a: 뒤로 가기 앱 안, 자동 완주 77번 클릭 오류 0 재확인). 자동 완주는 scripts/check-flow.mjs(소리 끔 복사본)로 운영에서 실제 버튼만 눌러 인증서까지 23초(브라우저 시작 포함, 77번 클릭, 오류 0). 단계 수는 그 완주에서 활동마다 누른 조작 수(다음 버튼 제외) 가운데값(P01 6·P02 8·P03 8·P04 6·P05 3·P06 11·P07 2·P08 2·P09 7·P10 11). 화면 값은 1280×800 P02·P05·P07의 .page-content 내용 상자(놀이 영역)·보이는 글자·그림 가운데값. 조작: 누르기(단서·카드·선택지), 끌기(P03·P04 관계/영향, P05 씻는 때, P06 소매, P09 작전, P10 그릇), 시간 막대(P05 되감기·P08 비교), 지도 걷기(방향키·탭·끌기), 지도 악당 공격(탭). 오답: 알림으로 이유+다음에 볼 곳 힌트, 다시 고르기 가능. 보상 효과 5(성취 카드 공개 연출, 학교 복구 창, 연구 기록 정리, 지도 파이널 영상, 인증서), 전환 효과 3(지도 걷기 이동, 창 등장, 결과 자막 등장)은 코드에서 센 값. voiceLines는 voices mp3 126 + 첫 환영 음성 1. 뒤로 가기는 활동 → 지도 → 시작 → 앱 밖 순서(3-2a단계). 오프라인 재방문은 서비스워커 precache(11-19 점검 PASS)."
 }
