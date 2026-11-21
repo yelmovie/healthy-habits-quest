@@ -3,6 +3,7 @@ import './ui/window-restoration.css';
 import { createResearchAudio, createMusic, type Cue } from './audio';
 import { mountNarration } from './ui/narration';
 import { mountNpcGuide } from './npc-guide';
+import {openStoryFilm} from './story-film.js';
 let disposeNpc: (()=>void) | undefined;
 import './ui/style.css';
 import './ui/stages-observation.css';
@@ -33,7 +34,9 @@ function notify(text:string,tone=''){toastRoot.textContent=text;toastRoot.classN
 // 설정의 「효과음」은 효과음과 안내 목소리를, 「배경 음악」과 그 크기는 배경 음악만 맡는다. 머리글 소리 버튼은 둘을 함께 켜고 끈다.
 // 효과음 크기(기본 100%)는 효과음 갈래 전체(UI·전투·보상·발자국)에 곱한다.
 const researchAudio=createResearchAudio(()=>state.settings.sfx,import.meta.env.BASE_URL,()=>state.settings.sfxVolume/100);
-const music=createMusic(()=>state.settings.music,import.meta.env.BASE_URL,()=>state.settings.musicVolume/100);
+// 이야기 영상(인트로·아웃트로)은 자기 음악·목소리를 담고 있어, 열려 있는 동안 게임 배경음을 쉰다.
+let filmOpen=false;
+const music=createMusic(()=>state.settings.music&&!filmOpen,import.meta.env.BASE_URL,()=>state.settings.musicVolume/100);
 // 정답·기록 효과음이 막 났으면 이어지는 대사는 그 소리가 끝날 즈음 시작한다(voiceWait).
 // 목소리(인물 대사·안내·악당 말풍선 음성)는 자기 스위치를 따른다. 꺼도 글·말풍선은 그대로 보인다.
 const narration=mountNarration({enabled:()=>state.settings.voice,quiet:v=>{researchAudio.quiet(v);music.quiet(v);},context:()=>state.route,delay:()=>researchAudio.voiceWait()});
@@ -51,13 +54,20 @@ let mapRequest:AbortController|null=null;
 let playbackSession:{kind:PlaybackKind;route:Route;steps:DemoStep[];index:number}|null=null;let playbackToken=0;
 function stop(){if(timer)clearTimeout(timer);timer=null;view.playing=false;view.autoMode='';playbackToken++;}
 function update(fn:(s:State)=>void,redraw=true){const before=new Set(state.evidence),pages=new Set(state.completed);fn(state);derive(state);persist();const newEvidence=state.evidence.filter(e=>!before.has(e)),evidence=newEvidence.length>0;
- if(!archive){pendingMapRestore.push(...newEvidence.map(e=>Number(e.slice(1))-1));if(state.completed.includes('P10')&&!pages.has('P10'))pendingMapRestore.push(5);}
+ if(!archive){pendingMapRestore.push(...newEvidence.map(e=>Number(e.slice(1))-1));if(state.completed.includes('P10')&&!pages.has('P10')){pendingMapRestore.push(5);setTimeout(()=>{if(state.route==='P10')playFilm('outro');},1600);}}
  queueMapEncounter(pages);// 활동을 마친 순간에도 기록 완성과 같은 성공 소리를 한 번만 낸다.
  if(evidence||state.completed.some(p=>!pages.has(p)))sound('success');if(evidence)notify('새 연구 기록이 자동으로 정리됐어요.','success');if(redraw)render();}
 // 브라우저 뒤로 가기: 화면 단계(시작 0·지도 1·활동 2)를 history 칸으로 둬서 앱 안의 앞 화면으로 간다.
 // 시작 화면에서 한 번 더 누르면 평소처럼 앱을 나간다. 앱 안 버튼으로 위 단계로 갈 때는 그만큼 history 를 되감는다.
 const depthOf=(r:Route)=>r==='C00'?0:r==='C01'?1:2;let historyDepth=0,historyQuiet=0;
 function syncHistory(route:Route){const want=depthOf(route);if(want>historyDepth){for(let d=historyDepth+1;d<=want;d++)history.pushState({it:d},'');}else if(want<historyDepth){historyQuiet++;history.go(want-historyDepth);}historyDepth=want;}
+// 처음 조사를 시작할 때 인트로, 학교 대응안을 처음 완성했을 때 아웃트로를 한 번 보여 준다(건너뛸 수 있음).
+function playFilm(kind:'intro'|'outro',after?:()=>void){const base=`${import.meta.env.BASE_URL}assets/story/${kind}-film`;
+ const opened=openStoryFilm(document,{src:`${base}.mp4`,poster:`${base}-poster.jpg`,title:kind==='intro'?'이야기의 시작: 우리 학교에 남은 흔적':'우리의 발견이 학교를 바꿨어요',label:kind==='intro'?'인트로 영상':'아웃트로 영상',
+  muted:!(state.settings.voice||state.settings.music),autoplay:!(state.settings.reduced||matchMedia('(prefers-reduced-motion: reduce)').matches),
+  onClose:()=>{filmOpen=false;music.sync();after?.();}});
+ if(opened){filmOpen=true;narration.stop();researchAudio.stop();music.sync();}
+ return opened;}
 function navigate(route:Route,fromHistory=false){if(!canEnter(state,route)){notify('앞선 조사 기록을 먼저 완성해 주세요.');return;}if(!fromHistory)syncHistory(route);narration.stop();stop();if(route!==state.route)hideToast();state.route=route;if(route!=='C00'&&route!=='C01')state.lastRoute=route;view.clue='';view.effect='';view.replacement='';view.action='';view.focus='';view.index=0;view.lab=state.labs.active;view.labPreview=null;view.demoStep=0;playbackSession=null;derive(state);persist();render();}
 function render(keepTimer=false){disposeNpc?.();if(!keepTimer){stop();playbackSession=null;}epoch++;travelRequest++;travellingStage=0;mapRequest?.abort();mapRequest=null;mapHandle?.destroy();mapHandle=null;document.body.classList.toggle('reduced',state.settings.reduced||matchMedia('(prefers-reduced-motion: reduce)').matches);document.body.classList.toggle('large-text',state.settings.large);document.body.classList.toggle('on-map',state.route==='C01');document.body.classList.toggle('on-home',state.route==='C00');document.body.classList.toggle('on-activity',state.route.startsWith('P'));
  music.scene(state.route==='P10'&&['restored','ending','certificate'].includes(state.final.phase)?'final':'main');
@@ -149,7 +159,7 @@ root.addEventListener('click',e=>{if(Date.now()<suppressClick)return;const targe
  if(['home','map','records','settings','sound','teacher','start','new-game','next','exit-replay','stage','print','certificate'].includes(a)){
  switch(a){case 'home':navigate('C00');return;case 'map':navigate('C01');return;case 'records':modal(records(state));return;case 'settings':settings();return;case 'teacher':teacher();return;case 'new-game':confirmReset();return;
  case 'sound':{const on=!soundOn(state);state.settings.music=on;state.settings.sfx=on;state.settings.voice=on;syncSound();persist();render();return;}
- case 'start':navigate(state.found.length?state.lastRoute:'C01');return;
+ case 'start':{const target=state.found.length?state.lastRoute:'C01';if(!state.found.length&&!state.completed.length&&playFilm('intro',()=>navigate(target)))return;navigate(target);return;}
  case 'exit-replay':exitReplay();return;
  case 'stage':void startStage(Number(id));return;
  case 'next':if(state.completed.includes(state.route)){const p=PAGES.find(p=>p.id===state.route)!;navigate(p.next as Route);}return;

@@ -15,7 +15,8 @@ const walk = dir => {
   }
 };
 walk(dist);
-const list = files.filter(f => f !== 'sw.js' && f !== 'precache-manifest.json').sort();
+// 이야기 영상(assets/story, 약 9MB)은 볼 때만 받는다. 첫 방문에 학교망을 무겁게 하지 않고, 오프라인이면 영상 창이 「계속하기」로 넘어간다.
+const list = files.filter(f => f !== 'sw.js' && f !== 'precache-manifest.json' && !f.startsWith('assets/story/')).sort();
 const version = Date.now().toString(36);
 writeFileSync(join(dist, 'precache-manifest.json'), JSON.stringify({ version, files: ['./', ...list] }, null, 1));
 // 서비스워커 파일 자체가 바뀌어야 브라우저가 새 버전을 설치한다. 배포마다 버전을 찍어 둔다.
