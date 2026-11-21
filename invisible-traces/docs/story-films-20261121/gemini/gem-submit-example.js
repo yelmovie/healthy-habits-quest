@@ -1,0 +1,28 @@
+
+const pgG = await openTab("https://gemini.google.com/app"); await sleep(2000);
+const refOf = (tree, re) => { const m = tree.match(re); return m ? m[1] : null; };
+let sA = await snapshot(page, {interactive:true});
+await page.locator(refOf(sA.tree, /button "업로드 및 도구" \[ref=(e\d+)\]/)).click(); await sleep(700);
+sA = await snapshot(page, {interactive:true});
+try { await page.locator(refOf(sA.tree, /menuitemcheckbox "동영상 만들기" \[ref=(e\d+)\]/)).click(); } catch (e) { console.log("checkbox note", String(e).slice(0,80)); } await sleep(900); await page.keyboard.press("Escape").catch(()=>{}); await sleep(300); const sV = await snapshot(page, {interactive:true}); console.log("VIDEO-MODE", /동영상/.test(sV.tree));
+sA = await snapshot(page, {interactive:true});
+const up = refOf(sA.tree, /button "업로드 및 도구" \[ref=(e\d+)\]/) || refOf(sA.tree, /button "[^"]*(?:업로드|파일)[^"]*" \[ref=(e\d+)\]/);
+await page.locator(up).click(); await sleep(700);
+sA = await snapshot(page, {interactive:true});
+const fu = refOf(sA.tree, /menuitem "파일 업로드[^"]*" \[ref=(e\d+)\]/);
+const fcP = page.waitForEvent("filechooser", {timeout: 8000}); await page.locator(fu).click(); const fcG = await fcP;
+const rG = await fetch("http://127.0.0.1:4499/final-3b.png");
+await fcG.setFiles({name:"final-3b.png", mimeType:"image/png", buffer: Buffer.from(await rG.arrayBuffer())});
+await sleep(5000);
+sA = await snapshot(page, {interactive:true});
+const box = refOf(sA.tree, /textbox "[^"]*프롬프트[^"]*" \[ref=(e\d+)\]/);
+await page.locator(box).fill("Image-to-video, 8 seconds, 16:9. Keep the same characters, school and art style as the input image. Slow aerial pull-back and rise over the restored, sunny school. Confetti leaves drift through the air, students run and play on the track and field, the two investigators in the foreground wave happily at the camera, and the trace goblin peeks from behind the tree and gives a small shy wave. End on a wide shot with open blue sky in the upper part of the frame for a title. Sound: celebratory orchestral finale music. No on-screen text, no subtitles, no speech.");
+await sleep(800);
+sA = await snapshot(page, {interactive:true});
+const send = refOf(sA.tree, /button "(?:메시지 보내기|보내기|전송)[^"]*" \[ref=(e\d+)\]/);
+console.log("sendRef", send);
+if (send) await page.locator(send).click(); else await page.keyboard.press("Enter");
+await sleep(15000);
+console.log("URL", page.url());
+const sZ = await snapshot(page);
+console.log(sZ.diff);
