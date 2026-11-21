@@ -1,0 +1,68 @@
+{
+ "style": "Bright, cheerful Korean elementary-school adventure game illustration in the same style as the attached references: clean dark outlines, soft cel shading, warm sunny colors, cute chibi kids. Wide landscape composition for a 16:9 video frame: keep every important subject inside the central horizontal band so the top and bottom can be cropped. The glowing traces are soft, friendly light lines and glowing hand or foot prints (a learning model of how germs could travel), never scary germs or monsters. No text, no letters, no numbers, no logos, no signs with writing, no watermark.",
+ "shots": [
+  {
+   "id": "intro-1",
+   "refs": [
+    "/Volumes/T7 Shield/iscreammedia_sc34/12 diseases/invisible-traces/public/assets/school.webp",
+    "/Volumes/T7 Shield/iscreammedia_sc34/12 diseases/invisible-traces/public/assets/restored.webp"
+   ],
+   "prompt": "Early morning aerial view of the same Korean elementary school as the first reference: green-roofed gym on the left, the main school building with the clock in the middle, red running track and green field on the right. The sun is just rising, the school is empty and quiet. Faint purple and blue glowing light trails, like a line of tiny glowing handprints and footprints, quietly drift and connect the gym, the main building and the cafeteria, as if someone sneaked around the school at night. Calm, curious, slightly mysterious but friendly mood. Leave open sky at the top of the frame."
+  },
+  {
+   "id": "intro-2",
+   "refs": [
+    "/Volumes/T7 Shield/iscreammedia_sc34/12 diseases/.tmp/video-keyframes-20261121/refs/villain-12.png",
+    "/Volumes/T7 Shield/iscreammedia_sc34/12 diseases/invisible-traces/public/assets/bg-classroom-20261116.webp"
+   ],
+   "prompt": "Inside an empty Korean elementary classroom in the morning with the windows closed (second reference). The mischievous trace goblin from the first reference, exactly the same design: purple pointed hood and cape with darker purple spots, white mask face with a sneaky grin, pale mint ghostly robe, mint green gloves that leave glowing yellow-green handprints. He tiptoes across the room giggling and presses a glowing handprint onto a soccer ball lying on a desk. A trail of glowing yellow-green handprints already marks the door handle, a stack of books and a shared water bottle. Playful, comedic sneaky mood, not scary."
+  },
+  {
+   "id": "intro-3",
+   "refs": [
+    "/Volumes/T7 Shield/iscreammedia_sc34/12 diseases/invisible-traces/public/assets/title-hero.webp",
+    "/Volumes/T7 Shield/iscreammedia_sc34/12 diseases/invisible-traces/public/assets/title-mate.webp",
+    "/Volumes/T7 Shield/iscreammedia_sc34/12 diseases/invisible-traces/public/assets/school.webp"
+   ],
+   "prompt": "The school front plaza in the morning with the main building in the background (third reference). The two kid investigators from the first two references, exactly the same characters and outfits: the boy with short black hair, white-and-teal hooded jacket, backpack and a magnifying glass; the girl with long dark hair, purple headband, lilac sweater and a tablet. The boy kneels and peers through his magnifying glass at a faint glowing yellow-green handprint on a wooden bench; the girl leans in beside him and points at it while holding her tablet, both excited and determined. A faint glowing trail leads from the bench toward the school entrance. Adventure-is-starting mood."
+  },
+  {
+   "id": "final-1",
+   "refs": [
+    "/Volumes/T7 Shield/iscreammedia_sc34/12 diseases/invisible-traces/public/assets/title-hero.webp",
+    "/Volumes/T7 Shield/iscreammedia_sc34/12 diseases/invisible-traces/public/assets/title-mate.webp",
+    "/Volumes/T7 Shield/iscreammedia_sc34/12 diseases/.tmp/video-keyframes-20261121/refs/villain-12.png"
+   ],
+   "prompt": "The school playground beside the red running track on a sunny afternoon. The two kid investigators from the first two references (same faces and outfits: boy with magnifying glass, girl with tablet) have caught the trace goblin from the third reference (same purple hood, white mask, mint robe, mint gloves). The goblin sheepishly scratches his hood and hands back a rolled school map, his glowing handprints fading away into tiny harmless sparkles. The boy points his magnifying glass triumphantly, the girl holds up her tablet proudly. Funny, warm, victorious mood, no fighting."
+  },
+  {
+   "id": "final-2",
+   "refs": [
+    "/Volumes/T7 Shield/iscreammedia_sc34/12 diseases/invisible-traces/public/assets/bg-classroom-20261116.webp",
+    "/Volumes/T7 Shield/iscreammedia_sc34/12 diseases/invisible-traces/public/assets/title-hero.webp",
+    "/Volumes/T7 Shield/iscreammedia_sc34/12 diseases/invisible-traces/public/assets/title-mate.webp"
+   ],
+   "prompt": "A bright Korean elementary classroom (first reference) now with the windows wide open, fresh breeze lifting the curtains and sunlight pouring in. The girl investigator (same girl as the third reference) happily slides a window open. In the back, the boy investigator (same boy as the second reference) washes his hands with soapy foam at a small classroom sink. A classmate covers a cough with the inside of her elbow, and two classmates share snacks using a serving tongs and separate small plates. Everyone looks healthy, cheerful and proud. Simple picture posters on the wall show only icons of soap bubbles, an open window and an elbow, no writing."
+  },
+  {
+   "id": "final-3",
+   "refs": [
+    "/Volumes/T7 Shield/iscreammedia_sc34/12 diseases/invisible-traces/public/assets/restored.webp",
+    "/Volumes/T7 Shield/iscreammedia_sc34/12 diseases/invisible-traces/public/assets/title-hero.webp",
+    "/Volumes/T7 Shield/iscreammedia_sc34/12 diseases/invisible-traces/public/assets/title-mate.webp",
+    "/Volumes/T7 Shield/iscreammedia_sc34/12 diseases/.tmp/video-keyframes-20261121/refs/villain-12.png"
+   ],
+   "prompt": "Aerial view of the same school restored and sparkling on a bright sunny day (first reference): gym, main building with clock, running track and field, flower beds, confetti leaves floating in the sky. Students play happily in the yard. In the bottom left foreground the two kid investigators (same boy and girl as the second and third references) wave at the viewer with big smiles. The trace goblin (fourth reference) peeks from behind a tree on the right, smiling shyly and holding a small notebook, now friendly. Leave open bright sky at the top of the frame for a title."
+  },
+  {
+   "id": "final-3b",
+   "refs": [
+    "/Volumes/T7 Shield/iscreammedia_sc34/12 diseases/invisible-traces/public/assets/restored.webp",
+    "/Volumes/T7 Shield/iscreammedia_sc34/12 diseases/invisible-traces/public/assets/title-hero.webp",
+    "/Volumes/T7 Shield/iscreammedia_sc34/12 diseases/invisible-traces/public/assets/title-mate.webp",
+    "/Volumes/T7 Shield/iscreammedia_sc34/12 diseases/.tmp/video-keyframes-20261121/refs/villain-12.png"
+   ],
+   "prompt": "Aerial view of the same school restored and sparkling on a bright sunny day (first reference): gym, main building with clock, running track and field, flower beds, confetti leaves floating in the sky. Students play happily in the yard. In the bottom left foreground the two kid investigators (same boy and girl as the second and third references) wave at the viewer with big smiles. The trace goblin from the fourth reference peeks from behind a tree on the right, exactly the same design: purple pointed hood with darker purple spots, a white mask face with narrow eyes and a small happy open mouth (no human face, no skin), mint ghostly robe and mint gloves; he holds a small notebook and waves shyly, now friendly. The ground and buildings are clean, with no glowing prints left anywhere. Leave open bright sky at the top of the frame for a title."
+  }
+ ]
+}

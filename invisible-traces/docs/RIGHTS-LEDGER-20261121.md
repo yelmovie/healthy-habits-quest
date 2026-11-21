@@ -1,6 +1,6 @@
 # 12 보이지 않는 흔적 · 권리 장부 (2026-11-21)
 
-**요약: 30줄 = 확인됨 28줄(그중 사용자 확인 17줄) · 근거 약함 2줄 · 출처 미확인 0줄.** 파일 수로는 미디어 221개 = 확인됨 219개 · 근거 약함 2개(`favicon.svg`, `map-encounters/map-finale.mp4`) · 출처 미확인 0개. (2026-11-21 3-2a단계: 출처 미확인이던 `villain-left.png`를 Codex 생성 기록과 이었고, 09:25 사용자 확인 「전부 맞아」로 그림 1~16줄·기침 예절 영상 19줄을 확인됨으로 바꿨다. 방법 `_shared/CODEX-IMAGE-RECORDS-20261121.md` 「16곳 전체 확인」.)
+**요약: 31줄 = 확인됨 29줄(그중 사용자 확인 18줄) · 근거 약함 2줄 · 출처 미확인 0줄.** 파일 수로는 미디어 221개 = 확인됨 219개 · 근거 약함 2개(`favicon.svg`, `map-encounters/map-finale.mp4`) · 출처 미확인 0개. (2026-11-21 3-2a단계: 출처 미확인이던 `villain-left.png`를 Codex 생성 기록과 이었고, 09:25 사용자 확인 「전부 맞아」로 그림 1~16줄·기침 예절 영상 19줄을 확인됨으로 바꿨다. 방법 `_shared/CODEX-IMAGE-RECORDS-20261121.md` 「16곳 전체 확인」.)
 
 - 경로 기준: 앞에 아무것도 없는 경로는 `invisible-traces/` 기준, `../`로 시작하면 저장소 루트(`12 diseases/`) 기준, `_shared/`·`_scratch/`는 `iscreammedia_sc34/` 기준이다.
 - 대상: 운영 빌드 `invisible-traces/dist`(2026-11-21 06:54 빌드)에 들어 있는 그림·영상·음악·효과음·목소리·글꼴 221개(`find dist -type f`, `._*` 제외). 코드·HTML·서비스 워커·캐시 목록은 빼고, Phaser 코드 안에 박힌 기본 그림만 한 줄로 넣었다.
@@ -39,6 +39,7 @@
 |---|---|---|---|---|---|---|
 | 19 | 기침 예절 개념 영상: `cough-etiquette-film.mp4`, `.webm`, `cough-etiquette-film-poster.webp`(13.5초, 소리 없음) | 이 프로젝트에서 HyperFrames로 직접 렌더. 그림은 8줄 `cough-before/covered`와 4줄 `title-mate`, 글꼴은 나눔스퀘어 네오(OFL), 애니메이션 라이브러리 gsap | 2026-11-09, 커밋 `ab7d10c`. 기획·검수·렌더 수치 | 영상 자체는 직접 제작(HyperFrames 렌더). 안에 든 그림은 8줄·4줄과 같이 GPT 이미지(ChatGPT·Codex) 유료 요금제 — 사용자 확인 2026-11-21 09:25(「16곳 그림은 전부 Codex(GPT), 영상은 제미나이, 모두 유료 요금제」 → 「전부 맞아」), `_shared/CODEX-IMAGE-RECORDS-20261121.md` | `../films/cough-etiquette/SPEC.md`, `REVIEW.md`, `meta.json` | 확인됨(사용자 확인) |
 | 20 | 지도 파이널 영상: `map-encounters/map-finale.mp4`(6초, 소리 없음) | ffmpeg 스크립트로 게임 지도 화면 캡처(1280×800) 한 장에 확대·글자를 얹음. 글자는 macOS 시스템 글꼴 `AppleSDGothicNeo.ttc` | 2026-11-14, 커밋 `718f5ff`. 기록이 저장소 밖에만 있음 | 지도 그림(5·14줄)의 조건을 따름. 시스템 글꼴로 구운 글자의 배포 조건은 기록 없음 | `_scratch/stage-villain-dialogue/movies.py`, 캡처 원본 `_scratch/live-map-contact-review/originals/12-attack.png` | 근거 약함 |
+| 20b | 이야기 영상: `story/intro-film.mp4`, `outro-film.mp4`, 포스터 2장(2026-11-21) | 첫 프레임 GPT 이미지(Codex), 움직임 Google Flow Veo 3.1 Fast 2컷·Gemini 앱 Veo 2컷·ffmpeg 카메라 움직임 2컷, 목소리 ElevenLabs(새 2줄 + 기존 4줄), 배경음 게임 Suno 곡, 글자 나눔스퀘어 네오(OFL) | 2026-11-21. 장면별 기록 `docs/story-films-20261121/README.md`(Flow 프로젝트 id, Gemini 채팅 id, ElevenLabs requestId, 프롬프트 파일) | GPT 이미지·Gemini/Flow 영상 유료 요금제 — 사용자 확인 2026-11-21 09:25(「그림은 Codex, 영상은 제미나이, 모두 유료」), ElevenLabs Creator, Suno Premier, OFL | `docs/story-films-20261121/` | 확인됨(사용자 확인) |
 
 ## 음악
 
