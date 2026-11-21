@@ -54,7 +54,11 @@ function update(fn:(s:State)=>void,redraw=true){const before=new Set(state.evide
  if(!archive){pendingMapRestore.push(...newEvidence.map(e=>Number(e.slice(1))-1));if(state.completed.includes('P10')&&!pages.has('P10'))pendingMapRestore.push(5);}
  queueMapEncounter(pages);// 활동을 마친 순간에도 기록 완성과 같은 성공 소리를 한 번만 낸다.
  if(evidence||state.completed.some(p=>!pages.has(p)))sound('success');if(evidence)notify('새 연구 기록이 자동으로 정리됐어요.','success');if(redraw)render();}
-function navigate(route:Route){if(!canEnter(state,route)){notify('앞선 조사 기록을 먼저 완성해 주세요.');return;}narration.stop();stop();if(route!==state.route)hideToast();state.route=route;if(route!=='C00'&&route!=='C01')state.lastRoute=route;view.clue='';view.effect='';view.replacement='';view.action='';view.focus='';view.index=0;view.lab=state.labs.active;view.labPreview=null;view.demoStep=0;playbackSession=null;derive(state);persist();render();}
+// 브라우저 뒤로 가기: 화면 단계(시작 0·지도 1·활동 2)를 history 칸으로 둬서 앱 안의 앞 화면으로 간다.
+// 시작 화면에서 한 번 더 누르면 평소처럼 앱을 나간다. 앱 안 버튼으로 위 단계로 갈 때는 그만큼 history 를 되감는다.
+const depthOf=(r:Route)=>r==='C00'?0:r==='C01'?1:2;let historyDepth=0,historyQuiet=0;
+function syncHistory(route:Route){const want=depthOf(route);if(want>historyDepth){for(let d=historyDepth+1;d<=want;d++)history.pushState({it:d},'');}else if(want<historyDepth){historyQuiet++;history.go(want-historyDepth);}historyDepth=want;}
+function navigate(route:Route,fromHistory=false){if(!canEnter(state,route)){notify('앞선 조사 기록을 먼저 완성해 주세요.');return;}if(!fromHistory)syncHistory(route);narration.stop();stop();if(route!==state.route)hideToast();state.route=route;if(route!=='C00'&&route!=='C01')state.lastRoute=route;view.clue='';view.effect='';view.replacement='';view.action='';view.focus='';view.index=0;view.lab=state.labs.active;view.labPreview=null;view.demoStep=0;playbackSession=null;derive(state);persist();render();}
 function render(keepTimer=false){disposeNpc?.();if(!keepTimer){stop();playbackSession=null;}epoch++;travelRequest++;travellingStage=0;mapRequest?.abort();mapRequest=null;mapHandle?.destroy();mapHandle=null;document.body.classList.toggle('reduced',state.settings.reduced||matchMedia('(prefers-reduced-motion: reduce)').matches);document.body.classList.toggle('large-text',state.settings.large);document.body.classList.toggle('on-map',state.route==='C01');document.body.classList.toggle('on-home',state.route==='C00');document.body.classList.toggle('on-activity',state.route.startsWith('P'));
  music.scene(state.route==='P10'&&['restored','ending','certificate'].includes(state.final.phase)?'final':'main');
  // 미션마다 지도 속 장소 그림을 활동 화면 뒤에 깐다(신호 광장·체육관·본관 교실·급식실·운동장).
@@ -309,4 +313,12 @@ root.addEventListener('pointercancel',()=>gesture=null);
 function viewport(){document.documentElement.style.setProperty('--app-height',`${visualViewport?.height??innerHeight}px`);gesture=null;}
 window.addEventListener('resize',viewport);visualViewport?.addEventListener('resize',viewport);document.addEventListener('visibilitychange',()=>{if(document.hidden){const was=!!timer;stop();persist();if(was)render();}});
 if(import.meta.env.PROD&&'serviceWorker' in navigator)addEventListener('load',()=>void navigator.serviceWorker.register('./sw.js').catch(()=>{/* 오프라인 캐시 없이도 앱은 동작한다. */}));
-viewport();derive(state);render();if(loaded.error)setTimeout(()=>notify(`기존 기록을 보존했어요. ${loaded.error} 새 연구는 교사용 안내에서 시작할 수 있어요.`),400);
+addEventListener('popstate',e=>{if(historyQuiet){historyQuiet--;return;}const it=Math.max(0,Math.min(2,Number((e.state as {it?:number}|null)?.it??0)));historyDepth=it;
+ if(modalRoot.innerHTML)closeModal();if(depthOf(state.route)===it)return;
+ const target:Route=it===0?'C00':it===1?'C01':state.lastRoute;if(canEnter(state,target))navigate(target,true);
+ if(depthOf(state.route)!==historyDepth){historyDepth=depthOf(state.route);history.replaceState({it:historyDepth},'');}});
+// 저장된 활동·지도로 바로 열리면 history 칸이 하나뿐이다. 첫 조작 때 아래 단계 칸(시작·지도)을 깔아 뒤로 가기가 앱 안에서 멈추게 한다
+// (조작 없이 만든 칸은 브라우저가 뒤로 가기에서 건너뛸 수 있다).
+viewport();derive(state);historyDepth=depthOf(state.route);history.replaceState({it:historyDepth},'');
+if(historyDepth>0){const lay=()=>{removeEventListener('pointerdown',lay,true);removeEventListener('keydown',lay,true);if(historyQuiet||(history.state as {it?:number}|null)?.it!==historyDepth)return;const top=historyDepth;history.replaceState({it:0},'');for(let d=1;d<=top;d++)history.pushState({it:d},'');};addEventListener('pointerdown',lay,true);addEventListener('keydown',lay,true);}
+render();if(loaded.error)setTimeout(()=>notify(`기존 기록을 보존했어요. ${loaded.error} 새 연구는 교사용 안내에서 시작할 수 있어요.`),400);
