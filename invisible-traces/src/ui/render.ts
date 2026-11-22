@@ -6,7 +6,7 @@ import {icon} from './icons';
 import {PLACES,type Point} from '../game/school-map';
 export interface View {site:string;clue:string;effect:string;lab:string;action:string;mapSpot:Point|null;mapOverview:boolean;teacher:boolean;playing:boolean;replacement:string;focus:string;index:number;speed:number;autoMode:string;demoStep:number;labPreview:number|null;}
 export const viewFresh=():View=>({site:'classroom',clue:'',effect:'',lab:'contact',action:'',mapSpot:null,mapOverview:false,teacher:false,playing:false,replacement:'',focus:'',index:0,speed:1,autoMode:'',demoStep:0,labPreview:null});
-import {btn,chip,image,actionName} from './render-parts';
+import {btn,chip,image,actionName,CREDIT} from './render-parts';
 export {btn} from './render-parts';
 import {observationPages} from './stages-observation';
 import {tracingPages,synthesisReady} from './stages-tracing';
@@ -27,7 +27,7 @@ export function header(s:State,sandbox:boolean,cards='',focus=''){
 // 그림 속 빛나는 자리(%)에 맞춰 신호가 깜빡인다.
 const TITLE_SIGNALS=[['purple',26.2,43.6],['blue',50.7,52.8],['amber',78,51.6],['orange',82.6,75.5]] as const;
 // 제작·저작권 표기: 시작 화면 우측 하단과 설정의 앱 정보에 같은 문구를 쓴다.
-export const CREDIT='기획·제작: 옐샘 &amp; ⓒ 아이스크림미디어';
+export {CREDIT} from './render-parts';
 export function home(s:State){const active=s.found.length>0||s.clues.length>0;return `<main class="title-screen"><div class="title-world">${image('school','title-school')}${TITLE_SIGNALS.map(([color,x,y],i)=>`<i class="title-signal ${color}" style="left:${x}%;top:${y}%;animation-delay:${i*.7}s"></i>`).join('')}</div>${image('title-hero','title-person title-hero')}${image('title-mate','title-person title-mate')}<div class="title-center"><h1 class="title-logo">${image('title-logo','','보이지 않는 흔적')}</h1><p class="title-tagline">우리 학교에 남은 흔적을 찾아 줘!</p></div><div class="title-bottom"><div class="title-actions">${active?`${btn(`이어 하기 ${icon('arrow',22)}`,'start','primary')}${btn('새 연구 시작','new-game','secondary')}`:btn(`조사 시작하기 ${icon('arrow',22)}`,'start','primary')}</div><div class="title-foot">${btn(`${icon('info',19)} 교사용 안내`,'teacher','small')}<span>흔적은 감염 과정을 생각해 보는 학습 모형이에요.</span></div></div><p class="title-credit">${CREDIT}</p></main>`;}
 // 지도 위 다섯 장소의 상태. 입장 가능 여부는 캔버스와 이름표가 같은 값을 쓴다.
 export function mapStatus(s:State,v:View){const open=STAGES.map((_,i)=>i===0||s.evidence.includes(`E${i}`)||v.teacher);const done=STAGES.map(t=>s.completed.includes(t.pages[1]));return {open,done,next:STAGES.findIndex((_,i)=>open[i]&&!done[i])};}

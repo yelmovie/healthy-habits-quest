@@ -2,8 +2,8 @@ import { labAssets } from '../data/lab-assets';
 import {DATA,SITES,ACTION_ICONS,EFFECTS} from '../data/game';
 import {planCost,planResult,placementKey,nextPlacement,type State} from '../simulation/model';
 import {icon} from './icons';
-import {btn,chip,image,note,actionName,playbackControls,windowIllustration} from './render-parts';
-import {CREDIT,type View} from './render';
+import {btn,chip,image,note,actionName,playbackControls,windowIllustration,CREDIT} from './render-parts';
+import type {View} from './render';
 
 // 받침이 있으면 '을', 없으면 '를'.
 const objectParticle=(word:string)=>(word.charCodeAt(word.length-1)-0xac00)%28>0?'을':'를';

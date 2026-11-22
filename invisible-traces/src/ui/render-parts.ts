@@ -3,6 +3,9 @@ import { labAssets } from '../data/lab-assets';
 import { icon } from './icons';
 import type { View } from './render';
 
+// 제작·저작권 표기: 시작 화면·설정 앱 정보·인증서에 같은 문구를 쓴다.
+export const CREDIT='기획·제작: 옐샘 &amp; ⓒ 아이스크림미디어';
+
 export const btn = (label: string, action: string, cls = 'secondary', extra = '') =>
   `<button class="btn ${cls}" data-action="${action}" ${extra}>${label}</button>`;
 export const chip = (name: string, label: string, cls = '') =>
