@@ -2,10 +2,10 @@
   "no": 12,
   "name": "보이지 않는 흔적",
   "folder": "12 diseases/invisible-traces",
-  "grade": "3학년(targetGrade 3, 교육 보강 기록은 3~4학년군)",
-  "semester": null,
+  "grade": "3학년",
+  "semester": "2학기",
   "subject": "과학",
-  "unit": null,
+  "unit": "감염병과 건강한 생활",
   "standards": [
     "4과08-01 생활 속 감염병 사례와 위험성 이해·토의",
     "4과08-02 여러 감염 과정과 생활 습관·유행의 관계 설명",
@@ -102,8 +102,6 @@
   },
   "teacherGuide": {
     "needsConfirm": [
-      "학기",
-      "단원 이름(코드에 없음, README 「감염병과 건강한 생활」)",
       "성취기준 공식 원문 대조",
       "예상 수업 시간"
     ]
@@ -111,5 +109,8 @@
   "files": {
     "teacherGuide": "12 diseases/invisible-traces/docs/TEACHER-GUIDE.md",
     "handoff": "12 diseases/invisible-traces/docs/DELIVERY-HANDOFF.md"
-  }
+  },
+  "gradeRepo": "3학년(targetGrade 3, 교육 보강 기록은 3~4학년군)",
+  "unitRepo": null,
+  "gradeUnitSource": "운영 시트 「이예리 선생님」 탭, 2026-11-22 확인"
 }
