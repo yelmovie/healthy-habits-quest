@@ -11,7 +11,9 @@ export function mountNarration(options:{enabled:()=>boolean;quiet:(value:boolean
  const byId=new Map(lines.map(line=>[line.id,line]));
  const player=createNarrationPlayer({enabled:()=>options.enabled()&&!document.hidden,quiet:options.quiet,create:src=>new Audio(src),changed:paint,finished:next});
  let deferred:ReturnType<typeof setTimeout>|null=null;
- function stop(){if(hold){clearTimeout(hold);hold=null;}if(deferred){clearTimeout(deferred);deferred=null;}queue=[];player.stop();}
+ // 설정의 「안내 목소리 듣기」처럼 화면에 글이 없는 줄을 직접 읽을 때, 다시 훑기가 그 줄을 멈추지 않게 표시한다.
+ let forced:string|null=null;
+ function stop(){forced=null;if(hold){clearTimeout(hold);hold=null;}if(deferred){clearTimeout(deferred);deferred=null;}queue=[];player.stop();}
  // 악당 반응 대사와 다른 인물 대사는 서로 끊지 않는다(최대 2초 기다림). 악당 대사가 그동안 화면에서 사라졌거나
  // 2초가 지나도 다른 대사가 이어지면 악당 대사는 건너뛰고, 안내 대사는 2초 뒤에 시작한다.
  const villain=(id:string)=>id.startsWith('villain-');
@@ -50,7 +52,7 @@ export function mountNarration(options:{enabled:()=>boolean;quiet:(value:boolean
   for(const area of scopes)for(const el of [area,...area.querySelectorAll('*')] as HTMLElement[]){if(el.closest('[data-narration-control]')||el.matches('script,style')||!visible(el))continue;
    const text=(el.textContent??'').replace(/\s+/g,' ').trim();for(const line of lines)if(text.includes(line.text)&&![...el.children].some(child=>(child.textContent??'').replace(/\s+/g,' ').includes(line.text)))found.add(line.id);
   }
-  const added=[...found].filter(id=>!seen.has(id));if(pending&&found.has(pending)){const i=added.indexOf(pending);if(i>=0)added.splice(i,1);added.unshift(pending);}pending=null;if(current&&!found.has(current)&&!(byId.get(current) as {keep?:boolean}|undefined)?.keep){stop();current=null;}
+  const added=[...found].filter(id=>!seen.has(id));if(pending&&found.has(pending)){const i=added.indexOf(pending);if(i>=0)added.splice(i,1);added.unshift(pending);}pending=null;if(current&&!found.has(current)&&current!==forced&&!(byId.get(current) as {keep?:boolean}|undefined)?.keep){stop();current=null;}
   queue=queue.filter(id=>found.has(id));seen=found;
   const host=overlay?.querySelector('[data-narration-host]')??overlay??scope.querySelector('.tools');
   if(host&&found.size){if(!button?.isConnected||!host.contains(button)){button?.remove();button=document.createElement('button');button.type='button';button.dataset.narrationControl='';button.className=overlay?'btn small':'icon-btn';button.style.minWidth='48px';button.style.minHeight='48px';
@@ -69,6 +71,7 @@ export function mountNarration(options:{enabled:()=>boolean;quiet:(value:boolean
  function hidden(){if(document.hidden)stop();}function setting(){queueMicrotask(()=>{if(!options.enabled())stop();});}
  document.addEventListener('visibilitychange',hidden);document.addEventListener('change',setting);window.addEventListener('pagehide',stop);schedule();
  document.addEventListener('pointerup',firstInput,{capture:true});document.addEventListener('keyup',firstInput,{capture:true});
- return {stop,/** A voice line is sounding or about to start. */
+ return {stop,/** Reads one line by id even when its text is not on screen. */
+  say(id:string){if(!byId.has(id))return;stop();forced=id;queue=[];speak(id);},/** A voice line is sounding or about to start. */
   isSpeaking(){return !!player.active||!!hold;},announce(text:string){pending=lines.find(line=>line.text===text)?.id??null;schedule();},isToastPlaying(){return !!player.active&&!!current&&!!document.querySelector('#toast.visible')?.textContent?.includes(byId.get(current)!.text);},sync(){if(!options.enabled())stop();},destroy(){observer.disconnect();stop();document.removeEventListener('pointerup',firstInput,{capture:true});document.removeEventListener('keyup',firstInput,{capture:true});document.removeEventListener('visibilitychange',hidden);document.removeEventListener('change',setting);window.removeEventListener('pagehide',stop);button?.remove();}};
 }
