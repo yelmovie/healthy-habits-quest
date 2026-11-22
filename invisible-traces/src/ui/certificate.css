@@ -14,7 +14,7 @@
 }
 .cert-content p { margin: 0; }
 .cert-kicker { color: #5b3fb8; font-size: 1.45cqw; font-weight: 800; letter-spacing: .28em; }
-.cert-title { margin: 0; color: var(--ink); font-size: 4.5cqw; font-weight: 900; letter-spacing: .06em; line-height: 1.15; }
+.cert-title { margin: 0; color: var(--ink); font-size: 4.5cqw; font-weight: 900; -webkit-text-stroke: .018em currentColor; letter-spacing: .06em; line-height: 1.15; }
 .cert-to { display: flex; flex-direction: column; align-items: center; gap: 1.2cqw; width: 100%; }
 .cert-to p { display: flex; align-items: flex-end; justify-content: center; gap: 2.2cqw; }
 .cert-slot { display: inline-flex; align-items: flex-end; gap: .7cqw; }
