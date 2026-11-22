@@ -14,9 +14,9 @@
   "minutes": null,
   "stages": 10,
   "thumbnail": "12 diseases/thumbnails/thumbnail-16x8.png",
-  "appCommit": "f21c505",
+  "appCommit": "78896a2",
   "host": "workers",
-  "note": "unit은 코드에 없고 README 소개문에 「감염병과 건강한 생활」(확인 필요). standards는 content.json의 요약문이며 공식 원문 아님(needsReview true). semester·minutes는 저장소에 없음. stages=활동 10개(구역 5곳). 저장소 뿌리는 12 diseases, 앱은 invisible-traces. appCommit은 HEAD이자 앱 코드 마지막 변경.",
+  "note": "학년·학기·단원은 운영 시트 기준. standards는 content.json의 요약문이며 공식 원문 대조는 needsReview true로 유지. minutes는 실제 수업 미검증. stages=활동 10개(구역 5곳). 저장소 뿌리는 12 diseases, 앱은 invisible-traces. appCommit은 마지막 앱 코드 변경이며 문서 커밋과 구분한다.",
   "consistency": {
     "creditLine": {
       "text": "기획·제작: 옐샘 & ⓒ 아이스크림미디어",
@@ -58,8 +58,6 @@
         "번호(빈칸)",
         "이름(빈칸)",
         "수여 문장",
-        "다섯 탐구 미션 완료",
-        "연구 기록 5 / 5",
         "완료한 날(인증서를 연 날)",
         "조사 완료 도장",
         "주는 이: 기록 파트너",
@@ -70,7 +68,10 @@
         "PNG로 저장",
         "파이널 영상 다시 보기"
       ],
-      "note": "2026-11-22 디자인: A4 가로 상장 한 장(테두리 certificate-frame-20261122.webp) + 종이 밖 버튼. 인쇄는 A4 가로 한 쪽, PNG는 캔버스로 2400×1697. 빈칸은 인쇄 후 손으로 씀(학교 5.6cm·이름 6.5cm·밑줄 위 1.2cm). 날짜는 인증서를 연 날"
+      "note": "2026-11-22 디자인: A4 가로 상장 한 장(테두리 certificate-frame-20261122.webp) + 종이 밖 버튼. 인쇄는 A4 가로 한 쪽, PNG는 캔버스로 2400×1697. 빈칸은 인쇄 후 손으로 씀(학교 5.6cm·이름 6.5cm·밑줄 위 1.2cm). 날짜는 인증서를 연 날",
+      "numericProgress": "사용자 최신 지시: 미션·기록·활동 개수/비율 숫자 요약은 종이에 표시하지 않음(완료 판정·저장 유지)",
+      "title": "900 굵기와 동색 .018em 스트로크, PNG에도 동일한 제목 획",
+      "verification": "운영 1280×800·1024×768·1920×1080 전체 종이·버튼 표시, 입력0·숫자요약0·겹침/넘침/콘솔오류0. A4 가로PDF1쪽, PNG2400×1697. 학교56.4mm·이름65.3mm·쓰기높이11.9mm. OS/앱 동작 줄이기 확인."
     },
     "rewardCards": {
       "count": 5,
@@ -120,5 +121,13 @@
   },
   "gradeRepo": "3학년(targetGrade 3, 교육 보강 기록은 3~4학년군)",
   "unitRepo": null,
-  "gradeUnitSource": "운영 시트 「이예리 선생님」 탭, 2026-11-22 확인"
+  "gradeUnitSource": "운영 시트 「이예리 선생님」 탭, 2026-11-22 확인",
+  "production": {
+    "checkedAt": "2026-11-22 20:27 KST",
+    "appCommit": "78896a2",
+    "workerVersion": "6c1807dc-d04b-4730-95e0-bfd32ebd15f3",
+    "url": "https://healthy-habits-quest.yelsam.workers.dev/",
+    "sha256MatchFiles": 7,
+    "result": "공식 운영 index·JS/CSS·서비스워커·인증서 테두리가 최신 검증 빌드와 모두 일치. 세뷰·PDF·PNG·모션·설정 닫기/지도 복귀와 완료 기록 보존 확인."
+  }
 }
