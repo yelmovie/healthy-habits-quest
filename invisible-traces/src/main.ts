@@ -4,11 +4,13 @@ import { createResearchAudio, createMusic, type Cue } from './audio';
 import { mountNarration } from './ui/narration';
 import { mountNpcGuide } from './npc-guide';
 import {openStoryFilm} from './story-film.js';
+import {saveCertificatePng} from './ui/cert-png';
 let disposeNpc: (()=>void) | undefined;
 import './ui/style.css';
 import './ui/stages-observation.css';
 import './ui/stages-tracing.css';
 import './ui/stages-strategy.css';
+import './ui/certificate.css';
 import './ui/activity-fit.css';
 import './ui/scenery-surfaces.css';
 import './ui/learning-guidance.css';
@@ -157,7 +159,7 @@ function settings(){modal(`<div data-science-settings><h2>설정</h2><div class=
 
 function sealed():boolean{const route=state.route;if(route==='P10')return false;const i=PAGES.findIndex(p=>p.id===route);return i>=0&&state.evidence.includes(`E${Math.floor(i/2)+1}`);}
 root.addEventListener('click',e=>{if(Date.now()<suppressClick)return;const target=(e.target as HTMLElement).closest<HTMLElement>('[data-action]');if(!target||target.hasAttribute('disabled'))return;const a=target.dataset.action!,id=target.dataset.id??'';sound(['simulate','observe','scan'].includes(a)?'scan':'tap');
- if(['home','map','records','settings','sound','teacher','start','new-game','next','exit-replay','stage','print','certificate','film'].includes(a)){
+ if(['home','map','records','settings','sound','teacher','start','new-game','next','exit-replay','stage','print','certificate','film','cert-png'].includes(a)){
  switch(a){case 'home':navigate('C00');return;case 'map':navigate('C01');return;case 'records':modal(records(state));return;case 'settings':settings();return;case 'teacher':teacher();return;case 'new-game':confirmReset();return;
  case 'sound':{const on=!soundOn(state);state.settings.music=on;state.settings.sfx=on;state.settings.voice=on;syncSound();persist();render();return;}
  case 'start':{const target=state.found.length?state.lastRoute:'C01';if(!state.found.length&&!state.completed.length&&playFilm('intro',()=>navigate(target)))return;navigate(target);return;}
@@ -166,7 +168,8 @@ root.addEventListener('click',e=>{if(Date.now()<suppressClick)return;const targe
  case 'film':playFilm(id==='outro'?'outro':'intro');return;
  case 'next':if(state.completed.includes(state.route)){const p=PAGES.find(p=>p.id===state.route)!;navigate(p.next as Route);}return;
  case 'print':window.print();return;
- case 'certificate':update(s=>s.final.phase='certificate');return;}
+ case 'cert-png':{const paper=root.querySelector<HTMLElement>('[data-cert-paper]');if(paper)void saveCertificatePng(paper,'학교-과학-조사-인증서.png').then(()=>notify('인증서를 PNG로 저장했어요.','success')).catch(()=>notify('PNG를 만들지 못했어요. 「인증서 인쇄 / PDF 저장」을 써 주세요.'));return;}
+ case 'certificate':update(s=>s.final.phase='certificate');sound('success');return;}
  }
  if(a==='auto-play'){play(target.dataset.kind as PlaybackKind);return;}
  if(a==='questions'){questions();return;}

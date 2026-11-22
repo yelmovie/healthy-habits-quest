@@ -97,11 +97,28 @@ function strategyBoard(s:State,v:View){
  <div class="strategy-actions">${DATA.p09.actions.map(a=>`<button class="action-card ${v.action===a.id?'selected':''}" data-action="strategy-action" data-id="${a.id}" draggable="true" data-drag="strategy" aria-pressed="${v.action===a.id}">${icon(ACTION_ICONS[a.id],26)}<b>${actionLabel(a.id,a.label)}</b><small>${icon('bolt',16)}${a.cost}</small></button>`).join('')}${btn(`${icon('play',20)}작전 실행`,'simulate',s.strategy.placements.length?'primary next-target':'primary',s.strategy.placements.length?'':'disabled')}</div></div>`;
 }
 
+// 인증서(2026-11-22 디자인): A4 가로 종이 한 장 + 종이 밖 버튼. 학교·학년/반·번호·이름은 인쇄한 뒤 손으로 쓰는 밑줄 빈칸이다.
+function certificatePage(){
+ return `<div class="ending strategy-ending certificate cert-stage">${image('restored','ending-background')}<div class="cert-layout">
+ <section class="cert-paper" data-cert-paper aria-label="학교 과학 조사 인증서">${image('certificate-frame-20261122','cert-frame')}<div class="cert-content">
+ <p class="cert-kicker">보이지 않는 흔적 · 학교 과학 조사</p>
+ <h2 class="cert-title">학교 과학 조사 인증서</h2>
+ <div class="cert-to"><p>${[['school','학교'],['class','학년/반'],['number','번호']].map(([id,label])=>`<span class="cert-slot cert-slot-${id}"><small>${label}</small><b></b></span>`).join('')}</p><p><span class="cert-slot cert-slot-name"><small>이름</small><b></b></span></p></div>
+ <p class="cert-award">위 조사원은 학교에 남은 보이지 않는 흔적을 관찰하고 근거를 비교해<br>손 씻기·기침 예절·환기·덜어 먹기 실천 계획을 세웠으므로 이 인증서를 드립니다.</p>
+ <p class="cert-summary"><span>✓ 다섯 탐구 미션 완료</span><span>✓ 연구 기록 5 / 5</span></p>
+ <div class="cert-foot"><p class="cert-date"><small>완료한 날</small><b>${certDate()}</b></p><span class="cert-stamp" aria-hidden="true"><span>조사<br>완료</span></span><p class="cert-giver"><small>주는 이</small><b>기록 파트너</b></p></div>
+ <small class="cert-credit">${CREDIT}</small>
+ </div></section>
+ <aside class="cert-panel" aria-label="인증서 저장"><p class="cert-handwrite">인쇄한 뒤 학교·반·번호·이름을 직접 적어요.</p>
+ <div class="ending-actions">${btn(`${icon('print',20)} 인증서 인쇄 / PDF 저장`,'print','primary')}${btn(`${icon('file',20)} PNG로 저장`,'cert-png','secondary')}${btn(`${icon('play',20)} 파이널 영상 다시 보기`,'film','secondary','data-id="outro"')}</div></aside>
+ </div></div>`;
+}
 // 인증서 날짜: 인증서를 연 날을 `2026. 11. 22.` 꼴로(저장 구조는 바꾸지 않는다).
 const certDate=(d=new Date())=>`${d.getFullYear()}. ${d.getMonth()+1}. ${d.getDate()}.`;
 function finalPage(s:State,v:View){
+ if(s.final.phase==='certificate')return certificatePage();
  if(['restored','ending','certificate'].includes(s.final.phase)){
-  const cert=s.final.phase==='certificate';return `<div class="ending strategy-ending ${cert?'certificate':''}">${image('restored','ending-background')}<div class="ending-card"><span class="core-emblem">${icon('spark',42)}</span><h2>${cert?'학교 과학 조사 인증서':'우리의 발견이 학교를 바꿨어요.'}</h2><div class="ending-badges">${chip('check','다섯 탐구 미션 완료')}${chip('file','연구 기록 5 / 5')}</div>${cert?'':'<p class="ending-practice">손 씻기·기침 예절·환기·덜어 먹기는 생활에서 모두 함께 실천해요.</p><p class="ending-share"><b>오늘의 약속을 말해요</b><span>나는 오늘 ______할 때 ______할 거야.<br>왜냐하면 ______을 줄일 수 있기 때문이야.</span></p>'}${cert?'<div class="cert-fields"><span>학교<i></i></span><span>학년·반<i></i></span><span>이름<i></i></span></div>':''}${cert?`<p class="cert-date">완료한 날 ${certDate()}</p>`:''}${cert?`<small class="cert-credit">${CREDIT}</small>`:''}<div class="ending-actions">${cert?btn(`${icon('print',20)} 인증서 인쇄 / PDF 저장`,'print','primary'):btn(`${icon('file',20)} 조사 인증서`,'certificate','primary next-target')}${btn(`${icon('play',20)} 파이널 영상 다시 보기`,'film','secondary','data-id="outro"')}</div></div></div>`;
+  const cert=false;return `<div class="ending strategy-ending ${cert?'certificate':''}">${image('restored','ending-background')}<div class="ending-card"><span class="core-emblem">${icon('spark',42)}</span><h2>${cert?'학교 과학 조사 인증서':'우리의 발견이 학교를 바꿨어요.'}</h2><div class="ending-badges">${chip('check','다섯 탐구 미션 완료')}${chip('file','연구 기록 5 / 5')}</div>${cert?'':'<p class="ending-practice">손 씻기·기침 예절·환기·덜어 먹기는 생활에서 모두 함께 실천해요.</p><p class="ending-share"><b>오늘의 약속을 말해요</b><span>나는 오늘 ______할 때 ______할 거야.<br>왜냐하면 ______을 줄일 수 있기 때문이야.</span></p>'}${cert?'<div class="cert-fields"><span>학교<i></i></span><span>학년·반<i></i></span><span>이름<i></i></span></div>':''}${cert?`<p class="cert-date">완료한 날 ${certDate()}</p>`:''}${cert?`<small class="cert-credit">${CREDIT}</small>`:''}<div class="ending-actions">${cert?btn(`${icon('print',20)} 인증서 인쇄 / PDF 저장`,'print','primary'):btn(`${icon('file',20)} 조사 인증서`,'certificate','primary next-target')}${btn(`${icon('play',20)} 파이널 영상 다시 보기`,'film','secondary','data-id="outro"')}</div></div></div>`;
  }
  if(s.final.phase==='report')return `<div class="strategy-activity strategy-report"><div class="final-report-heading">${icon('flag',26)}<h2>내가 설계한 계획을 실천해요</h2></div><div class="final-plan-cards">${s.strategy.placements.map((p,i)=>`<section class="final-plan-card"><div class="final-plan-picture">${image(SITES.find(x=>x.id===p.site)?.image??'classroom')}${experimentDrawing(p.actionId,true,true)}</div><div class="final-plan-caption"><b>${i+1}</b><span><small class="final-plan-place">${SITES.find(x=>x.id===p.site)?.name}</small><strong>${actionName(p.actionId)}</strong></span></div></section>`).join('')}</div>${btn(`직접 실천하기 ${icon('arrow',22)}`,'begin-apply','primary next-target')}</div>`;
  const p=nextPlacement(s);if(!p)return '';const key=placementKey(p);
