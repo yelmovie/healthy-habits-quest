@@ -2,6 +2,12 @@
 
 최신 대조일 2026-11-20.
 
+## 2026-11-22 파이널 영상은 P10 완료 때 한 번만
+
+- 지침 `_shared/FINALE-ONCE-20261122.md` 덩어리 E. `invisible-traces/src/game/pixel-map.ts`의 `requiredFoes`를 5→0으로 바꿔 마지막 악당 뒤 지도 피날레(`map-finale.mp4`)를 껐다(`map-encounters.js`에서 `requiredFoes`는 피날레 시각에만 쓰임). 악당 격퇴는 성취 카드만, 파이널(`assets/story/outro-film.mp4`)은 P10을 처음 마칠 때 한 번. 설정의 「파이널 영상 다시 보기」는 P10 완료 그대로.
+- 4번(운동장) 악당은 P10을 마쳐야 지도에 나온다. 그래서 「마지막 스테이지 직전·악당 하나 남음」은 3번 악당으로 확인했다.
+- 검증: 타입, 테스트 71개, 빌드. 헤드리스 `.tmp/finale-once-20261122/verify.mjs` 로컬 시나리오 1(영상 0)·2·2b(영상 1)·3(3번 악당 카드만 0 → P10 영상 1 → 4번 악당·컬렉션 완성 0, 합계 1), 운영 시나리오 1·2 17/17·콘솔 오류 0. 커밋 `2bb9c07` → Worker `05af7baf-d45a-41fc-8fcf-a7ac5808e7d4`, `pixel-map` 번들·index MATCH.
+
 ## 2026-11-20 영상 구간(Range) 응답
 
 - 운영의 영상 3개(`/assets/cough-etiquette-film.mp4`·`.webm`, `/assets/map-encounters/map-finale.mp4`)가 `Range` 요청에 파일 전체(200)를 줘서, 서비스 워커가 아직 없는 첫 방문의 크롬에서는 `seekable [0,0]`으로 위치 이동이 0초로 돌아갔다(iPad Safari는 206이 없으면 mp4를 재생하지 않는다). 영상 경로만 `invisible-traces/worker/media-range.js`를 거쳐 206 조각으로 응답한다. 지침 `_shared/EXISTING-ISSUES-FIX-20261120.md`, 방식 `_shared/media-range-20261119/README.md`.
