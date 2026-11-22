@@ -50,7 +50,8 @@ export async function createMap(parent:HTMLElement,options:MapOptions):Promise<M
  let resolveReady:()=>void=()=>{},rejectReady:(e:Error)=>void=()=>{};
  const ready=new Promise<void>((resolve,reject)=>{resolveReady=resolve;rejectReady=reject;});
  let active:SchoolMap|undefined;
- const encounters=mountMapEncounters({requiredFoes:5,host:parent,clearStage:()=>options.newEncounter,stages:options.encountersEnabled?PLACES.flatMap((place,i)=>{
+ // 2026-11-22: 악당을 다 물리치면 성취 카드만. 파이널 영상은 P10 완료(스테이지 완료) 때 한 번만 나오므로 지도 피날레는 끈다(requiredFoes 0).
+ const encounters=mountMapEncounters({requiredFoes:0,host:parent,clearStage:()=>options.newEncounter,stages:options.encountersEnabled?PLACES.flatMap((place,i)=>{
   const p=NODES[place.node],toward=NODES['plazaMid'],d=Math.hypot(toward.x-p.x,toward.y-p.y)||1;
   return options.done[i]?[encounterStage(i,i,place.name,nearestOnRoad({x:p.x+(toward.x-p.x)/d*38,y:p.y+(toward.y-p.y)/d*38}).point)]:[];
  }):[],progress:options.mapHits,onSave:options.onEncounterSave,reduced:()=>options.reduced,
