@@ -112,6 +112,9 @@ def build(kind):
     cues = []
     for (st, v, who, text, speech_end) in S['lines']:
         cues.append({'s': round(st - 0.15, 2), 'e': round(st + speech_end + 0.6, 2), 'speech': [round(st, 2), round(st + speech_end, 2)], 'who': who, 'text': text})
+    for a, b in zip(cues, cues[1:]):  # 앞 자막이 다 사라진 뒤 다음 자막(겹침 0, 사이 0.1초). 목소리 시각은 그대로
+        if a['e'] > b['s'] - 0.1:
+            a['e'] = round(max(a['speech'][1] + 0.09, b['s'] - 0.1), 2); b['s'] = round(max(b['s'], a['e'] + 0.1), 2)
     film = {'src': str(src), 'out': str(OUT / f"{S['out']}.mp4"), 'theme': {'box': '#103e43', 'accent': '#d9f56a', 'hot': '#d9f56a'},
             'speakers': {k: [v, '#ffffff'] for k, v in WHO.items()}, 'bottom': 64, 'sweep': True, 'cues': cues}
     fj = OUT / f'{kind}.json'; fj.write_text(json.dumps(film, ensure_ascii=False, indent=1), encoding='utf-8')
