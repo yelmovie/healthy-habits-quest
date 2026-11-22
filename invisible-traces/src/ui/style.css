@@ -91,6 +91,9 @@ button:disabled, button[disabled] { cursor: not-allowed; }
 .btn.primary:hover:not(:disabled) { background: var(--teal-strong); }
 .btn.secondary { background: var(--surface); border-color: var(--line); color: var(--ink); }
 .btn.secondary:hover:not(:disabled) { border-color: var(--teal); }
+/* 되돌릴 수 없는 동작(기록 지우기) 버튼: 흰 글자 대비 6.5:1 */
+.btn.danger { background: #b42318; color: #fff; box-shadow: 0 6px 16px rgba(180, 35, 24, .25); }
+.btn.danger:hover:not(:disabled) { background: #912018; }
 .btn.text { background: transparent; color: var(--teal-strong); text-decoration: underline; text-underline-offset: 4px; }
 .btn.small { min-height: 46px; padding: .45rem 1rem; font-size: 1rem; background: var(--surface); border-color: var(--line); }
 .btn.small.primary { background: var(--teal-action); border-color: var(--teal-action); color: #fff; }
