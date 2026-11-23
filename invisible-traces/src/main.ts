@@ -5,6 +5,7 @@ import { mountNarration } from './ui/narration';
 import { openNpcGuide } from './npc-guide';
 import {openStoryFilm} from './story-film.js';
 import {saveCertificatePng} from './ui/cert-png';
+import {mountCertificateWax} from './certificate-wax.js';
 let disposeNpc: (()=>void) | undefined;
 import './ui/style.css';
 import './ui/stages-observation.css';
@@ -84,6 +85,7 @@ function render(keepTimer=false){disposeNpc?.();if(!keepTimer){stop();playbackSe
  if(state.route==='P10'&&state.final.phase==='report'&&state.completed.includes('P09')){state.final.phase='apply';persist();}
  const body=state.route==='C00'?home(state):state.route==='C01'?map(state,view):shell(state,view,pageContent(state,view));
  root.innerHTML=header(state,!!archive,state.route==='C01'?rewardSlotsHtml((archive??state).mapHits):'',body.match(/<aside class="learning-focus[\s\S]*?<\/aside>/)?.[0]??'')+body;
+ const certificate=root.querySelector<HTMLElement>('[data-cert-paper]');if(certificate)mountCertificateWax(certificate,{label:'학교 조사\n탐구 인증',art:import.meta.env.BASE_URL+'assets/ui/certificate-wax-seal-20261123.webp',reduced:state.settings.reduced,onImpact:()=>void researchAudio.play('hit2',true)});
  if(protectedSave||saveWarning){const warning=document.createElement('div');warning.className='storage-warning';warning.setAttribute('role','status');warning.textContent=saveError()??'현재 탐구는 임시 상태예요. 창을 닫기 전에 연구 기록을 확인해 주세요.';root.prepend(warning);}
  if(state.route==='C01'){void mountMap();mountWindowRestoration(root.querySelector('.map-page')!,state,persist,()=>sound('success'));}
  root.querySelectorAll<HTMLImageElement>('img').forEach(img=>{img.addEventListener('error',()=>{img.classList.add('failed-image');img.alt='배경 그림을 불러오지 못했어요.';const scene=img.parentElement;if(scene&&!scene.querySelector('.image-retry')){const button=document.createElement('button');button.className='image-retry btn small';button.textContent='그림 다시 읽기';button.onclick=()=>{img.classList.remove('failed-image');img.src=img.src;button.remove();};scene.append(button);}}, {once:true});});
