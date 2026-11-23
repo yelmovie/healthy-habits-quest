@@ -16,6 +16,7 @@ import './ui/activity-fit.css';
 import './ui/scenery-surfaces.css';
 import './ui/learning-guidance.css';
 import './ui/flow-upgrade.css';
+import './ui/final-review.css';
 import './reward-cards.css';
 import './reward-card-set.css';
 import {learningGuide,curriculumGuide,nextInstruction} from './ui/learning-guidance';
@@ -29,6 +30,7 @@ import {header,home,map,mapStatus,mapViewLabel,shell,pageContent,records,viewFre
 import type {MapHandle} from './game/pixel-map';
 import {NODES,PLACES} from './game/school-map';
 import {SIGNAL_SPOTS} from './ui/stages-observation';
+import {strategySceneHint} from './ui/stages-strategy';
 import {rewardSlotsHtml,wonRewardCards,winRewardCard,rewardCardDue,bindRewardSound} from './reward-card-set';
 const root=document.querySelector<HTMLDivElement>('#app')!,modalRoot=document.querySelector<HTMLDivElement>('#modal-root')!,toastRoot=document.querySelector<HTMLDivElement>('#toast')!;
 const loaded=readSave();let state=loaded.state,protectedSave=!!loaded.error;let archive:State|null=null;let view:View={...viewFresh(),lab:state.labs.active};let epoch=0,mapHandle:MapHandle|null=null;let travelRequest=0,travellingStage=0;let timer:ReturnType<typeof setInterval>|null=null,toastTimer:ReturnType<typeof setTimeout>|null=null;let focusBefore:HTMLElement|null=null;let saveWarning=false;
@@ -49,6 +51,9 @@ function sound(kind:Cue='tap'){void researchAudio.play(kind);}
 bindRewardSound(cue=>void researchAudio.play(cue,true));
 document.addEventListener('map-finale-music',e=>{if((e as CustomEvent<boolean>).detail)researchAudio.stop();});
 function persist(){if(archive||protectedSave)return;if(!writeSave(state)&&!saveWarning){saveWarning=true;notify(saveError()??'이 기기에 저장하지 못했어요. 창을 닫으면 기록이 사라질 수 있어요.');}}
+let pendingOutro:ReturnType<typeof setTimeout>|null=null;
+function cancelPendingOutro(){if(pendingOutro)clearTimeout(pendingOutro);pendingOutro=null;}
+function showCertificate(){cancelPendingOutro();update(s=>s.final.phase='certificate');sound('success');}
 let pendingMapRestore:number[]=[];
 let pendingMapEncounter:number|null=null;
 function queueMapEncounter(previous:Set<string>){if(!archive)for(const [i,stage] of STAGES.entries())if(state.completed.includes(stage.pages[1])&&!previous.has(stage.pages[1]))pendingMapEncounter=i;}
@@ -56,7 +61,7 @@ let mapRequest:AbortController|null=null;
 let playbackSession:{kind:PlaybackKind;route:Route;steps:DemoStep[];index:number}|null=null;let playbackToken=0;
 function stop(){if(timer)clearTimeout(timer);timer=null;view.playing=false;view.autoMode='';playbackToken++;}
 function update(fn:(s:State)=>void,redraw=true){const before=new Set(state.evidence),pages=new Set(state.completed);fn(state);derive(state);persist();const newEvidence=state.evidence.filter(e=>!before.has(e)),evidence=newEvidence.length>0;
- if(!archive){pendingMapRestore.push(...newEvidence.map(e=>Number(e.slice(1))-1));if(state.completed.includes('P10')&&!pages.has('P10')){pendingMapRestore.push(5);setTimeout(()=>{if(state.route==='P10')playFilm('outro');},1600);}}
+ if(!archive){pendingMapRestore.push(...newEvidence.map(e=>Number(e.slice(1))-1));if(state.completed.includes('P10')&&!pages.has('P10')){pendingMapRestore.push(5);cancelPendingOutro();pendingOutro=setTimeout(()=>{pendingOutro=null;if(!archive&&state.route==='P10'&&['restored','ending'].includes(state.final.phase))playFilm('outro');},1600);}}
  queueMapEncounter(pages);// 활동을 마친 순간에도 기록 완성과 같은 성공 소리를 한 번만 낸다.
  if(evidence||state.completed.some(p=>!pages.has(p)))sound('success');if(evidence)notify('새 연구 기록이 자동으로 정리됐어요.','success');if(redraw)render();}
 // 브라우저 뒤로 가기: 화면 단계(시작 0·지도 1·활동 2)를 history 칸으로 둬서 앱 안의 앞 화면으로 간다.
@@ -64,15 +69,16 @@ function update(fn:(s:State)=>void,redraw=true){const before=new Set(state.evide
 const depthOf=(r:Route)=>r==='C00'?0:r==='C01'?1:2;let historyDepth=0,historyQuiet=0;
 function syncHistory(route:Route){const want=depthOf(route);if(want>historyDepth){for(let d=historyDepth+1;d<=want;d++)history.pushState({it:d},'');}else if(want<historyDepth){historyQuiet++;history.go(want-historyDepth);}historyDepth=want;}
 // 처음 조사를 시작할 때 인트로, 학교 대응안을 처음 완성했을 때 아웃트로를 한 번 보여 준다(건너뛸 수 있음).
-function playFilm(kind:'intro'|'outro',after?:()=>void){const base=`${import.meta.env.BASE_URL}assets/story/${kind}-film`;
+function playFilm(kind:'intro'|'outro',after?:()=>void){if(kind==='outro')cancelPendingOutro();const base=`${import.meta.env.BASE_URL}assets/story/${kind}-film`;
  // 목소리가 꺼져 있으면 영상 속 대사도 끈다(자막은 영상 안에 남는다). 그때 배경 음악은 평소 크기 그대로.
  const voiced=state.settings.voice;
  const opened=openStoryFilm(document,{src:`${base}.mp4`,poster:`${base}-poster.jpg`,label:kind==='intro'?'인트로 영상: 우리 학교에 남은 흔적':'파이널 영상: 우리의 발견이 학교를 바꿨어요',
   muted:!voiced,autoplay:!(state.settings.reduced||matchMedia('(prefers-reduced-motion: reduce)').matches),
+  onCertificate:kind==='outro'&&state.completed.includes('P10')?showCertificate:undefined,
   onClose:()=>{if(voiced)music.quiet(false);after?.();}});
  if(opened){narration.stop();researchAudio.stop();if(voiced)music.quiet(true);}
  return opened;}
-function navigate(route:Route,fromHistory=false){if(!canEnter(state,route)){notify('앞선 조사 기록을 먼저 완성해 주세요.');return;}if(!fromHistory)syncHistory(route);narration.stop();stop();if(route!==state.route)hideToast();state.route=route;if(route!=='C00'&&route!=='C01')state.lastRoute=route;view.clue='';view.effect='';view.replacement='';view.action='';view.focus='';view.index=0;view.lab=state.labs.active;view.labPreview=null;view.demoStep=0;playbackSession=null;derive(state);persist();render();}
+function navigate(route:Route,fromHistory=false){if(!canEnter(state,route)){notify('앞선 조사 기록을 먼저 완성해 주세요.');return;}if(!fromHistory)syncHistory(route);if(route!==state.route)cancelPendingOutro();narration.stop();stop();if(route!==state.route)hideToast();state.route=route;if(route!=='C00'&&route!=='C01')state.lastRoute=route;view.clue='';view.effect='';view.replacement='';view.action='';view.focus='';view.index=0;view.lab=state.labs.active;view.labPreview=null;view.demoStep=0;playbackSession=null;derive(state);persist();render();}
 function render(keepTimer=false){disposeNpc?.();if(!keepTimer){stop();playbackSession=null;}epoch++;travelRequest++;travellingStage=0;mapRequest?.abort();mapRequest=null;mapHandle?.destroy();mapHandle=null;document.body.classList.toggle('reduced',state.settings.reduced||matchMedia('(prefers-reduced-motion: reduce)').matches);document.body.classList.toggle('large-text',state.settings.large);document.body.classList.toggle('on-map',state.route==='C01');document.body.classList.toggle('on-home',state.route==='C00');document.body.classList.toggle('on-activity',state.route.startsWith('P'));
  music.scene(state.route==='P10'&&['restored','ending','certificate'].includes(state.final.phase)?'final':'main');
  // 미션마다 지도 속 장소 그림을 활동 화면 뒤에 깐다(신호 광장·체육관·본관 교실·급식실·운동장).
@@ -144,7 +150,7 @@ function closeModal(){narration.stop();modalRoot.innerHTML='';root.inert=false;f
 function modal(content:string,closeX=true){if(state.route==='C01')cancelMapTravel();narration.stop();stop();persist();paintPlaybackControls();if(!root.inert)focusBefore=document.activeElement as HTMLElement;root.inert=true;modalRoot.innerHTML=`<div class="modal-backdrop"><section class="modal" role="dialog" aria-modal="true" aria-label="조사 안내">${closeX?`<button class="icon-btn modal-close" data-modal="close" aria-label="닫기">${icon('close')}</button>`:''}${content}</section></div>`;modalRoot.querySelector<HTMLButtonElement>('button')?.focus();}
 // 첫 화면 「새로 시작」도 같은 확인창을 쓰고, 지운 뒤에는 처음 시작과 같이 인트로 영상부터 탄다.
 function confirmReset(fromTitle=false){modal(`<h2>새 연구를 시작할까요?</h2><p>현재 기기의 본편 기록은 복구용 사본으로 보관한 뒤 새로 시작해요. 백업 공간이 부족하면 초기화하지 않아요.</p><div class="modal-actions"><button class="btn secondary" data-modal="close">취소</button><button class="btn danger" data-modal="${fromTitle?'confirm-new':'confirm-reset'}">기록 지우기</button></div>`);modalRoot.querySelector<HTMLButtonElement>('.modal-actions [data-modal="close"]')?.focus();}
-function teacher(fromSettings=false){modal(`<div class="eyebrow">TEACHER'S GUIDE</div><h2>관찰에서 실천으로 이어지는 과학</h2><p>5개 미션의 연구 기록을 모아 학교 대응안을 완성해요. 모형의 흔적은 실제 감염 여부나 감염 확률이 아니에요.</p><div class="guide-stages">${STAGES.map((s,i)=>`<div><b>0${i+1} ${s.name}</b><span>${['관찰하고 중요한 단서 고르기','관계를 설명하고 생활 영향 살피기','시간을 되감고 개입 시점 비교하기','다른 조건은 같게, 한 행동만 바꾸기','장소별 예방을 계획하고 생활에서 실천하기'][i]}</span></div>`).join('')}</div>${curriculumGuide()}<p>카드는 드래그하거나 선택 후 대상을 눌러 연결할 수 있어요. 입력과 기록은 자동 저장돼요. 같은 기기·같은 주소에서 이어 갈 수 있어요.</p><div class="modal-actions"><button class="btn primary" data-modal="unlock">전 미션 시연 열기</button><button class="btn secondary" data-modal="reset">새 연구 시작</button>${fromSettings?'<button class="btn secondary" data-modal="settings">설정으로 돌아가기</button>':''}</div><small>시연 기록은 학생 본편에 덮어쓰지 않아요. 실제 학교망·기기 동시 접속 검증은 별도로 필요해요.</small>`);}
+function teacher(fromSettings=false){modal(`<div class="eyebrow">TEACHER'S GUIDE</div><h2>관찰에서 실천으로 이어지는 과학</h2><p>5개 미션의 연구 기록을 모아 학교 대응안을 완성해요. 모형의 흔적은 실제 감염 여부나 감염 확률이 아니에요.</p><div class="guide-stages">${STAGES.map((s,i)=>`<div><b>0${i+1} ${s.name}</b><span>${['관찰하고 중요한 단서 고르기','관계를 설명하고 생활 영향 살피기','시간을 되감고 개입 시점 비교하기','다른 조건은 같게, 한 행동만 바꾸기','장소별 예방을 계획하고 생활에서 실천하기'][i]}</span></div>`).join('')}</div><div class="guide-stages"><div><b>사례 토의</b><span>감염병으로 달라지는 생활과 아픈 친구를 돕는 방법을 이야기해요.</span></div><div><b>모형 비교</b><span>보라색은 실제 병원체나 감염된 친구의 표시가 아니에요. 병마다 전파 방식이 다르고, 비말과 공기 중 작은 입자는 함께 퍼질 수 있어요.</span></div><div><b>생활 속 실천</b><span>게임의 세 부위 문지르기는 연습이에요. 실제로는 흐르는 물과 비누로 30초 이상 손 전체를 꼼꼼히 씻어요.</span></div></div>${curriculumGuide()}<p>카드는 드래그하거나 선택 후 대상을 눌러 연결할 수 있어요. 입력과 기록은 자동 저장돼요. 같은 기기·같은 주소에서 이어 갈 수 있어요.</p><div class="modal-actions"><button class="btn primary" data-modal="unlock">전 미션 시연 열기</button><button class="btn secondary" data-modal="reset">새 연구 시작</button>${fromSettings?'<button class="btn secondary" data-modal="settings">설정으로 돌아가기</button>':''}</div><small>시연 기록은 학생 본편에 덮어쓰지 않아요. 실제 학교망·기기 동시 접속 검증은 별도로 필요해요.</small>`);}
 function btnForReplay(){return `<button class="btn secondary" data-modal="exit-replay">${icon('undo',20)} 본편 복귀</button>`;}
 // 배경 음악 크기·효과음 크기 막대(0~100%, 5% 단위). 스위치가 꺼져 있으면 막대도 쉰다.
 const VOLUME_KEY={music:'musicVolume',sfx:'sfxVolume'} as const;
@@ -172,7 +178,7 @@ root.addEventListener('click',e=>{if(Date.now()<suppressClick)return;const targe
  case 'next':if(state.completed.includes(state.route)){const p=PAGES.find(p=>p.id===state.route)!;navigate(p.next as Route);}return;
  case 'print':window.print();return;
  case 'cert-png':{const paper=root.querySelector<HTMLElement>('[data-cert-paper]');if(paper)void saveCertificatePng(paper,'학교-과학-조사-인증서.png').then(()=>notify('인증서를 PNG로 저장했어요.','success')).catch(()=>notify('PNG를 만들지 못했어요. 「인증서 인쇄 / PDF 저장」을 써 주세요.'));return;}
- case 'certificate':update(s=>s.final.phase='certificate');sound('success');return;}
+ case 'certificate':showCertificate();return;}
  }
  if(a==='auto-play'){play(target.dataset.kind as PlaybackKind);return;}
  if(a==='questions'){questions();return;}
@@ -180,8 +186,9 @@ root.addEventListener('click',e=>{if(Date.now()<suppressClick)return;const targe
  if(a==='focus'){view.focus=id;render();return;}
  if(a==='focus-index'){view.index=Math.max(0,Number(id)||0);render();return;}
  if(a==='site-preview'){view.site=id;render();return;}
- if(sealed()&&!['site','lab','timeline-play','comparison-play','re-experiment','select-clue','select-effect'].includes(a)){notify('이 미션의 기록이 완성됐어요. 지도에서 다시 실험할 수 있어요.');return;}
+ if(sealed()&&!['site','lab','timeline-play','comparison-play','re-experiment','select-clue','select-effect','reflect'].includes(a)){notify('이 미션의 기록이 완성됐어요. 지도에서 다시 실험할 수 있어요.');return;}
  switch(a){
+ case 'locate-signal':if(SITES.some(site=>site.id===id))discover(id);return;
  case 'discover':{// 돋보기로 찾은 그 손짓의 클릭이 바로 현장 이동으로 이어지지 않게 한다(그 그림만, 잠깐).
  if(scanGrace.id===id&&Date.now()<scanGrace.until)return;if(state.found.includes(id)&&state.completed.includes('P01')){view.site=id;navigate('P02');return;}if(state.found.includes(id))return;const me=e as MouseEvent,vis=target.querySelector<HTMLElement>('.obs-site-visual');if(me.detail!==0&&vis&&!scanAt(vis,id,me.clientX,me.clientY)){notify('보라 빛이 새어 나오는 곳으로 돋보기를 옮겨 봐요.');return;}discover(id);return;}
  case 'site':view.site=id;view.index=0;view.replacement='';view.focus='clues';render();return;
@@ -200,8 +207,9 @@ root.addEventListener('click',e=>{if(Date.now()<suppressClick)return;const targe
  case 'lab-set':setLab(id,Number(target.dataset.value));return;
  case 'water':setLab('water',Number(id));return;
  case 'synthesis':if(id==='washHands'){notify('손 씻기도 중요해요. 지금은 기침과 닫힌 공간을 각각 바꾸는 행동을 생각해 보세요.');return;}update(s=>{if(s.labs.synthesis.includes(id))s.labs.synthesis=s.labs.synthesis.filter(x=>x!==id);else s.labs.synthesis.push(id);});return;
- case 'experiment-action':update(s=>{s.experiment.action=id;s.experiment.prediction='';s.experiment.tick=0;s.experiment.pinned='';s.experiment.explanation='';});return;
+ case 'experiment-action':update(s=>{s.experiment.action=id;s.experiment.prediction='';s.experiment.tick=0;s.experiment.pinned='';s.experiment.explanation='';s.experiment.reflection='';});return;
  case 'predict':if(!state.experiment.action)return;update(s=>{s.experiment.prediction=id;s.experiment.tick=0;},false);navigate('P08');play('comparison');return;
+ case 'reflect':if(state.experiment.pinned&&['matched','different','unsure'].includes(id))update(s=>s.experiment.reflection=id);return;
  case 'difference':{const action=DATA.p07.actionPool.find(x=>x.id===state.experiment.action)!;update(s=>s.experiment.pinned=action.differenceEvent);return;}
  case 're-experiment':if(state.evidence.includes('E4')){if(!archive)archive=structuredClone(state);state=fixtureFor(4,state.settings);}navigate('P07');return;
  case 'explain':{const a=DATA.p07.actionPool.find(x=>x.id===state.experiment.action);if(!state.experiment.pinned)return;if(a&&id!==a.metric){notify('이 행동과 직접 관련된 변화인지 두 장면을 다시 살펴봐요.');return;}update(s=>s.experiment.explanation=id);return;}
@@ -229,7 +237,7 @@ root.addEventListener('pointermove',e=>{if(state.route!=='P01'||sealed())return;
 function cluesHint(){if(state.route==='P02'&&state.clues.length===5&&!state.completed.includes('P02'))notify(gateHint(state));}
 function linkImpact(id:string){if(!view.effect)view.effect=DATA.p04.links.find(x=>!Object.values(state.impacts).includes(x.id))?.id??'';if(!view.effect){notify('먼저 영향 카드를 골라주세요.');return;}if(DATA.p04.links.find(x=>x.id===view.effect)?.domain!==id){notify('이 영향은 누구의 생활과 더 직접 이어질까요?');return;}update(s=>{s.impacts[id]=view.effect;view.effect='';view.focus='';});}
 function setLab(id:string,value:number){view.labPreview=null;update(s=>{s.labs.values[id]=value;if(value===1&&!s.labs.done.includes(id))s.labs.done.push(id);});}
-function place(actionId:string,site:string){let result='';update(s=>{result=addPlacement(s,{actionId,site});if(result==='ok')view.action='';});if(result==='budget')notify('에너지가 부족해요. 기존 행동을 빼거나 바꿔보세요.');if(result==='wrong-site')notify('이 행동과 관련된 장소에 놓아주세요.');if(result==='duplicate')notify('이미 이 장소에 배치한 행동이에요.');}
+function place(actionId:string,site:string){let result='';update(s=>{result=addPlacement(s,{actionId,site});if(result==='ok')view.action='';});if(result==='budget')notify('에너지가 부족해요. 기존 행동을 빼거나 바꿔보세요.');if(result==='wrong-site')notify(strategySceneHint(site));if(result==='duplicate')notify('이미 이 장소에 배치한 행동이에요.');}
 // 적용 직후 같은 자리에 다음 계획 버튼이 그려지므로, 연속 탭이 그 버튼까지 누르지 않게 잠깐 막는다.
 let applyLock=0;
 function apply(key:string){if(Date.now()<applyLock)return;let applied=false;const pages=state.completed.length;update(s=>applied=applyPlacement(s,key));if(applied){applyLock=Date.now()+700;if(state.completed.length===pages)sound('success');notify('계획을 직접 실천했어요.','success');}}

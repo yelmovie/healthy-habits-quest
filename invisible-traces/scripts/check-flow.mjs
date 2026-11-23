@@ -41,6 +41,7 @@ try {
   for (const key of ['music', 'sfx', 'voice']) await page.locator(`[data-setting="${key}"]`).uncheck();
   await click('[data-modal="close"]', 'close settings');
   await click('[data-action="start"]', 'start');
+  await page.locator('.story-film-skip').click();
   await page.locator('.map-next-cue').waitFor();
   await page.waitForTimeout(1500);
   await click('.map-next-cue', 'map next mission');
@@ -101,6 +102,7 @@ try {
   await page.locator('.compare-pin.next-target').waitFor({ timeout: 20000 });
   await click('.compare-pin.next-target', 'P08 pin');
   await click('[data-action="explain"][data-id="hand-object-contact"]', 'P08 explain');
+  await click('[data-action="reflect"][data-id="matched"]', 'P08 reflect without grading');
   await shot('P08'); await next('P09');
 
   for (const [action, site] of [['ventilation', 'classroom'], ['portionFood', 'cafeteria'], ['washHands', 'gym']]) {

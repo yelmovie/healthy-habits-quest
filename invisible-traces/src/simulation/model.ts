@@ -8,7 +8,7 @@ export interface State {
  found:string[]; clues:string[]; relations:Record<string,string>; impacts:Record<string,string>;
  timeline:{tick:number;source:string;intervention:number|null;tried:number[]};
  labs:{active:string;done:string[];values:Record<string,number>;synthesis:string[]};
- experiment:{action:string;prediction:string;tick:number;pinned:string;explanation:string;baselineSeen:boolean};
+ experiment:{action:string;prediction:string;tick:number;pinned:string;explanation:string;baselineSeen:boolean;reflection?:string};
  strategy:{asked:string[];placements:Placement[];simulated:boolean};
  final:{phase:'report'|'apply'|'restored'|'ending'|'certificate';applied:string[];hands:string[];coreClaimed:boolean};
  restoration:Record<string,number>; mapHits:Record<string,number>; completed:string[]; evidence:string[];
@@ -17,7 +17,7 @@ export interface State {
 export const MUSIC_VOLUME=30;
 /** 효과음 크기 기본값(%). 100%가 3차 전에 나던 효과음 크기 그대로다(각 소리의 gain에 곱한다). */
 export const SFX_VOLUME=100;
-export const fresh = ():State => ({version:1,contentVersion:DATA.contentVersion,route:'C00',lastRoute:'C01',settings:{music:true,sfx:true,musicVolume:MUSIC_VOLUME,sfxVolume:SFX_VOLUME,voice:true,reduced:false,large:false},found:[],clues:[],relations:{},impacts:{},timeline:{tick:5,source:'',intervention:null,tried:[]},labs:{active:'contact',done:[],values:{},synthesis:[]},experiment:{action:'',prediction:'',tick:0,pinned:'',explanation:'',baselineSeen:false},strategy:{asked:[],placements:[],simulated:false},final:{phase:'report',applied:[],hands:[],coreClaimed:false},restoration:{},mapHits:{},completed:[],evidence:[]});
+export const fresh = ():State => ({version:1,contentVersion:DATA.contentVersion,route:'C00',lastRoute:'C01',settings:{music:true,sfx:true,musicVolume:MUSIC_VOLUME,sfxVolume:SFX_VOLUME,voice:true,reduced:false,large:false},found:[],clues:[],relations:{},impacts:{},timeline:{tick:5,source:'',intervention:null,tried:[]},labs:{active:'contact',done:[],values:{},synthesis:[]},experiment:{action:'',prediction:'',tick:0,pinned:'',explanation:'',baselineSeen:false,reflection:''},strategy:{asked:[],placements:[],simulated:false},final:{phase:'report',applied:[],hands:[],coreClaimed:false},restoration:{},mapHits:{},completed:[],evidence:[]});
 export function contactAt(tick:number,intervention:number|null=null): Set<string> {
  const trace = new Set(DATA.p05.initialTrace);
  const events:({tick:number;id:string;from?:string;to?:string;wash?:boolean})[] = DATA.p05.events.map(e=>({...e}));
@@ -55,7 +55,7 @@ export function derive(s:State):State {
  const six=pass('P06',five&&LABS.every(x=>s.labs.done.includes(x.id))&&['coughEtiquette','ventilation'].every(x=>s.labs.synthesis.includes(x)));
  const action=DATA.p07.actionPool.find(a=>a.id===s.experiment.action);
  const seven=pass('P07',six&&!!action&&['fewer','same','unsure'].includes(s.experiment.prediction)&&s.experiment.baselineSeen);
- const eight=pass('P08',seven&&!!action&&s.experiment.pinned===action.differenceEvent&&s.experiment.explanation===action.metric);
+ const eight=pass('P08',seven&&!!action&&s.experiment.pinned===action.differenceEvent&&s.experiment.explanation===action.metric&&(s.experiment.reflection===undefined||['matched','different','unsure'].includes(s.experiment.reflection)));
  const nine=pass('P09',eight&&s.strategy.simulated&&planResult(s.strategy.placements).success);
  const ten=pass('P10',nine&&s.strategy.placements.every(p=>s.final.applied.includes(placementKey(p))));
  s.completed=done;s.evidence=[two?'E1':'',four?'E2':'',six?'E3':'',eight?'E4':'',nine?'E5':''].filter(Boolean);
@@ -88,6 +88,8 @@ export function sanitize(input:unknown):State {
  s.labs.done=uniq(labs.done,LABS.map(l=>l.id));for(const [a,b]of Object.entries(record(labs.values)))if(['droplet','air','water','saliva'].includes(a))s.labs.values[a]=num(b,0,1,0);
  s.labs.synthesis=uniq(labs.synthesis,['coughEtiquette','ventilation','washHands']);
  const action=DATA.p07.actionPool.find(a=>a.id===ex.action);s.experiment={action:action?.id??'',prediction:str(ex.prediction,['fewer','same','unsure']),tick:num(ex.tick,0,5,0),pinned:str(ex.pinned,DATA.p07.events.map(e=>e.id)),explanation:str(ex.explanation,DATA.p07.actionPool.map(a=>a.metric)),baselineSeen:ex.baselineSeen===true};
+ // 이전에 완료한 비교 기록은 보존한다. 새 탐구는 예측 돌아보기에 정답 없이 답한다.
+ if(ex.reflection!==undefined||!action||s.experiment.pinned!==action.differenceEvent||s.experiment.explanation!==action.metric)s.experiment.reflection=str(ex.reflection,['matched','different','unsure']);
  s.strategy.asked=uniq(st.asked,DATA.p09.questions.map(q=>q.id),3);
  if(Array.isArray(st.placements))for(const entry of st.placements.slice(0,20)){const p=record(entry);addPlacement(s,{actionId:String(p.actionId),site:String(p.site)});}
  s.strategy.simulated=st.simulated===true;
@@ -105,6 +107,6 @@ export function fixtureFor(stage:number,settings:SettingsInput):State {
  const s=fresh();s.settings=readSettings(settings);if(stage>1){s.found=[...DATA.p01.requiredSites];s.clues=[...DATA.p02.requiredClues];}
  if(stage>2){for(const b of DATA.p03.acceptedBranches)for(const [from,to]of b.requiresAll)s.relations[from]=to;for(const x of DATA.p04.links)s.impacts[x.domain]=x.id;}
  if(stage>3){s.timeline.source='book';s.timeline.intervention=1.5;s.timeline.tried=[4.5,1.5];s.labs.done=LABS.map(x=>x.id);s.labs.values={droplet:1,air:1,water:1,saliva:1};s.labs.synthesis=['coughEtiquette','ventilation'];}
- if(stage>4){s.experiment={action:'washHands',prediction:'fewer',tick:5,pinned:'before-meal',explanation:'hand-object-contact',baselineSeen:true};}
+ if(stage>4){s.experiment={action:'washHands',prediction:'fewer',tick:5,pinned:'before-meal',explanation:'hand-object-contact',baselineSeen:true,reflection:'matched'};}
  s.route=DATA.stages[stage-1].pages[0] as Route;s.lastRoute=s.route;return derive(s);
 }
