@@ -110,8 +110,8 @@ function certificatePage(){
  <p class="cert-kicker">보이지 않는 흔적 · 학교 과학 조사</p>
  <h2 class="cert-title">학교 과학 조사 인증서</h2>
  <div class="cert-to"><p>${[['school','학교'],['class','학년/반'],['number','번호']].map(([id,label])=>`<span class="cert-slot cert-slot-${id}"><small>${label}</small><b></b></span>`).join('')}</p><p><span class="cert-slot cert-slot-name"><small>이름</small><b></b></span></p></div>
- <p class="cert-award">위 조사원은 학교에 남은 보이지 않는 흔적을 관찰하고 근거를 비교해<br>손 씻기·기침 예절·환기·덜어 먹기 실천 계획을 세웠으므로 이 인증서를 드립니다.</p>
- <div class="cert-foot"><p class="cert-date"><small>완료한 날</small><b>${certDate()}</b></p><span class="cert-stamp" aria-hidden="true"><span>조사<br>완료</span></span><p class="cert-giver"><small>주는 이</small><b>기록 파트너</b></p></div>
+ <p class="cert-award">위 조사원은 학교에 남은 보이지 않는 흔적을 관찰하고 근거를 비교하여<br>손 씻기·기침 예절·환기·덜어 먹기 실천 계획을 수립하였으므로 이 인증서를 수여함.</p>
+ <div class="cert-foot"><p class="cert-date"><small>완료한 날</small><b>${certDate()}</b></p><span class="cert-stamp" aria-hidden="true"><span>조사<br>완료</span></span><p class="cert-giver"><small>수여자</small><b>기록 파트너</b></p></div>
  <small class="cert-credit">${CREDIT}</small>
  </div></section>
  <aside class="cert-panel" aria-label="인증서 저장"><p class="cert-handwrite">인쇄한 뒤 학교·반·번호·이름을 직접 적어요.</p>
