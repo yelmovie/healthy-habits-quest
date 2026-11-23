@@ -45,6 +45,7 @@ export function nextInstruction(s: State, v: View): string {
       const event = DATA.p07.events.find(e => e.id === action?.differenceEvent);
       if (!event) return '조건 실험실에서 행동을 먼저 골라요.';
       if (s.experiment.tick < event.time) return '자동재생이나 시간 막대로 두 하루를 관찰해요.';
+      if(s.experiment.pinned&&s.experiment.explanation&&s.experiment.reflection==='')return '내 예상과 무엇이 달랐는지 돌아보기에서 답해요. 정답은 없어요.';
       return s.experiment.pinned ? '달라진 결과 카드 중 알맞은 것을 골라요.' : 'B 그림에서 달라진 곳을 눌러 표시해요.';
     }
     case 'P09': return v.action ? '고른 행동을 놓을 장소 그림을 눌러요.'
@@ -75,6 +76,7 @@ export function learningFocus(s: State, v: View, question = ''): string {
   const page = PAGES.find(p => p.id === s.route);
   if (!page) return '';
   let concept = s.route === 'P06' ? LAB_CONCEPTS[v.lab] ?? page.concept : page.concept;
+  if (s.route === 'P03') concept={term:'경로와 조건',description:'창문 닫힘은 경로가 아니라 공기 흐름에 영향을 주는 조건이에요.'};
   if (s.route === 'P10' && s.final.phase === 'apply' && nextPlacement(s)?.actionId === 'washHands') {
     concept = { term: '30초 이상', description: '실제로는 비누와 흐르는 물로 씻어요. 엄지·손끝·손톱 밑도 꼼꼼히!' };
   }

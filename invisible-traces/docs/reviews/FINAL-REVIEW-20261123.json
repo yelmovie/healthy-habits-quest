@@ -1,0 +1,424 @@
+{
+  "date": "2026-11-23",
+  "scope": "12 보이지 않는 흔적: 로컬 수정·테스트만",
+  "remoteBase": "d6b6c141ee8aaa4886e397bbbed9dfc37d9e1041",
+  "branch": "review/series12-final-20261123",
+  "physicalDeviceTested": false,
+  "runtime": "macOS system Google Chrome, Playwright headless; touch emulation",
+  "unitTests": {
+    "passed": 76,
+    "failed": 0,
+    "log": ".tmp/final-review-20261123/unit.txt"
+  },
+  "regression": [
+    {
+      "name": "p01-touch-list",
+      "ok": true,
+      "viewport": [
+        1024,
+        768
+      ],
+      "large": false,
+      "touchEmulation": true,
+      "errors": []
+    },
+    {
+      "name": "p02-replace-only-unrelated",
+      "ok": true,
+      "viewport": [
+        1024,
+        768
+      ],
+      "large": false,
+      "touchEmulation": true,
+      "errors": []
+    },
+    {
+      "name": "p03-condition-and-retry",
+      "ok": true,
+      "viewport": [
+        1024,
+        768
+      ],
+      "large": false,
+      "touchEmulation": true,
+      "errors": []
+    },
+    {
+      "name": "p06-overlap-and-clear-water",
+      "ok": true,
+      "viewport": [
+        1024,
+        768
+      ],
+      "large": false,
+      "touchEmulation": true,
+      "errors": []
+    },
+    {
+      "name": "p08-prediction-fewer",
+      "ok": true,
+      "viewport": [
+        1024,
+        768
+      ],
+      "large": false,
+      "touchEmulation": true,
+      "errors": []
+    },
+    {
+      "name": "p08-prediction-same",
+      "ok": true,
+      "viewport": [
+        1024,
+        768
+      ],
+      "large": false,
+      "touchEmulation": true,
+      "errors": []
+    },
+    {
+      "name": "p08-prediction-unsure",
+      "ok": true,
+      "viewport": [
+        1024,
+        768
+      ],
+      "large": false,
+      "touchEmulation": true,
+      "errors": []
+    },
+    {
+      "name": "p09-one-scene-hint",
+      "ok": true,
+      "viewport": [
+        1024,
+        768
+      ],
+      "large": false,
+      "touchEmulation": true,
+      "errors": []
+    },
+    {
+      "name": "certificate-immediate",
+      "ok": true,
+      "viewport": [
+        1024,
+        768
+      ],
+      "large": false,
+      "touchEmulation": true,
+      "errors": []
+    },
+    {
+      "name": "certificate-after-1600ms",
+      "ok": true,
+      "viewport": [
+        1024,
+        768
+      ],
+      "large": false,
+      "touchEmulation": true,
+      "errors": []
+    },
+    {
+      "name": "certificate-after-skip",
+      "ok": true,
+      "viewport": [
+        1024,
+        768
+      ],
+      "large": false,
+      "touchEmulation": true,
+      "errors": []
+    },
+    {
+      "name": "certificate-video-failure",
+      "ok": true,
+      "viewport": [
+        1024,
+        768
+      ],
+      "large": false,
+      "touchEmulation": true,
+      "errors": []
+    },
+    {
+      "name": "intro-video-failure-muted",
+      "ok": true,
+      "viewport": [
+        1024,
+        768
+      ],
+      "large": false,
+      "touchEmulation": true,
+      "errors": []
+    },
+    {
+      "name": "wash-layout-1280x800",
+      "ok": true,
+      "viewport": [
+        1280,
+        800
+      ],
+      "large": false,
+      "touchEmulation": true,
+      "errors": []
+    },
+    {
+      "name": "wash-layout-1024x768-large",
+      "ok": true,
+      "viewport": [
+        1024,
+        768
+      ],
+      "large": true,
+      "touchEmulation": true,
+      "errors": []
+    },
+    {
+      "name": "wash-layout-915x412",
+      "ok": true,
+      "viewport": [
+        915,
+        412
+      ],
+      "large": false,
+      "touchEmulation": true,
+      "errors": []
+    },
+    {
+      "name": "wash-layout-390x844",
+      "ok": true,
+      "viewport": [
+        390,
+        844
+      ],
+      "large": false,
+      "touchEmulation": true,
+      "errors": []
+    }
+  ],
+  "flows": [
+    {
+      "width": 1024,
+      "height": 768,
+      "ok": true,
+      "clicks": 78,
+      "errors": []
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "ok": true,
+      "clicks": 78,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "ok": true,
+      "clicks": 86,
+      "errors": []
+    },
+    {
+      "width": 915,
+      "height": 412,
+      "ok": true,
+      "clicks": 84,
+      "errors": []
+    }
+  ],
+  "responsive": {
+    "screens": 806,
+    "sizes": [
+      [
+        360,
+        740
+      ],
+      [
+        390,
+        844
+      ],
+      [
+        740,
+        360
+      ],
+      [
+        768,
+        1024
+      ],
+      [
+        800,
+        270
+      ],
+      [
+        830,
+        515
+      ],
+      [
+        915,
+        412
+      ],
+      [
+        1024,
+        600
+      ],
+      [
+        1024,
+        768
+      ],
+      [
+        1280,
+        720
+      ],
+      [
+        1280,
+        800
+      ],
+      [
+        1366,
+        768
+      ],
+      [
+        1920,
+        1080
+      ]
+    ],
+    "issues": 0,
+    "errors": []
+  },
+  "certificate": {
+    "screens": [
+      {
+        "tag": "1280x800",
+        "empty": {
+          "paperW": 891,
+          "paperH": 630,
+          "widthShare": 0.7,
+          "inView": true,
+          "overflow": [],
+          "contrast": {
+            ".cert-award": 9.5,
+            ".cert-kicker": 7.01,
+            ".cert-slot small": 6.4,
+            ".cert-foot small": 4.81,
+            ".cert-credit": 4.81
+          },
+          "scrollY": false
+        },
+        "printPanelHidden": true,
+        "blanksCm": {
+          "school": {
+            "w": 5.64,
+            "h": 1.19
+          },
+          "class": {
+            "w": 3.27,
+            "h": 1.19
+          },
+          "number": {
+            "w": 2.08,
+            "h": 1.19
+          },
+          "name": {
+            "w": 6.53,
+            "h": 1.31
+          }
+        },
+        "png": {
+          "name": "학교-과학-조사-인증서.png",
+          "bytes": 3561862
+        },
+        "errors": []
+      },
+      {
+        "tag": "1024x768",
+        "empty": {
+          "paperW": 700,
+          "paperH": 495,
+          "widthShare": 0.68,
+          "inView": true,
+          "overflow": [],
+          "contrast": {
+            ".cert-award": 9.5,
+            ".cert-kicker": 7.01,
+            ".cert-slot small": 6.4,
+            ".cert-foot small": 4.81,
+            ".cert-credit": 4.81
+          },
+          "scrollY": false
+        },
+        "printPanelHidden": true,
+        "blanksCm": {
+          "school": {
+            "w": 5.64,
+            "h": 1.19
+          },
+          "class": {
+            "w": 3.27,
+            "h": 1.19
+          },
+          "number": {
+            "w": 2.08,
+            "h": 1.19
+          },
+          "name": {
+            "w": 6.53,
+            "h": 1.31
+          }
+        },
+        "errors": []
+      },
+      {
+        "tag": "1920x1080",
+        "empty": {
+          "paperW": 1287,
+          "paperH": 910,
+          "widthShare": 0.67,
+          "inView": true,
+          "overflow": [],
+          "contrast": {
+            ".cert-award": 9.5,
+            ".cert-kicker": 7.01,
+            ".cert-slot small": 6.4,
+            ".cert-foot small": 4.81,
+            ".cert-credit": 4.81
+          },
+          "scrollY": false
+        },
+        "printPanelHidden": true,
+        "blanksCm": {
+          "school": {
+            "w": 5.64,
+            "h": 1.19
+          },
+          "class": {
+            "w": 3.27,
+            "h": 1.19
+          },
+          "number": {
+            "w": 2.08,
+            "h": 1.19
+          },
+          "name": {
+            "w": 6.53,
+            "h": 1.31
+          }
+        },
+        "errors": []
+      }
+    ],
+    "pdfPages": 1,
+    "pngWidth": 2400,
+    "pngHeight": 1697
+  },
+  "artifacts": ".tmp/final-review-20261123/",
+  "newMediaAssets": 0,
+  "remaining": [
+    "실물 iPad/Android·Safari 터치·성능·실물 인쇄",
+    "실제 학생·교사 검수와 학습 효과",
+    "기존 권리 장부 근거 약함 2개 및 저장소 밖 원본 증빙 재대조",
+    "실제 청취·학교망·오프라인 재검증은 이번 범위에서 미실행"
+  ]
+}

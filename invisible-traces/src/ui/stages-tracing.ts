@@ -48,8 +48,8 @@ export function tracingPages(s: State, v: View): string {
     // 접촉 실험은 P05 기록과 같은 장면이라 탭을 따로 두지 않는다(자동으로 기록됨).
     const labs = LABS.filter(l => l.id !== 'contact');
     const next = labs.find(l => !s.labs.done.includes(l.id))?.id ?? 'synthesis';
-    const tabs = [...labs, { id: 'synthesis', name: '종합', icon: 'link' }];
-    return `<section class="tracing-page tracing-p06"><div class="lab-tabs tracing-lab-tabs" aria-label="실험 선택">${tabs.map(l => btn(`${icon(l.icon, 21)}<span>${l.name}</span>${s.labs.done.includes(l.id) || l.id === 'synthesis' && synthesisReady(s.labs.synthesis) ? icon('check', 16) : ''}`, 'lab', v.lab === l.id ? 'lab-tab selected' : 'lab-tab', `data-id="${l.id}" aria-pressed="${v.lab === l.id}"`)).join('')}</div>
+    const tabs = [...labs, { id: 'synthesis', name: '종합·복습', icon: 'link' }];
+    return `<section class="tracing-page tracing-p06"><p class="lab-model-notice">접촉은 앞 실험(P05)에서 다뤘어요. 종합은 배운 내용을 다시 쓰는 복습이에요.${['droplet','air','synthesis'].includes(v.lab)?'<span>비말과 공기 중 작은 입자는 같은 상황에서 함께 퍼질 수 있어요. 병마다 전파 방식이 달라요.</span>':''}</p><div class="lab-tabs tracing-lab-tabs" aria-label="실험 선택">${tabs.map(l => btn(`${icon(l.icon, 21)}<span>${l.name}</span>${s.labs.done.includes(l.id) || l.id === 'synthesis' && synthesisReady(s.labs.synthesis) ? icon('check', 16) : ''}`, 'lab', v.lab === l.id ? 'lab-tab selected' : 'lab-tab', `data-id="${l.id}" aria-pressed="${v.lab === l.id}"`)).join('')}</div>
       <section class="lab-device tracing-device tracing-device-${v.lab}">${labDevice(s, v)}</section>
       ${next !== v.lab && (s.labs.done.includes(v.lab) || v.lab === 'contact') ? `<div class="tracing-lab-play">${btn(`<span>${next === 'synthesis' ? '종합 문제 풀기' : `다음 실험: ${LABS.find(l => l.id === next)?.name}`}</span>${icon('arrow', 20)}`, 'lab', 'primary next-target', `data-id="${next}"`)}</div>` : ''}
     </section>`;
