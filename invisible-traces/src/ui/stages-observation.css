@@ -3,8 +3,8 @@
 .observation-page :is(button,span,div,aside,strong,small,p,nav) { min-width: 0; }
 .observation-page button { touch-action: none; }
 .observation-page .mission-question { flex: none; margin: 0; line-height: 1.35; }
-.observation-page :is(.obs-focus-tabs,.obs-site-tabs,.obs-clue-pager) { display: flex; gap: .4rem; min-height: 48px; flex: none; }
-.observation-page :is(.obs-focus-tabs,.obs-site-tabs,.obs-clue-pager) .btn { min-height: 48px; padding: .35rem .7rem; line-height: 1.2; }
+.observation-page :is(.obs-focus-tabs,.obs-site-tabs) { display: flex; gap: .4rem; min-height: 48px; flex: none; }
+.observation-page :is(.obs-focus-tabs,.obs-site-tabs) .btn { min-height: 48px; padding: .35rem .7rem; line-height: 1.2; }
 .observation-page .obs-focus-tabs { display: none; }
 .observation-page .obs-next { border-color: var(--purple); }
 .observation-page button.obs-next:focus-visible { outline-color: var(--purple); }
@@ -24,20 +24,9 @@
 .observation-p01 .site-bottom strong { font-size: 1.1rem; }
 .observation-p01 .site-bottom > span { display: inline-flex; align-items: center; gap: .3rem; color: var(--teal-strong); font-size: 1rem; }
 
-.observation-p02 .obs-clue-pager { display: none; }
 .observation-p02 .obs-site-picker { display: none; }
 .observation-p02 .evidence-layout { display: grid; grid-template-columns: minmax(0,1fr) minmax(235px,.33fr); grid-template-rows: minmax(0,1fr); flex: 1 1 0; min-height: 0; gap: .65rem; }
-.observation-p02 .clue-board { display: flex; flex-direction: column; min-height: 0; padding: .7rem; }
-.observation-p02 .clue-backdrop { opacity: .2; }
-.observation-p02 .clue-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); grid-template-rows: minmax(0,1fr); gap: .65rem; height: 100%; min-height: 0; flex: 1 1 0; }
-.observation-p02 .clue-card { display: flex; flex-direction: column; justify-content: center; min-height: 0; padding: .8rem; gap: .8rem; border: 2px solid var(--line); overflow: hidden; }
-.observation-p02 .clue-card.obs-next { border-color: var(--purple); }
-.observation-p02 .clue-card.selected { border-color: var(--teal); background: var(--teal-soft); }
-.obs-clue-heading { display: grid; grid-template-columns: 48px minmax(0,1fr) 22px; align-items: center; gap: .5rem; align-self: stretch; }
-.obs-clue-heading .clue-icon { width: 48px; height: 48px; flex: none; }
-.obs-clue-heading strong { font-size: 1.08rem; line-height: 1.4; }
-.obs-clue-heading > svg { color: var(--teal-strong); }
-.observation-p02 .clue-card > .obs-clue-description { font-size: 1rem; line-height: 1.6; color: var(--ink); }
+.observation-p02 .evidence-layout .clue-board { display: grid; grid-template-rows: minmax(0, 1fr) auto; min-height: 0; padding: 0; background: #163d45; }
 .observation-p02 .evidence-tray { display: flex; min-height: 0; padding: .7rem; gap: .6rem; border: 1px solid var(--line); box-shadow: none; }
 .observation-p02 .panel-heading { flex: none; font-size: 1rem; }
 .obs-evidence-slots { display: grid; grid-template-rows: repeat(5,minmax(0,1fr)); gap: .45rem; min-height: 0; flex: 1 1 0; }
@@ -103,16 +92,9 @@
   .observation-p01 .site-bottom { padding: .4rem .65rem; }
   .observation-p01 .scanner-orb { width: 58px; height: 58px; }
   .observation-p02 .evidence-layout { grid-template-columns: minmax(0,1fr); }
-  .observation-p02.obs-mode-clues .evidence-tray,.observation-p02.obs-mode-tray .clue-board { display: none; }
-  .observation-p02.obs-mode-tray :is(.obs-site-tabs,.obs-clue-pager) { display: none; }
+  .observation-p02.obs-mode-clues .evidence-tray,.observation-p02.obs-mode-tray .evidence-layout .clue-board,
+  .observation-p02.obs-mode-tray .obs-site-tabs { display: none; }
   .observation-p02 .evidence-tray .panel-heading:not(.obs-replacement) { display: none; }
-  .observation-p02 .obs-clue-pager { display: flex; }
-  .observation-p02 .obs-clue-pager .btn { min-width: 44px; padding-inline: .4rem; }
-  .observation-p02 .clue-grid { grid-template-columns: minmax(0,1fr); gap: 0; }
-  .observation-p02 .clue-card:not(.obs-current) { display: none; }
-  .observation-p02 .clue-card { justify-content: center; padding: .7rem; gap: .6rem; }
-  .observation-p02 .obs-clue-heading { grid-template-columns: 40px minmax(0,1fr) 22px; }
-  .observation-p02 .obs-clue-heading .clue-icon { width: 40px; height: 40px; }
   .observation-p03 .relationship-board,.observation-p04 .impact-layout { grid-template-columns: minmax(0,1fr); }
   .observation-p03.obs-mode-sources .obs-target-section,.observation-p03.obs-mode-targets .source-cards { display: none; }
   .observation-p03 .source-cards { grid-template-columns: repeat(2,minmax(0,1fr)); grid-template-rows: repeat(3,minmax(0,1fr)); }
@@ -126,10 +108,8 @@
   .observation-p02 .obs-toolbar { display: grid; grid-template-columns: minmax(0,1fr) auto; grid-template-rows: auto auto; gap: .45rem; align-items: stretch; }
   .observation-p02 .obs-focus-tabs { grid-column: 1/-1; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); }
   .observation-p02 .obs-site-tabs { display: none; }
-  .observation-p02 .obs-site-picker { display: flex; grid-column: 1; grid-row: 2; min-width: 0; min-height: 44px; }
+  .observation-p02 .obs-site-picker { display: flex; grid-column: 1/-1; grid-row: 2; min-width: 0; min-height: 44px; }
   .observation-p02 .obs-site-picker select { min-width: 0; width: 100%; min-height: 44px; padding-block: .35rem; }
-  .observation-p02 .obs-clue-pager { grid-column: 2; grid-row: 2; display: grid; grid-auto-flow: column; grid-auto-columns: 44px; gap: .3rem; }
-  .observation-p02 .obs-clue-pager .btn { min-width: 44px; width: 44px; padding-inline: .2rem; }
   .observation-p02.obs-mode-tray .obs-site-picker { display: none; }
   .observation-p02.obs-mode-tray .obs-toolbar { grid-template-rows: auto; }
   .observation-p03 .source-card { grid-template-columns: 32px minmax(0,1fr) 18px; padding: .45rem; gap: .35rem; }
@@ -156,11 +136,6 @@
   .observation-p01 .obs-scan-toolbar { flex-wrap: nowrap; }
   .observation-p01 .playback-controls { margin-left: auto; }
   .observation-p02 .obs-toolbar { flex-wrap: nowrap; }
-  .observation-p02 .clue-card { padding: .55rem; gap: .3rem; }
-  .observation-p02 .obs-clue-heading { grid-template-columns: 32px minmax(0,1fr) 22px; }
-  .observation-p02 .obs-clue-heading .clue-icon { width: 32px; height: 32px; }
-  .observation-p02 .obs-clue-heading .clue-icon > svg { width: 27px; }
-  .observation-p02 .obs-clue-description { line-height: 1.4; }
   .observation-p02 .obs-evidence-slots { grid-template-columns: repeat(3,minmax(0,1fr)); grid-template-rows: repeat(2,minmax(0,1fr)); }
   .observation-p03 .source-cards { grid-template-columns: repeat(3,minmax(0,1fr)); grid-template-rows: repeat(2,minmax(0,1fr)); }
   .observation-p03 .source-card { padding: .35rem .5rem; }
@@ -211,4 +186,93 @@
   body.large-text .observation-p02 .evidence-slot.filled > svg:first-of-type { display: none; }
   body.large-text .observation-p02 .evidence-slot.filled b { grid-column: 1; line-height: 1.2; }
   body.large-text .observation-p02 .evidence-slot.filled > svg:last-of-type { grid-column: 2; }
+}
+
+/* The image and its hit areas share the same bounds, even when the board is letterboxed. */
+.clue-visual {
+  position: relative;
+  container-type: size;
+  min-height: 0;
+  background: radial-gradient(ellipse at center, #395d66, #163d45);
+}
+.clue-scene {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -50%);
+  width: min(100cqw, calc(100cqh * 16 / 9));
+  aspect-ratio: 16 / 9;
+}
+.clue-scene .clue-backdrop { object-fit: fill; opacity: 1; }
+.clue-hotspot {
+  position: absolute;
+  z-index: 1;
+  inset: var(--clue-y) auto auto var(--clue-x);
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  width: clamp(48px, 20cqh, 98px);
+  height: clamp(48px, 20cqh, 98px);
+  padding: 0;
+  border: 0;
+  border-radius: 16px;
+  background: transparent;
+  color: #4e3687;
+  cursor: pointer;
+}
+.clue-hotspot:focus-visible { outline: 3px solid #fff; box-shadow: 0 0 0 6px #694cbf; }
+.clue-hotspot-mark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: #f5f0ff;
+  box-shadow: 0 0 0 3px #694cbf, 0 4px 12px #112d3c88;
+  pointer-events: none;
+}
+.clue-hotspot:has(.clue-prop) .clue-hotspot-mark { position: absolute; inset: auto 0 0 auto; width: 29px; height: 29px; }
+.clue-hotspot:has(.clue-prop) .clue-hotspot-mark svg { width: 16px; }
+.clue-hotspot[aria-pressed="true"] .clue-hotspot-mark { color: #fff; background: #08756f; box-shadow: 0 0 0 3px #08756f, 0 4px 12px #112d3c88; }
+.clue-hotspot.inspected .clue-hotspot-mark { outline: 3px solid #fff; outline-offset: 4px; }
+.clue-prop { display: block; width: 100%; height: 100%; min-height: 0; object-fit: contain; pointer-events: none; filter: drop-shadow(0 3px 4px #142c3baa); }
+.clue-prop-icon { display: grid; place-items: center; width: 68%; height: 68%; max-width: 54px; max-height: 54px; border-radius: 10px; background: #fff5d8; color: #594634; }
+.clue-field-note {
+  display: flex;
+  align-items: flex-start;
+  gap: .65rem;
+  min-height: 60px;
+  padding: .55rem .8rem;
+  background: #f1f8fa;
+  color: var(--ink);
+}
+.clue-field-note > svg { flex: none; color: #5e43a5; }
+.clue-field-note div { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: .6rem; line-height: 1.4; }
+.clue-field-note b { flex: none; }
+.observation-p03 .target-card.obs-next,
+.observation-p04 .impact-domain.obs-next { border-color: #7556d4; }
+@media (hover:hover) {
+  .clue-hotspot:hover .clue-hotspot-mark { outline: 3px solid #fff; outline-offset: 4px; }
+}
+@media (max-width: 700px) and (orientation: portrait) {
+  .clue-visual { container-type: inline-size; }
+  .clue-scene { width: 100%; }
+  .clue-hotspot { width: 54px; height: 54px; }
+}
+
+@media (max-height: 560px) {
+  .activity-layout .page-content:has(.observation-p02, .observation-p03, .observation-p04) { overflow-y: auto; }
+  .observation-p02 { min-height: 360px; flex-shrink: 0; }
+  .observation-p03, .observation-p04 { min-height: 360px; flex-shrink: 0; }
+  .observation-p03 .target-card .obs-relationship-scene,
+  .observation-p04 .impact-domain .obs-impact-scene { display: grid; }
+  .observation-p03 .obs-active-selection.ready,
+  .observation-p04 .obs-active-selection.ready { display: flex; }
+}
+@media (max-width: 700px) {
+  .activity-layout .page-content:has(.observation-p04) { overflow-y: auto; }
+  .observation-p04 { min-height: 510px; flex-shrink: 0; }
+  .observation-p04 .impact-domains { grid-template-rows: repeat(3,minmax(95px,1fr)); }
+  .large-text .observation-p04 { min-height: 590px; }
 }

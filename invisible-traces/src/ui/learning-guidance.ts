@@ -18,35 +18,35 @@ export function nextInstruction(s: State, v: View): string {
     return next ? `잘 해냈어요! 「다음 조사」를 눌러 ${next.name}${toParticle(next.name)} 가요.` : '잘 해냈어요! 「다음 조사」를 눌러요.';
   }
   switch (s.route) {
-    case 'P01': return '돋보기를 그림 위로 움직여 보라 빛이 숨은 곳을 찾아요.';
+    case 'P01': return '그림에서 보라 빛이 나는 곳을 누르거나 돋보기로 찾아요.';
     case 'P02': return v.replacement ? '단서함에서 바꿀 단서를 눌러요.'
-      : s.clues.length === 5 ? '단서함에서 관계가 먼 단서를 바꿔요.' : '장소를 바꿔 보며 관련 단서를 눌러 담아요.';
+      : s.clues.length === 5 ? '단서함에서 관계가 먼 단서를 바꿔요.' : '그림 속 단서를 눌러 읽고, 사건과 연결되는 것을 단서함에 남겨요.';
     case 'P03': return v.clue ? '이 단서와 이어지는 생활 상황을 눌러요.' : '연결할 단서를 골라요.';
     case 'P04': return '반짝이는 카드의 일이 누구에게 생길지 그림을 눌러요.';
     case 'P05':
       if (s.timeline.source !== 'book') return s.timeline.tick > 0 ? '시간 막대를 0으로 옮겨 처음을 살펴봐요.' : '처음 흔적이 있는 물체를 눌러요.';
-      if (s.timeline.tried.length === 0) return '비누 방패를 넣을 때를 하나 골라요.';
-      return s.timeline.tried.includes(1.5) ? '다른 때에도 넣어 흔적 수를 비교해요.' : '더 일찍 씻으면 흔적이 줄어들까요?';
+      if (s.timeline.tried.length === 0) return '물방울이 표시된 그림을 눌러 손 씻을 때를 골라요.';
+      return s.timeline.tried.includes(1.5) ? '다른 그림을 눌러 씻는 때에 따라 남는 흔적 수를 비교해요.' : '더 일찍 씻으면 흔적이 줄어들까요?';
     case 'P06': {
-      if (v.lab === 'synthesis') return '관찰한 기록을 떠올리며 다른 흔적을 줄일 행동 두 개를 골라요.';
+      if (v.lab === 'synthesis') return '그림을 눌러 기침하는 상황과 닫힌 공간을 각각 바꿔요.';
       if (s.labs.done.includes(v.lab)) return '다음 실험 버튼을 눌러 다른 경로도 살펴봐요.';
       const instructions: Record<string, string> = {
         contact: '다음 실험 버튼을 눌러 다른 경로를 살펴봐요.',
-        droplet: '옷소매를 기침하는 친구의 입으로 끌어 흔적 범위를 비교해요.',
-        air: '열기를 눌러 창문 전후를 비교해요.',
-        water: '관리 정보를 읽고 마실 물을 골라요.',
+        droplet: '기침하는 친구 그림을 눌러 옷소매로 입과 코를 가려요.',
+        air: '창문 그림을 눌러 열기 전과 후를 비교해요.',
+        water: '관리 정보를 읽고 마실 물의 그림을 눌러요.',
         saliva: '덜기 도구를 개인 접시로 끌거나 개인 접시를 눌러 도구의 역할을 봐요.',
       };
       return instructions[v.lab] ?? '살펴볼 실험을 골라요.';
     }
-    case 'P07': return s.experiment.action ? '흔적이 어떻게 달라질지 예측을 눌러요.' : '바꿔 볼 행동 하나를 눌러요.';
+    case 'P07': return s.experiment.action ? '흔적이 어떻게 달라질지 예측을 눌러요.' : '그림을 눌러 바꿔 볼 행동 하나를 골라요.';
     case 'P08': {
       const action = DATA.p07.actionPool.find(a => a.id === s.experiment.action);
       const event = DATA.p07.events.find(e => e.id === action?.differenceEvent);
       if (!event) return '조건 실험실에서 행동을 먼저 골라요.';
       if (s.experiment.tick < event.time) return '자동재생이나 시간 막대로 두 하루를 관찰해요.';
       if(s.experiment.pinned&&s.experiment.explanation&&s.experiment.reflection==='')return '내 예상과 무엇이 달랐는지 돌아보기에서 답해요. 정답은 없어요.';
-      return s.experiment.pinned ? '달라진 결과 카드 중 알맞은 것을 골라요.' : 'B 그림에서 달라진 곳을 눌러 표시해요.';
+      return s.experiment.pinned ? '달라진 결과 카드 중 알맞은 것을 골라요.' : 'B 그림에서 테두리로 표시된 곳을 눌러요.';
     }
     case 'P09': return v.action ? '고른 행동을 놓을 장소 그림을 눌러요.'
       : !s.strategy.placements.length ? '장소의 설명을 읽고 행동 카드를 눌러요.'
@@ -54,8 +54,8 @@ export function nextInstruction(s: State, v: View): string {
     case 'P10': {
       if (s.final.phase === 'report') return '내 계획을 보고 직접 실천하기를 눌러요.';
       const placement = nextPlacement(s);
-      if (placement?.actionId === 'washHands') return '손바닥·손등·손가락 사이 카드를 쓱쓱 문질러요.';
-      if (placement?.actionId === 'ventilation') return '창문을 오른쪽으로 밀거나 「창문 밀어 열기」를 눌러요.';
+      if (placement?.actionId === 'washHands') return '손바닥·손등·손가락 사이 그림을 쓱쓱 문지르거나 눌러요.';
+      if (placement?.actionId === 'ventilation') return '창문 그림을 누르거나 오른쪽으로 밀어 열어요.';
       return '공용 음식을 개인 접시로 끌거나 접시를 눌러 덜어요.';
     }
     default: return '';
@@ -85,7 +85,7 @@ export function learningFocus(s: State, v: View, question = ''): string {
 
 export function recheckInstruction(s: State, v: View): string {
   switch(s.route) {
-    case 'P02': return '단서함을 눌러 남길 카드의 장소와 행동을 다시 읽어요. 지금 조사하는 상황과 연결되는 근거가 있는지 비교해요.';
+    case 'P02': return '그림 속 단서를 다시 눌러 그 장소와 행동을 살펴봐요. 지금 조사하는 상황과 연결되는 근거가 있는지 비교해요.';
     case 'P03': case 'P04': return '카드를 눌러 관찰 문장을 다시 읽어요. 고른 생활 장면에서 같은 변화가 있는지 살펴봐요.';
     case 'P05': case 'P08': return '시간 막대를 움직여 앞뒤 장면의 같은 곳을 봐요. 흔적이 나타난 곳과 사라진 곳을 비교해요.';
     case 'P06': return '살펴본 실험의 처음과 결과를 비교해요. 어떤 조건을 바꿨고 흔적이 어디까지 남았는지 확인해요.';

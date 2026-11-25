@@ -2,7 +2,7 @@ import { labAssets } from '../data/lab-assets';
 import { DATA, LABS, NODE_NAMES } from '../data/game';
 import { contactAt, type State } from '../simulation/model';
 import { icon } from './icons';
-import { btn, image, actionName, playbackControls, windowIllustration } from './render-parts';
+import { btn, image, playbackControls, windowIllustration } from './render-parts';
 export const VISIBLE_LABS = LABS.filter(l => l.id !== 'contact');
 import type { View } from './render';
 
@@ -14,7 +14,27 @@ const nodeIcons = ['book', 'hand', 'ball', 'hand', 'door', 'hand'];
 const nodeArt = [labAssets.book, labAssets.handPalm, labAssets.ball, labAssets.handPalm, labAssets.door, labAssets.handPalm];
 const nodeImage = (i: number) => `<img src="${nodeArt[i].src}" alt="" width="${nodeArt[i].width}" height="${nodeArt[i].height}" decoding="async" draggable="false">`;
 const interventionNames = ['공을 만지기 전', '공을 만진 뒤', '다른 친구가 쓴 뒤', '문손잡이에 옮겨진 뒤'];
-const interventionShort = ['공 만지기 전', '공 만진 뒤', '친구가 쓴 뒤', '손잡이 뒤'];
+function traceStop(s: State, node: string, i: number, trace: Set<string>, avoided: string[]): string {
+  const tick = DATA.p05.intervention.allowedTicks[i - 1];
+  const source = s.timeline.source === node;
+  const choosingSource = s.timeline.source !== 'book';
+  const canWash = !choosingSource && tick !== undefined;
+  const isActive = canWash && s.timeline.intervention === tick;
+  const tried = canWash && s.timeline.tried.includes(tick);
+  const tag = choosingSource || canWash ? 'button' : 'div';
+  const timing = interventionNames[i - 1];
+  const count = tried ? `흔적 ${contactAt(5, tick).size}곳` : '';
+  const action = choosingSource
+    ? `data-action="source" data-id="${node}" aria-pressed="${source}"`
+    : canWash ? `data-action="intervene" data-id="${tick}" aria-label="${timing} 손 씻기${tried?`, ${count}`:''}" aria-pressed="${isActive}"` : '';
+  return `<div class="trace-stop"><${tag} class="trace-node ${trace.has(node)?'has-trace':''} ${source?'source':''} ${avoided.includes(node)?'trace-protected':''} ${canWash?'trace-wash-stop':''}" data-node="${node}" ${action}>
+    <span class="trace-step-number">${i}</span>
+    <span class="trace-object">${nodeImage(i)}</span>
+    <b>${node==='door'?'문<wbr>손잡이':NODE_NAMES[node]}</b>
+    <span class="trace-state"><span class="trace-state-on">${icon('search',16)} 있음</span><span class="trace-state-off">없음</span><span class="prevented-trace">${avoided.includes(node)?'연결 차단':''}</span></span>
+    ${canWash?`<span class="trace-wash ${isActive?'active':''}">${icon(tried?'check':'drop',18)}<span>${tried?count:timing}</span></span>`:`<em class="trace-source-label">${icon('flag',16)} 시작</em>`}
+  </${tag}></div>`;
+}
 
 export function tracingPages(s: State, v: View): string {
   if (s.route === 'P05') {
@@ -26,23 +46,11 @@ export function tracingPages(s: State, v: View): string {
         <section class="timeline-stage tracing-stage" aria-label="접촉 순서 모형">
           ${image('classroom', 'timeline-background')}
           <div class="timeline-scene tracing-sequence">
-            ${DATA.p05.nodes.map((node, i) => `<button class="trace-node ${trace.has(node) ? 'has-trace' : ''} ${s.timeline.source === node ? 'source' : ''} ${avoided.includes(node)?'trace-protected':''}" data-node="${node}" data-action="source" data-id="${node}" aria-pressed="${s.timeline.source === node}">
-              <span class="trace-step-number">${i}</span>
-              <span class="trace-object">${nodeImage(i)}</span>
-              <b>${node === 'door' ? '문<wbr>손잡이' : NODE_NAMES[node]}</b>
-              <span class="trace-state"><span class="trace-state-on">${icon('search', 16)} 있음</span><span class="trace-state-off">없음</span><span class="prevented-trace">${avoided.includes(node) ? '연결 차단' : ''}</span></span>
-              <em class="trace-source-label">${icon('flag', 16)} 시작</em>
-            </button>`).join('')}
+            ${DATA.p05.nodes.map((node,i)=>traceStop(s,node,i,trace,avoided)).join('')}
           </div>
         </section>
-        <aside class="intervention-panel tracing-intervention">
-          <button class="soap-shield" draggable="true" data-drag="wash-point" data-id="wash" aria-label="비누 방패를 아래 시점으로 끌어 놓기. 아래 시점을 눌러도 같아요.">${icon('hand',28)} 비누 방패</button><label class="tracing-intervention-label" for="tracing-intervention">${icon('hand', 24)}<b>손 씻을 때</b></label>
-          <div class="tracing-choices">${DATA.p05.intervention.allowedTicks.map((tick, i) => { const tried = s.timeline.tried.includes(tick), left = contactAt(5, tick).size; return btn(`<span class="choice-full">${interventionNames[i]}</span><span class="choice-short">${interventionShort[i]}</span>${tried ? `<small class="trial-result ${left <= 2 ? 'good' : ''}">흔적 ${left}곳</small>` : ''}`, 'intervene', `${s.timeline.intervention === tick ? 'choice selected' : 'choice'} ${tried ? 'tried' : ''} ${s.timeline.source === 'book' && s.timeline.tried.length < 2 && !tried ? 'next-target' : ''}`, `data-drop="wash-point" data-id="${tick}" aria-pressed="${s.timeline.intervention === tick}"`); }).join('')}</div>
-          <select id="tracing-intervention" class="tracing-intervention-select" data-select="intervention" aria-label="손 씻을 때 선택"><option value="">시점을 골라요</option>${DATA.p05.intervention.allowedTicks.map((tick, i) => `<option value="${tick}" ${s.timeline.intervention === tick ? 'selected' : ''}>${interventionNames[i]}</option>`).join('')}</select>
-          ${s.timeline.intervention === null ? '' : `<div class="intervention-result" id="prevention-result">${icon(s.timeline.intervention === 1.5 ? 'check' : 'info', 20)}<span>${s.timeline.intervention === null ? '두 때 이상 넣어 흔적 수를 비교해요.' : `${before.size}곳 → ${trace.size}곳에 모형 흔적. ${avoided.length}곳의 연결이 달라졌어요.`}</span></div>`}
-        </aside>
       </div>
-      <div class="tracing-play-row">${playbackControls(v, 'timeline')}<div class="tracing-time-controls"><input id="tracing-time" aria-label="사건 시간 되감기" data-range="timeline" type="range" min="0" max="5" step="0.1" value="${s.timeline.tick}"><span class="trace-model-note">접촉 경로 학습 모형 · 실제 감염 여부나 모든 감염병의 전파를 나타내지 않아요.</span><span id="time-label">사건 ${s.timeline.tick.toFixed(1)} / 5</span></div></div></section>`;
+      <div class="tracing-play-row">${playbackControls(v, 'timeline')}<div class="tracing-time-controls"><input id="tracing-time" aria-label="사건 시간 되감기" data-range="timeline" type="range" min="0" max="5" step="0.1" value="${s.timeline.tick}"><span class="trace-model-note" id="prevention-result"><span>${s.timeline.intervention===null?'접촉 경로 학습 모형 · 실제 감염 여부를 나타내지 않아요.':`모형 흔적 ${before.size}곳 → ${trace.size}곳 · ${avoided.length}곳의 연결이 달라졌어요.`}</span></span><span id="time-label">사건 ${s.timeline.tick.toFixed(1)} / 5</span></div></div></section>`;
   }
   if (s.route === 'P06') {
     // 접촉 실험은 P05 기록과 같은 장면이라 탭을 따로 두지 않는다(자동으로 기록됨).
@@ -62,8 +70,13 @@ function learnerFigure(covered = false, coughing = false): string {
   return `<img class="tracing-learner" src="${art.src}" width="${art.width}" height="${art.height}" alt="" aria-hidden="true" data-cough-state="${covered ? 'covered' : 'uncovered'}" decoding="async" draggable="false">`;
 }
 
-function coughFigure(covered: boolean, sleeveTarget = false): string {
-  return `<div class="tracing-cough-view ${covered ? 'is-covered' : ''}"><div class="tracing-cough-people"><div class="tracing-cough-person ${sleeveTarget && !covered ? 'sleeve-target' : ''}" ${sleeveTarget && !covered ? 'data-drop="sleeve" data-id="droplet"' : ''}>${learnerFigure(covered, true)}<b>${covered ? '옷소매로 가린 기침' : '가리지 않은 기침'}</b></div><div class="tracing-cough-path" aria-hidden="true"><span></span><i></i><i></i><i></i><i></i><i></i></div><div class="tracing-cough-person tracing-cough-friend">${learnerFigure()}<b>함께 있는 친구</b></div></div></div>`;
+function coughFigure(covered: boolean, synthesis = false): string {
+  const action = synthesis ? 'data-action="synthesis" data-id="coughEtiquette"' : `data-action="lab-set" data-id="droplet" data-value="${covered?0:1}"`;
+  return `<div class="tracing-cough-view ${covered?'is-covered':''}"><div class="tracing-cough-people">
+    <button type="button" class="tracing-cough-person lab-picture-control" ${action} aria-pressed="${covered}" aria-label="${covered?'가리지 않은 기침 보기':'옷소매로 입과 코 가리기'}">${learnerFigure(covered,true)}<b>${covered?'옷소매로 가린 기침':'가리지 않은 기침'}</b><span class="lab-touch-mark" aria-hidden="true">${icon(covered?'undo':'hand',19)}</span></button>
+    <div class="tracing-cough-path" aria-hidden="true"><span></span><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="tracing-cough-person tracing-cough-friend">${learnerFigure()}<b>함께 있는 친구</b></div>
+  </div></div>`;
 }
 
 // 물 자체는 두 쪽 모두 똑같이 맑은 컵이다(겉모습으로 정답을 알 수 없게). 관리된 물에만 출처인 점검된 정수기가 함께 보인다.
@@ -88,21 +101,24 @@ const heading = (title: string, term = '') => `<h2 class="tracing-device-heading
         <div class="tracing-device-art tracing-contact">${DATA.p05.nodes.map((x, i) => `<div class="tracing-contact-node ${i <= v.demoStep ? 'observed' : ''}"><span class="tracing-contact-order">${i + 1}</span>${icon(nodeIcons[i], 66)}<b><span class="tracing-contact-name">${NODE_NAMES[x]}</span><span class="tracing-contact-short">${['책', 'A의 손', '공', 'B의 손', '손잡이', 'C의 손'][i]}</span></b>${i < 5 ? `<span class="tracing-contact-arrow" aria-hidden="true">${icon('arrow', 23)}</span>` : ''}</div>`).join('')}</div>
         ${result('늦게 손을 씻어도 이미 다른 물체에 옮겨진 흔적은 남아요.', s.labs.done.includes('contact'), '옮겨진 흔적은 남아요.')}`;
     case 'droplet':
-      return `${heading('옷소매로 입과 코를 가리면?', '비말은 기침·재채기 때 튀는 작은 침방울이에요.')}<div class="tracing-device-art">${coughFigure(!!value, true)}</div>
-        <div class="tracing-device-action">${value ? btn(`${icon('undo', 22)} 가리기 전 보기`, 'lab-set', 'primary small', 'data-id="droplet" data-value="0" aria-label="가리기 전 보기"') : btn(`${icon('hand', 24)} 옷소매를 입으로 끌어요`, 'lab-set', 'sleeve-chip next-target', 'data-id="droplet" data-value="1" draggable="true" data-drag="sleeve" aria-label="옷소매로 입과 코 가리기. 눌러도 가려져요."')}</div>
+      return `${heading('옷소매로 입과 코를 가리면?', '비말은 기침·재채기 때 튀는 작은 침방울이에요.')}<div class="tracing-device-art">${coughFigure(!!value)}</div>
         ${result('흔적이 퍼지는 범위가 줄었어요.', !!value, '흔적 범위가 줄었어요.', !!value)}`;
     case 'air':
       return `${heading('창문을 열면 무엇이 달라질까요?')}
-        <div class="tracing-device-art tracing-room"><div class="window-demo illustrated-window tracing-window ${value ? 'open' : ''}" data-gesture="window" aria-label="오른쪽으로 밀어 여는 창문">${windowIllustration(!!value)}</div></div>
-        <div class="tracing-device-action device-controls tracing-device-controls">${btn('닫기', 'lab-set', !value ? 'small selected' : 'small', 'data-id="air" data-value="0" aria-label="창문 닫힘"')}${btn('열기', 'lab-set', value ? 'small selected' : 'small', 'data-id="air" data-value="1" aria-label="창문 열기"')}</div>
+        <div class="tracing-device-art tracing-room"><button type="button" class="window-demo illustrated-window tracing-window lab-picture-control ${value?'open':''}" ${value?'':'data-gesture="window"'} data-action="lab-set" data-id="air" data-value="${value?0:1}" aria-pressed="${!!value}" aria-label="${value?'창문 닫기':'창문 열기'}">${windowIllustration(!!value)}<span class="lab-touch-mark" aria-hidden="true">${icon(value?'undo':'hand',19)}</span></button></div>
         ${result('바깥 공기와 바뀌며 공기 중 흔적이 줄어요.', !!value, '공기 흐름이 생겨요.', !!value)}`;
     case 'water':
       return `${heading('맑아 보이면 모두 괜찮을까요?')}
         <div class="tracing-device-art water-options tracing-water-options"><button class="water-card ${value === 1 ? 'selected' : ''}" data-action="water" data-id="1" aria-pressed="${value === 1}">${waterGlass(true)}<strong>관리 기록이 확인된 물</strong><small>${icon('file', 18)} 학교에서 공급·관리</small></button><button class="water-card ${value === 2 ? 'selected' : ''}" data-action="water" data-id="2" aria-pressed="${value === 2}">${waterGlass(false)}<strong>출처가 확인되지 않은 물</strong><small>${icon('search', 18)} 어디서 담았는지 몰라요</small></button></div>
         ${result(value === 1 ? '공급·관리 정보를 근거로 골랐어요.' : value === 2 ? '투명해도 안전한지 알 수 없어요.' : '두 물의 겉모습보다 관리 정보를 살펴봐요.', value === 1, value === 1 ? '관리 정보를 확인했어요.' : '관리 정보를 살펴봐요.', value !== 0)}`;
-    case 'synthesis':
-      return `${heading('닫힌 교실에서 기침한다면?')}<div class="tracing-device-art tracing-synthesis-scene"><span class="tracing-synthesis-window ${s.labs.synthesis.includes('ventilation') ? 'open' : ''}"><img src="${(s.labs.synthesis.includes('ventilation') ? labAssets.windowOpen : labAssets.windowClosed).src}" alt="" draggable="false"><b>${s.labs.synthesis.includes('ventilation') ? '열린 창문' : '닫힌 창문'}</b></span>${coughFigure(s.labs.synthesis.includes('coughEtiquette'))}</div>
-        <div class="tracing-device-action tracing-synthesis-choices">${['coughEtiquette', 'ventilation', 'washHands'].map(id => btn(`${icon(s.labs.synthesis.includes(id) ? 'check' : id === 'ventilation' ? 'window' : id === 'coughEtiquette' ? 'air' : 'hand', 25)}<span>${actionName(id)}</span>`, 'synthesis', s.labs.synthesis.includes(id) ? 'small selected' : 'small', `data-id="${id}" aria-pressed="${s.labs.synthesis.includes(id)}"`)).join('')}</div>${result(synthesisReady(s.labs.synthesis) ? '기침 예절과 환기는 각각의 상황을 바꿔요.' : '기침과 닫힌 공간을 각각 바꾸는 두 행동을 골라요.', synthesisReady(s.labs.synthesis), undefined, s.labs.synthesis.length > 0)}`;
+    case 'synthesis': {
+      const open = s.labs.synthesis.includes('ventilation');
+      return `${heading('닫힌 교실에서 기침한다면?')}<div class="tracing-device-art tracing-synthesis-scene">
+        <button type="button" class="tracing-synthesis-window lab-picture-control ${open?'open':''}" data-action="synthesis" data-id="ventilation" aria-pressed="${open}" aria-label="${open?'창문 닫기':'창문 열기'}"><img src="${(open?labAssets.windowOpen:labAssets.windowClosed).src}" alt="" draggable="false"><b>${open?'열린 창문':'닫힌 창문'}</b><span class="lab-touch-mark" aria-hidden="true">${icon(open?'undo':'hand',19)}</span></button>
+        ${coughFigure(s.labs.synthesis.includes('coughEtiquette'),true)}
+        <button type="button" class="tracing-synthesis-hand lab-picture-control" data-action="synthesis" data-id="washHands"><img src="${labAssets.handPalm.src}" alt="" draggable="false"><b>손 씻기</b><span class="lab-touch-mark" aria-hidden="true">${icon('hand',19)}</span></button>
+        </div>${result(synthesisReady(s.labs.synthesis) ? '기침 예절과 환기는 각각의 상황을 바꿔요.' : '기침과 닫힌 공간을 각각 바꾸는 두 행동을 골라요.', synthesisReady(s.labs.synthesis), undefined, s.labs.synthesis.length > 0)}`;
+    }
     default:
       return `${heading('공용 음식은 어떻게 덜어 먹을까요?', '타액은 입속의 침이에요.')}
         <div class="tracing-device-art serving-demo tracing-serving ${value ? 'separated' : ''}"><div class="shared-bowl">${foodIllustration()}<b>공용 음식</b></div><div class="serving-tool" draggable="true" data-drag="serving" data-id="serve">${icon('plate', 38)}<span>덜기 도구</span>${icon('arrow', 24)}</div><button class="personal-plate ${value ? '' : 'next-target'}" data-action="lab-set" data-id="saliva" data-value="1" data-drop="serving" aria-label="개인 접시에 덜기">${value ? foodIllustration(true) : '<span class="tracing-empty-plate" aria-hidden="true"></span>'}<b>개인 접시</b></button></div>

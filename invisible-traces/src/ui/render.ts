@@ -4,8 +4,8 @@ import {DATA,STAGES,PAGES,LABS,SITES,CLUE_NAMES,asset} from '../data/game';
 import {branches,type State} from '../simulation/model';
 import {icon} from './icons';
 import {PLACES,type Point} from '../game/school-map';
-export interface View {site:string;clue:string;effect:string;lab:string;action:string;mapSpot:Point|null;mapOverview:boolean;teacher:boolean;playing:boolean;replacement:string;focus:string;index:number;speed:number;autoMode:string;demoStep:number;labPreview:number|null;}
-export const viewFresh=():View=>({site:'classroom',clue:'',effect:'',lab:'contact',action:'',mapSpot:null,mapOverview:false,teacher:false,playing:false,replacement:'',focus:'',index:0,speed:1,autoMode:'',demoStep:0,labPreview:null});
+export interface View {site:string;clue:string;effect:string;lab:string;action:string;mapSpot:Point|null;mapOverview:boolean;teacher:boolean;playing:boolean;replacement:string;focus:string;speed:number;autoMode:string;demoStep:number;labPreview:number|null;}
+export const viewFresh=():View=>({site:'classroom',clue:'',effect:'',lab:'contact',action:'',mapSpot:null,mapOverview:false,teacher:false,playing:false,replacement:'',focus:'',speed:1,autoMode:'',demoStep:0,labPreview:null});
 import {btn,chip,image,actionName,CREDIT} from './render-parts';
 export {btn} from './render-parts';
 import {observationPages} from './stages-observation';

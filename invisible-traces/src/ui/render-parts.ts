@@ -18,7 +18,7 @@ export const actionName = (id: string) => DATA.p07.actionPool.find(a => a.id ===
 
 export function windowIllustration(open: boolean): string {
   const art = open ? labAssets.windowOpen : labAssets.windowClosed;
-  return `<img class="window-illustration" src="${art.src}" width="${art.width}" height="${art.height}" alt="${open ? '왼쪽 창짝을 오른쪽으로 밀어 연 창문' : '닫힌 창문'}" draggable="false"><div class="air-streams" aria-hidden="true">${icon('arrow',70)}${icon('arrow',70)}</div>`;
+  return `<img class="window-illustration" src="${art.src}" width="${art.width}" height="${art.height}" alt="${open ? '왼쪽 창짝을 오른쪽으로 밀어 연 창문' : '닫힌 창문'}" draggable="false"><span class="air-streams" aria-hidden="true">${icon('arrow',70)}${icon('arrow',70)}</span>`;
 }
 
 export function playbackControls(v: View, kind: string): string {

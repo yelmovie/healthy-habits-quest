@@ -94,7 +94,11 @@ export function sanitize(input:unknown):State {
  if(Array.isArray(st.placements))for(const entry of st.placements.slice(0,20)){const p=record(entry);addPlacement(s,{actionId:String(p.actionId),site:String(p.site)});}
  s.strategy.simulated=st.simulated===true;
  s.final.applied=uniq(fin.applied,s.strategy.placements.map(placementKey));s.final.hands=uniq(fin.hands,['palm','back','fingers']);
- s.final.phase=str(fin.phase,['report','apply','restored','ending','certificate'],'report') as State['final']['phase'];derive(s);
+ s.final.phase=str(fin.phase,['report','apply','restored','ending','certificate'],'report') as State['final']['phase'];
+ const pending=nextPlacement(s);
+ // A save from the previous hand-washing reveal can already contain all three zones.
+ if(s.final.phase==='apply'&&pending?.actionId==='washHands'&&s.final.hands.length===3)applyPlacement(s,placementKey(pending));
+ derive(s);
  s.restoration=Object.fromEntries(Object.entries(record(r.restoration)).filter(([k,v])=>s.evidence.includes(k)&&Number.isInteger(v)&&Number(v)>=0&&Number(v)<=2).map(([k,v])=>[k,Number(v)]));
  s.mapHits=normalizeMapHits(r.mapHits,DATA.stages.flatMap((stage,i)=>s.completed.includes(stage.pages[1])?[String(i)]:[]));
  if(!s.completed.includes('P10')&&['restored','ending','certificate'].includes(s.final.phase))s.final.phase='apply';

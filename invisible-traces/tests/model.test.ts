@@ -69,6 +69,23 @@ test('최종 실천: 보이던 계획만 적용되고 연속 탭이 다음 계�
   assert.equal(new Set(s.final.applied).size, s.final.applied.length);
 });
 
+test('저장 복구: 손 씻기의 마지막 그림에서 중단한 이전 기록도 실천이 완료된다', () => {
+  const s = fixtureFor(5, { sound: false, reduced: true, large: false });
+  s.route = 'P10';
+  s.strategy.placements = solvedPlan();
+  s.strategy.simulated = true;
+  s.final.phase = 'apply';
+  s.final.applied = s.strategy.placements.filter(p => p.actionId !== 'washHands').map(placementKey);
+  s.final.hands = ['palm', 'back'];
+  assert.equal(nextPlacement(roundTrip(s))?.actionId, 'washHands');
+
+  s.final.hands.push('fingers');
+  const restored = roundTrip(s);
+  assert.ok(restored.completed.includes('P10'));
+  assert.deepEqual(restored.final.hands, []);
+  assert.deepEqual(roundTrip(restored).final.applied, restored.final.applied);
+});
+
 test('저장 복구: 손상되거나 조작된 값은 버리고 허용된 값만 남긴다', () => {
   const s = fresh();
   const raw = { ...JSON.parse(JSON.stringify(s)), found: ['classroom', 'classroom', 'hacker', 3], clues: ['CL01', 'CL99', 'CL02', 'CL03', 'CL04', 'CL05', 'CL06'],

@@ -40,6 +40,8 @@ test('실험 안내는 현재 실험의 조작과 완료 뒤 이동을 구별한
 
 test('손 씻기 결과는 접촉 횟수 감소로 설명하지 않는다', () => {
   const s = fresh(); s.route = 'P08'; s.experiment.action = 'washHands'; s.experiment.tick = 5;
+  assert.doesNotMatch(comparisonTasks(s), /data-action="explain"/);
+  s.experiment.pinned = DATA.p07.actionPool.find(a => a.id === s.experiment.action)!.differenceEvent;
   assert.doesNotMatch(comparisonTasks(s), /손 → 물건의 접촉 감소/);
   assert.match(comparisonTasks(s), /손에서 옮겨 가는 흔적 감소/);
 });

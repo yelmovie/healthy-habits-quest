@@ -1,4 +1,5 @@
 import {DATA,SITES,CLUE_ICONS,CLUE_NAMES,TARGETS} from '../data/game';
+import {labAssets} from '../data/lab-assets';
 import type {State} from '../simulation/model';
 import type {View} from './render';
 import {btn,image} from './render-parts';
@@ -11,7 +12,24 @@ const siteNames:Record<string,string>={classroom:'교실',cafeteria:'급식실',
 export const SIGNAL_SPOTS:Record<string,[number,number]>={classroom:[30,52],cafeteria:[50,80],gym:[46,72]};
 // 신호를 찾으면 무엇이 보였는지 한 줄로 알려 준다. 다음 장(P02)의 단서를 고르는 실마리가 된다.
 const signalCaptions:Record<string,string>={classroom:'창문이 닫힌 교실, 친구들 사이에 흔적이 떠 있어요',cafeteria:'함께 먹는 그릇 주변에 흔적이 보여요',gym:'함께 쓴 공과 손에 흔적이 남았어요'};
+// 원본 그림의 위치(%). 사진에 없는 사건·소품은 같은 자리 위에 삽화로 얹는다.
+const clueSpots:Record<string,[number,number]> = {
+  CL01:[13,24], CL05:[47,49], CL06:[73,26],
+  CL04:[54,83], CL08:[78,30],
+  CL02:[18,54], CL03:[73,64], CL07:[43,79],
+};
+const clueArt:Record<string,string> = {CL05:labAssets.coughUncovered.src,CL03:labAssets.handPalm.src};
+const illustratedClues = new Set(['CL06','CL07','CL08']);
 const focusTabs=(active:string,items:[string,string][])=>`<nav class="obs-focus-tabs" aria-label="활동 보기">${items.map(([id,label])=>btn(label,'focus',active===id?'small selected':'small',`data-id="${id}" aria-pressed="${active===id}"`)).join('')}</nav>`;
+
+function clueHotspot(clue: typeof DATA.clues[number], s: State, v: View) {
+  const {id,text}=clue, [x,y]=clueSpots[id];
+  const selected=s.clues.includes(id);
+  const art=clueArt[id]
+    ? `<img class="clue-prop" src="${clueArt[id]}" alt="" draggable="false">`
+    : illustratedClues.has(id) ? `<span class="clue-prop clue-prop-icon" aria-hidden="true">${icon(CLUE_ICONS[id],30)}</span>` : '';
+  return `<button type="button" class="clue-hotspot ${v.clue===id?'inspected':''}" style="--clue-x:${x}%;--clue-y:${y}%" data-action="clue" data-id="${id}" aria-label="${CLUE_NAMES[id]}" aria-describedby="detail-${id}" aria-pressed="${selected}">${art}<span class="clue-hotspot-mark" aria-hidden="true">${icon(selected?'check':art?'search':CLUE_ICONS[id],22)}</span></button><span id="detail-${id}" hidden>${text}</span>`;
+}
 
 // 작은 화면은 활동의 초점만 전환한다. 단서 선택·정답 연결은 학습자가 직접 한다.
 export function observationPages(s:State,v:View):string {
@@ -21,15 +39,18 @@ export function observationPages(s:State,v:View):string {
       <p class="trace-model-notice">보라색은 게임에서 옮을 수 있는 길을 보여 주는 표시에요. 실제 병원체나 감염된 친구를 찾는 게 아니에요.</p>
       <div class="obs-scan-toolbar"><nav class="obs-site-tabs" aria-label="살펴볼 장소">${SITES.map(x=>btn(`${icon(s.found.includes(x.id)?'check':x.icon,20)}<span>${siteNames[x.id]}</span>`,'site-preview',v.site===x.id?'small selected':'small',`data-id="${x.id}" aria-pressed="${v.site===x.id}"`)).join('')}</nav></div>
       <div class="site-scenes">${SITES.map(x=>{const found=s.found.includes(x.id);return `<button class="site-scene ${found?'discovered':''} ${v.site===x.id?'obs-current':''} ${!found?'obs-next':''}" data-action="discover" data-id="${x.id}" aria-label="${x.name} ${found?'현장 조사하기':'신호 찾기'}"><span class="obs-site-visual" data-scan="${x.id}" style="--hx:${SIGNAL_SPOTS[x.id][0]}%;--hy:${SIGNAL_SPOTS[x.id][1]}%">${image(x.image,'site-image')}<span class="signal-spot ${found?'found':''}" aria-hidden="true"></span><span class="scanner-orb scan-lens" style="${found?`left:${SIGNAL_SPOTS[x.id][0]}%;top:${SIGNAL_SPOTS[x.id][1]}%`:''}">${icon(found?'check':'search',38)}</span><span class="obs-viewfinder" aria-hidden="true"></span>${found?`<span class="signal-caption">${signalCaptions[x.id]}</span>`:''}</span><span class="site-bottom"><strong>${x.name}</strong><span>${icon(found?'check':'search',20)}${found?'발견':'신호 찾기'}</span></span></button>`;}).join('')}</div>
-      <nav class="signal-list" aria-label="그림 탐색 대신 누를 수 있는 흔적 목록">${SITES.map(x=>btn(`${icon(s.found.includes(x.id)?'check':'search',20)} ${siteNames[x.id]} 흔적 찾기`,'locate-signal','small',`data-id="${x.id}" ${s.found.includes(x.id)?'disabled':''}`)).join('')}</nav>
     </section>`;
     case 'P02':{
-      const clues=DATA.clues.filter(c=>c.site===v.site),index=Math.min(v.index??0,clues.length-1),tray=v.focus==='tray',review=s.clues.length===5&&!s.completed.includes('P02');
+      const clues=DATA.clues.filter(c=>c.site===v.site), tray=v.focus==='tray', review=s.clues.length===5&&!s.completed.includes('P02');
+      const inspected=clues.find(c=>c.id===v.clue);
       const recheck=(id:string)=>(review||!!v.replacement)&&!DATA.p02.requiredClues.includes(id);
       return `<section class="observation-page observation-p02 ${tray?'obs-mode-tray':'obs-mode-clues'}">
         <p class="mission-question">사건을 설명할 <b>단서 5개</b>를 골라요.</p>
-        <div class="obs-toolbar">${focusTabs(tray?'tray':'clues',[['clues','단서'],['tray','단서함']])}<nav class="obs-site-tabs" aria-label="조사 장소">${SITES.map(x=>btn(siteNames[x.id],'site',v.site===x.id?'small selected':'small',`data-id="${x.id}" aria-pressed="${v.site===x.id}"`)).join('')}</nav><label class="obs-site-picker"><select data-select="observation-site" aria-label="조사 장소">${SITES.map(x=>`<option value="${x.id}" ${v.site===x.id?'selected':''}>${siteNames[x.id]}</option>`).join('')}</select></label><nav class="obs-clue-pager" aria-label="단서 넘겨 보기">${clues.map((_,i)=>btn(String(i+1),'focus-index',index===i?'small selected':'small',`data-id="${i}" aria-label="${i+1}번째 단서" aria-pressed="${index===i}"`)).join('')}</nav></div>
-        <div class="evidence-layout"><div class="clue-board">${image(SITES.find(x=>x.id===v.site)!.image,'clue-backdrop')}<div class="clue-grid">${clues.map((c,i)=>{const selected=s.clues.includes(c.id);return `<button class="clue-card ${selected?'selected':''} ${i===index?'obs-current':''} ${!selected?'obs-next':''}" data-action="clue" data-id="${c.id}" aria-pressed="${selected}"><span class="obs-clue-heading"><span class="clue-icon">${icon(CLUE_ICONS[c.id],34)}</span><strong>${CLUE_NAMES[c.id]}</strong>${icon(selected?'check':'bag',22)}</span><span class="obs-clue-description">${c.text}</span></button>`;}).join('')}</div></div>
+        <div class="obs-toolbar">${focusTabs(tray?'tray':'clues',[['clues','현장'],['tray',`단서함 ${s.clues.length}/5`]])}<nav class="obs-site-tabs" aria-label="조사 장소">${SITES.map(x=>btn(siteNames[x.id],'site',v.site===x.id?'small selected':'small',`data-id="${x.id}" aria-pressed="${v.site===x.id}"`)).join('')}</nav><label class="obs-site-picker"><select data-select="observation-site" aria-label="조사 장소">${SITES.map(x=>`<option value="${x.id}" ${v.site===x.id?'selected':''}>${siteNames[x.id]}</option>`).join('')}</select></label></div>
+        <div class="evidence-layout"><div class="clue-board">
+          <div class="clue-visual"><div class="clue-scene" aria-label="${siteNames[v.site]} 조사 그림">${image(SITES.find(x=>x.id===v.site)!.image,'clue-backdrop')}${clues.map(c=>clueHotspot(c,s,v)).join('')}</div></div>
+          <div class="clue-field-note" role="status">${icon(inspected?CLUE_ICONS[inspected.id]:'search',23)}<div>${inspected?`<b>${CLUE_NAMES[inspected.id]}</b><span>${inspected.text}</span>`:'<b>현장 단서</b><span>그림에서 표시된 곳을 눌러 살펴봐요.</span>'}</div></div>
+        </div>
         <aside class="evidence-tray"><div class="panel-heading ${v.replacement?'obs-replacement':''}">${icon('bag',22)}<b>${v.replacement?'바꿀 단서 선택':review?'다시 살펴볼 단서':'모은 단서'}</b></div><div class="obs-evidence-slots">${Array.from({length:5},(_,i)=>{const id=s.clues[i];return id?`<button class="evidence-slot filled ${recheck(id)?'replace obs-next needs-recheck':''}" data-action="remove-clue" data-id="${id}" aria-label="${CLUE_NAMES[id]} ${v.replacement?'교체':'빼기'}"><span>${i+1}</span>${icon(CLUE_ICONS[id],20)}<b>${CLUE_NAMES[id]}${recheck(id)?'<small>다시 살펴보기</small>':''}</b>${icon(recheck(id)?'search':v.replacement?'undo':'close',17)}</button>`:`<div class="evidence-slot"><span>${i+1}</span><small>빈칸</small></div>`;}).join('')}</div></aside></div>
       </section>`;
     }
@@ -43,7 +64,7 @@ export function observationPages(s:State,v:View):string {
     case 'P04':{
       // 빠른 분류: 아직 놓지 않은 카드가 차례로 위에 올라오고, 그림 하나만 누르면 된다.
       const placed=Object.values(s.impacts),current=v.effect||DATA.p04.links.find(x=>!placed.includes(x.id))?.id||'';
-      const domains=v.focus==='domains',selected=DATA.p04.links.find(x=>x.id===current);
+      const domains=v.focus!=='effects',selected=DATA.p04.links.find(x=>x.id===current);
       return `<section class="observation-page observation-p04 ${domains?'obs-mode-domains':'obs-mode-effects'}"><p class="mission-question"><b>누구의 생활</b>에 영향을 줄까요?</p>${focusTabs(domains?'domains':'effects',[['effects','1 영향 카드'],['domains','2 생활 영역']])}
       <div class="impact-layout"><div class="impact-effects">${DATA.p04.links.map(x=>`<button class="impact-effect ${current===x.id?'selected current-card':''} ${Object.values(s.impacts).includes(x.id)?'linked':''} ${current===x.id?'obs-next':''}" data-action="select-effect" data-id="${x.id}" draggable="true" data-drag="impact" aria-pressed="${current===x.id}">${icon('file',30)}<span>${x.effect}</span>${icon(Object.values(s.impacts).includes(x.id)?'check':current===x.id?'arrow':'link',20)}</button>`).join('')}</div>
       <div class="obs-impact-targets"><div class="obs-active-selection ${selected?'ready':''}" role="status">${icon(selected?'file':'link',22)}<b>${selected?selected.effect:'영향 카드를 먼저 골라요'}</b></div><div class="impact-domains">${['self','others','school'].map((d,i)=>{const x=DATA.p04.links.find(x=>x.id===s.impacts[d]);return `<button class="impact-domain domain-${i} ${x?'obs-impact-linked':''} ${selected?'obs-next':''}" data-action="impact-domain" data-id="${d}" data-drop="impact"><span class="obs-impact-scene obs-impact-art" aria-hidden="true">${image(IMPACT_ART[i],'obs-impact-image')}</span><strong>${['나','친구·주변 사람','학급·학교생활'][i]}</strong>${x?`<small class="obs-domain-reason">${icon('check',18)}<span>${x.reason}</span></small>`:''}</button>`;}).join('')}</div></div></div>

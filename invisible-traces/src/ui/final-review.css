@@ -2,8 +2,6 @@
 .trace-model-notice,.lab-model-notice { flex: none; margin: 0; padding: .45rem .7rem; border-radius: 12px; background: var(--purple-soft); color: var(--ink); font-size: 1rem; line-height: 1.45; }
 .lab-model-notice span { display: block; }
 .tracing-p06 { grid-template-rows: auto auto minmax(0, 1fr) auto; }
-.signal-list { display: flex; flex: none; gap: .5rem; justify-content: center; flex-wrap: wrap; }
-.signal-list .btn { min-height: 48px; white-space: normal; }
 .observation-p02 .evidence-slot { min-height: 48px; }
 .evidence-slot.needs-recheck { outline: 2px solid var(--orange-strong); outline-offset: -2px; }
 .evidence-slot.needs-recheck b small { display: block; font-size: 1rem; color: var(--ink); line-height: 1.3; }
