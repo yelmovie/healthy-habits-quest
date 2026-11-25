@@ -56,6 +56,11 @@ test('비교 장면은 누르기 전 세 영역을 같은 모양과 위치 이�
   const html=comparisonBoard(s);
   assert.deepEqual([...html.matchAll(/class="experiment-zone" data-action="difference" data-id="([^"]+)"/g)].map(m=>m[1]), ['left','center','right']);
   assert.doesNotMatch(html,/experiment-zone recorded/);
+  if(action.id==='washHands'){
+   assert.match(html,/hand-palm-20261112\.webp/);
+   assert.match(html,/handwashing-20261112\.webp/);
+   assert.doesNotMatch(html,/m191 110 12 12 25-29/);
+  }
   assert.ok(['left','center','right'].includes(differenceZone(action.id)));
  }
 });

@@ -33,7 +33,7 @@ export function nextInstruction(s: State, v: View): string {
       if (!event) return '조건 실험실에서 행동을 먼저 골라요.';
       if (s.experiment.tick < event.time) return '재생하거나 시간 막대를 움직여요.';
       if (s.experiment.explanation) return '처음 예상과 비교해 돌아봐요.';
-      return s.experiment.pinned ? '그림에서 어떻게 달라졌는지 골라요.' : 'A와 B를 비교해 B에서 달라진 곳을 눌러요.';
+      return s.experiment.pinned ? '그림에서 어떻게 달라졌는지 골라요.' : '두 그림을 보고 B에서 행동이 바뀐 곳을 눌러요.';
     }
     case 'P09': return v.action ? '행동을 놓을 장소를 눌러요.'
       : s.strategy.simulated ? '남은 연결을 보고 배치를 바꿔요.'

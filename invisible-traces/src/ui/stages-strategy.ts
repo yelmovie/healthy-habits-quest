@@ -93,7 +93,8 @@ function experimentDrawing(action:string,changed:boolean,after:boolean){
  const signals=(points:number[][])=>after?points.map(([x,y])=>`<circle cx="${x}" cy="${y}" r="5" fill="${purple}" opacity=".8"/><circle cx="${x}" cy="${y}" r="10" fill="none" stroke="${purple}" opacity=".25"/>`).join(''):'';
  let drawing='';
  if(action==='washHands'){
-  drawing=`${picture(labAssets.handPalm.src,35,12,140,145)}${picture(labAssets.ball.src,272,30,112,118)}${arrow(213,86)}${signals(active?[]:[[105,111],[196,85],[311,79],[339,105]])}${active?`<path d="m191 110 12 12 25-29" fill="none" stroke="${teal}" stroke-width="5"/>`:''}`;
+  const hands=active?labAssets.handwashing:labAssets.handPalm;
+  drawing=`${picture(hands.src,21,12,145,145)}${picture(labAssets.ball.src,272,30,112,118)}${arrow(213,86)}${signals(active?[]:[[105,111],[196,85],[311,79],[339,105]])}`;
  }else if(action==='coughEtiquette'){
   drawing=`${picture((active?labAssets.coughCovered:labAssets.coughUncovered).src,22,10,125,147)}${picture(labAssets.coughBefore.src,295,10,125,147)}<path d="M126 56q${active?'25-4 43 15':'82-28 171 10'}" fill="none" stroke="${purple}" stroke-width="3" stroke-dasharray="5 8" ${!after?'opacity=".18"':''}/>${signals(active?[[142,56],[157,61]]:[[148,52],[193,45],[236,50],[281,63]])}`;
  }else if(action==='ventilation'){
