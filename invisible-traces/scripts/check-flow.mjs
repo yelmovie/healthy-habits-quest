@@ -118,8 +118,10 @@ try {
   await click('[data-action="experiment-action"][data-id="washHands"]', 'P07 wash hands');
   await click('[data-action="predict"][data-id="fewer"]', 'P07 predict');
   await page.locator('.activity-layout[data-page="P08"]').waitFor();
-  const difference = '.experiment-picture [data-action="difference"]';
+  const difference = '.experiment-picture [data-action="difference"][data-id="left"]';
   await page.locator(difference).waitFor({ timeout: 20000 });
+  await click('.experiment-picture [data-action="difference"][data-id="right"]', 'P08 compare an unchanged area');
+  if ((await save()).experiment.pinned) throw new Error('P08 accepted a different area');
   await click(difference, 'P08 mark the hand in picture B');
   await click('[data-action="explain"][data-id="hand-object-contact"]', 'P08 explain');
   await click('[data-action="reflect"][data-id="matched"]', 'P08 reflect without grading');
@@ -140,9 +142,7 @@ try {
   for (const zone of ['palm', 'back', 'fingers']) for (let i = 0; i < 3; i++) await click(`[data-action="hand-zone"][data-id="${zone}"]`, `P10 ${zone}`);
   await page.locator('.ending-card').waitFor({ timeout: 5000 });
   await shot('P10-ending');
-  const outro = page.locator('.story-film-skip');
-  if (await outro.isVisible()) await outro.click();
-  await click('[data-action="certificate"]', 'certificate');
+  await click('.story-film-certificate', 'certificate from finale');
   await page.locator('.strategy-ending.certificate').waitFor();
   const s = await save();
   if (!s.completed?.includes('P10') || s.evidence?.length !== 5) throw new Error(`incomplete record: ${JSON.stringify(s.completed)}`);

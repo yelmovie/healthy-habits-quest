@@ -1,32 +1,3 @@
-/* A stable concept line and a state-aware instruction frame the activity. */
-.activity-layout .play-main:has(> .learning-focus) {
-  grid-template-rows: auto minmax(0, 1fr) auto;
-}
-.learning-focus {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  padding: 8px 20px;
-  color: var(--ink-2);
-  background: #edf6f3;
-  border-block: 1px solid #c7ded6;
-  font-size: 1rem;
-  line-height: 1.4;
-}
-.learning-focus mark {
-  flex: none;
-  color: #075e59;
-  background: transparent;
-  font-weight: 850;
-  box-shadow: inset 0 -.35em #c3e9d5;
-}
-.learning-focus > span { min-width: 0; }
-/* 페이지 질문과 개념을 한 줄 띠로: [개념 칩] 질문 · 개념 설명 */
-.learning-focus.has-question { flex-wrap: wrap; align-items: baseline; column-gap: 12px; row-gap: 2px; }
-.learning-focus.has-question mark { padding: 2px 10px; border-radius: 999px; background: #c3e9d5; color: #075e59; box-shadow: none; }
-.activity-layout .learning-focus .mission-question,
-body.on-activity.has-stage-bg .learning-focus .mission-question { flex: none; width: auto; max-width: 100%; margin: 0; padding: 0; border-radius: 0; background: none; box-shadow: none; color: var(--ink); font-size: 1.05rem; font-weight: 700; line-height: 1.35; }
-.learning-focus .focus-description { flex: 1 1 18em; color: var(--ink-2); }
 .activity-progress { display: block; font-size: 1rem; color: var(--ink-2); }
 .next-instruction { display: block; color: var(--teal-strong); font-weight: 750; }
 .activity-layout .actionbar { min-height: 64px; }
@@ -50,7 +21,6 @@ body.on-activity.has-stage-bg .learning-focus .mission-question { flex: none; wi
 .strategy-apply .handwashing-workspace .hand-zones { height: min(100%, 240px); }
 .hand-zone-cue { align-self: center; font-size: 1rem; line-height: 1.5; font-weight: 600; color: var(--ink); }
 @media (max-width: 700px) {
-  .learning-focus { padding: 8px; gap: 8px; font-size: 1rem; }
   .activity-layout .actionbar { min-height: 76px; }
   .activity-layout .activity-info { width: 44px; }
   .activity-layout .actionbar > .btn { min-width: 100px; padding-inline: 8px; }
@@ -58,7 +28,6 @@ body.on-activity.has-stage-bg .learning-focus .mission-question { flex: none; wi
   .handwashing-workspace { grid-template-columns: 1fr; grid-template-rows: minmax(0, 1fr) minmax(100px, 1fr); gap: 8px; }
 }
 @media (max-height: 560px) and (min-width: 701px) {
-  .learning-focus { padding: 4px 12px; font-size: 1rem; }
   .activity-layout .actionbar { min-height: 52px; }
   .activity-progress { display: none; }
   .hand-zone-cue { font-size: 1rem; line-height: 1.3; }
@@ -77,20 +46,4 @@ body.on-activity.has-stage-bg .learning-focus .mission-question { flex: none; wi
   .large-text .activity-layout .page-content > .strategy-activity,
   .large-text .activity-layout .page-content > .tracing-p06 { min-height: 600px; flex-shrink: 0; }
 }
-@media print { .learning-focus, .ending-share { display: none; } }
-
-/* 넓은 가로 화면: 개념·질문 띠를 위 띠 가운데로 올려 한 띠로 합친다(놀이 영역이 그만큼 커진다).
-   위 띠 사본(.topbar-focus)은 여기서만 보이고, 아래 띠(.learning-focus)는 숨긴다. 글이 길면 위 띠가 늘어난다(잘리지 않음). */
-.topbar-focus { display: none; }
-@media (min-width: 1000px) and (min-height: 561px) {
-  html:not(:has(body.large-text)) .activity-topbar:has(> .topbar-focus) { grid-template-columns: 48px auto minmax(0, 1fr) auto; height: auto; min-height: 64px; padding-block: 6px; }
-  html:not(:has(body.large-text)) .activity-topbar > .tools { grid-column: -2; }
-  html:not(:has(body.large-text)) .activity-topbar:has(> .topbar-focus) .activity-heading { flex-direction: column; align-items: flex-start; gap: 2px; }
-  html:not(:has(body.large-text)) .activity-topbar:has(> .topbar-focus) .activity-mission { padding: 0 10px; line-height: 1.4; }
-  html:not(:has(body.large-text)) .activity-topbar:has(> .topbar-focus) .activity-heading h1 { font-size: 1.15rem; white-space: nowrap; }
-  html:not(:has(body.large-text)) .topbar-focus { display: block; min-width: 0; padding-left: 14px; border-left: 2px solid #c7ded6; color: var(--ink-2); font-size: 1rem; line-height: 1.35; overflow-wrap: break-word; }
-  html:not(:has(body.large-text)) .topbar-focus mark { display: inline-block; margin-right: 8px; padding: 0 10px; border-radius: 999px; background: #c3e9d5; color: #075e59; font-weight: 850; box-shadow: none; }
-  html:not(:has(body.large-text)) .topbar-focus .mission-question { display: inline; margin: 0 8px 0 0; padding: 0; border-radius: 0; background: none; box-shadow: none; color: var(--ink); font-size: 1rem; font-weight: 700; line-height: 1.35; }
-  html:not(:has(body.large-text)):has(.topbar-focus) .activity-layout .learning-focus { display: none; }
-  html:not(:has(body.large-text)):has(.topbar-focus) .activity-layout .play-main:has(> .learning-focus) { grid-template-rows: minmax(0, 1fr) auto; }
-}
+@media print { .ending-share { display: none; } }

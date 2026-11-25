@@ -5,13 +5,16 @@ import {fresh,fixtureFor,derive,sanitize,addPlacement} from '../src/simulation/m
 import {observationPages} from '../src/ui/stages-observation';
 import type {View} from '../src/ui/render';
 const viewFresh=():View=>({site:'classroom',lab:'contact',clue:'',effect:'',replacement:'',action:''} as View);
-import {comparisonBoard,strategySceneHint} from '../src/ui/stages-strategy';
+import {comparisonBoard,differenceZone,strategySceneHint} from '../src/ui/stages-strategy';
 
-test('가득 찬 단서함은 관계가 먼 단서만 강조하고 고른 단서는 보존한다',()=>{
+test('가득 찬 단서함은 선택한 단서를 같은 모양으로 표시한다',()=>{
  const s=fixtureFor(2,{});s.route='P02';s.clues=[...DATA.p02.requiredClues.slice(0,4),'CL06'];derive(s);
  const before=structuredClone(s.clues),html=observationPages(s,viewFresh());
- const highlighted=[...html.matchAll(/class="evidence-slot filled [^"]*needs-recheck[^"]*"[^>]*data-id="([^"]+)"/g)].map(m=>m[1]);
- assert.deepEqual(highlighted,['CL06']);assert.deepEqual(s.clues,before);assert.ok(!s.completed.includes('P02'));
+ assert.equal((html.match(/class="evidence-slot filled"/g) ?? []).length, 5);
+ assert.match(html, /obs-evidence-slots reviewing/);
+ assert.doesNotMatch(html, /needs-recheck/);
+ assert.deepEqual(s.clues,before);
+ assert.ok(!s.completed.includes('P02'));
  s.clues=s.clues.map(c=>c==='CL06'?DATA.p02.requiredClues[4]:c);derive(s);assert.ok(s.completed.includes('P02'));
  assert.doesNotMatch(observationPages(s,viewFresh()),/needs-recheck/);
 });
@@ -44,4 +47,15 @@ test('잘못 놓은 행동은 기존 계획을 보존하고 대상 장면의 단
  const s=fixtureFor(5,{});assert.equal(addPlacement(s,{site:'cafeteria',actionId:'portionFood'}),'ok');const before=structuredClone(s.strategy.placements);
  assert.equal(addPlacement(s,{site:'gym',actionId:'ventilation'}),'wrong-site');assert.deepEqual(s.strategy.placements,before);
  assert.match(strategySceneHint('gym'),/음식을 먹기 전의 손/);assert.doesNotMatch(strategySceneHint('gym'),/손 씻기|환기|덜어 먹기/);
+});
+
+test('비교 장면은 누르기 전 세 영역을 같은 모양과 위치 이름으로 표시한다', () => {
+ const s=fixtureFor(4,{});s.route='P08';s.experiment.tick=5;
+ for (const action of DATA.p07.actionPool) {
+  s.experiment.action=action.id;s.experiment.pinned='';
+  const html=comparisonBoard(s);
+  assert.deepEqual([...html.matchAll(/class="experiment-zone" data-action="difference" data-id="([^"]+)"/g)].map(m=>m[1]), ['left','center','right']);
+  assert.doesNotMatch(html,/experiment-zone recorded/);
+  assert.ok(['left','center','right'].includes(differenceZone(action.id)));
+ }
 });

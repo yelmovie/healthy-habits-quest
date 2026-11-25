@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { DATA } from '../src/data/game';
 import { fresh } from '../src/simulation/model';
 import type { View } from '../src/ui/render';
-import { learningFocus, learningGuide, nextInstruction } from '../src/ui/learning-guidance';
+import { learningGuide, nextInstruction } from '../src/ui/learning-guidance';
 import { comparisonBoard, comparisonTasks, strategyPages } from '../src/ui/stages-strategy';
 import { tracingPages } from '../src/ui/stages-tracing';
 
@@ -15,7 +15,7 @@ test('학습 10장에 성취기준, 목표, 관찰 증거와 설명 질문이 �
     assert.ok(page.learningObjectives.length > 0);
     assert.ok(page.concept.term && page.concept.description && page.reflection && page.evidence);
     const s = fresh(); s.route = page.id as typeof s.route;
-    assert.match(learningFocus(s, viewFresh()), /<mark>/);
+    assert.ok(learningGuide(s).includes(page.learningObjectives[0]));
     assert.ok(learningGuide(s).includes(page.standards[0]));
   }
 });
@@ -25,8 +25,8 @@ test('단서와 영향 연결은 선택 전후에 맞는 다음 조작을 알려
   assert.match(nextInstruction(s, v), /단서를 골라/);
   v.clue = 'CL01'; assert.match(nextInstruction(s, v), /생활 상황/);
   // P04는 빠른 분류: 카드를 따로 고르지 않고 반짝이는 카드의 일이 생길 그림을 바로 누른다.
-  s.route = 'P04'; assert.match(nextInstruction(s, v), /반짝이는 카드/);
-  assert.match(nextInstruction(s, v), /그림을 눌러요/);
+  s.route = 'P04'; assert.match(nextInstruction(s, v), /카드 속 일/);
+  assert.match(nextInstruction(s, v), /그림을 골라요/);
 });
 
 test('실험 안내는 현재 실험의 조작과 완료 뒤 이동을 구별한다', () => {

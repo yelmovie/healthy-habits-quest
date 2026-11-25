@@ -15,7 +15,7 @@ test('물 출처 비교는 물의 겉모습이 아니라 공급 정보로만 달
   assert.equal((html.match(/src="\/assets\/water-glass-20261108.webp"/g) || []).length, 1);
   assert.equal((html.match(/src="\/assets\/water-managed-20261116.webp"/g) || []).length, 1);
   assert.doesNotMatch(html, /water-unknown/);
-  assert.match(html, /출처가 확인되지 않은 물/);
+  assert.match(html, /출처를 모르는 물/);
 });
 
 test('기침 두 상태는 독립 그림을 바꾸고 비말은 DOM 모형으로 유지한다', () => {

@@ -82,11 +82,8 @@
 /* 종합: 환기를 고르면 실내에 머무는 흔적이 옅어진다(기침 예절은 퍼지는 범위를 줄인다). */
 .tracing-synthesis-scene:has(.tracing-synthesis-window.open) .tracing-cough-path i { opacity: .35; transform: translateX(14px); }
 
-/* 활동 화면 배경: 미션 장소 그림 위에 밝은 막을 덮어 글과 카드가 또렷하게 보이게 한다. */
-body.on-activity.has-stage-bg { --surface: rgba(255,255,255,.8); background: linear-gradient(rgba(238,248,248,.22), rgba(238,248,248,.4)), var(--stage-bg) center / cover no-repeat, var(--bg); }
-body.on-activity.has-stage-bg .mission-question { align-self: flex-start; width: fit-content; max-width: 100%; padding: .3rem .85rem; border-radius: 999px; background: rgba(255,255,255,.82); box-shadow: var(--shadow-sm); }
-body.on-activity.has-stage-bg .learning-focus { background: rgba(255,255,255,.8); }
-@media (prefers-reduced-transparency: reduce) { body.on-activity.has-stage-bg { background: var(--bg); } }
+/* The art fills the activity. Reading surfaces supply their own contrast. */
+body.on-activity.has-stage-bg { background: var(--stage-bg) center / cover no-repeat, var(--bg); }
 /* 인쇄: 활동 배경 그림과 아이콘 그림자(PDF에서 보라 네모로 찍힘)를 빼고 흰 종이에 인증서만. */
 @media print { body.on-activity.has-stage-bg { background: #fff; } .core-emblem { box-shadow: none; } }
 
@@ -95,8 +92,6 @@ body.on-activity.has-stage-bg .learning-focus { background: rgba(255,255,255,.8)
 .tracing-p05 .trace-node .trace-object { overflow: hidden; }
 .tracing-p05 .trace-node .trace-object img { min-width: 0; min-height: 0; max-width: 100%; max-height: 100%; }
 body.on-activity.has-stage-bg .page-content { background: transparent; }
-/* 장면 위 카드는 유리처럼 비쳐 배경이 살아 보이게 한다. */
-body.on-activity.has-stage-bg :is(.source-card,.target-card,.impact-effect,.impact-domain,.evidence-tray,.lab-device,.trace-node,.compare-half,.strategy-zone-card,.prediction-panel,.condition-study,.apply-device,.intervention-panel) { backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
 .tracing-lab-play { display: flex; justify-content: flex-end; }
 
 /* P05 사물 그림은 칸 크기를 밀어내지 않도록 칸 안에 띄운다. */
@@ -143,7 +138,6 @@ body.on-activity.has-stage-bg :is(.source-card,.target-card,.impact-effect,.impa
 .observation-p04 .impact-effect.current-card { border-color: var(--purple); box-shadow: 0 0 0 4px rgba(117,86,212,.22), 0 10px 22px rgba(60,30,140,.16); transform: scale(1.02); }
 .observation-p04 .impact-effect.linked { opacity: .78; }
 
-.observation-p01 .signal-caption { bottom: auto; top: 7%; }
 
 /* ---------- 팝업·토스트·글자 위계 (yelsam-design: Modal scale .95→1, duration-slow, Glassmorphism) ---------- */
 :root { --ease-out: cubic-bezier(.16, 1, .3, 1); --dur-slow: 400ms; --dur-base: 250ms; --modal-radius: 28px; }
@@ -178,7 +172,6 @@ body.on-activity.has-stage-bg :is(.source-card,.target-card,.impact-effect,.impa
 /* 글자 위계: 미션 질문은 또렷하게, 개념 막대는 작은 꼬리표 + 본문. */
 .mission-question { font-size: 1.06rem; font-weight: 600; letter-spacing: -.01em; }
 .mission-question b { color: var(--teal-strong); font-weight: 800; }
-.learning-focus mark { border-radius: 999px; padding: .1rem .6rem; background: var(--teal-action); color: #fff; font-weight: 800; }
 .btn.primary { background: linear-gradient(180deg, #0e837b, var(--teal-action)); box-shadow: 0 6px 16px rgba(18,160,151,.3), inset 0 1px 0 rgba(255,255,255,.25); }
 .btn.primary:hover:not(:disabled) { background: linear-gradient(180deg, #0c7a73, var(--teal-strong)); }
 .modal .learning-standards summary::after { content: ""; width: 9px; height: 9px; margin-left: auto; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg) translateY(-3px); transition: transform var(--dur-base) var(--ease-out); }

@@ -4,6 +4,7 @@ import { contactAt, type State } from '../simulation/model';
 import { icon } from './icons';
 import { btn, image, playbackControls, windowIllustration } from './render-parts';
 export const VISIBLE_LABS = LABS.filter(l => l.id !== 'contact');
+export const nextLab = (s: State): string => VISIBLE_LABS.find(l => !s.labs.done.includes(l.id))?.id ?? 'synthesis';
 import type { View } from './render';
 
 
@@ -50,17 +51,14 @@ export function tracingPages(s: State, v: View): string {
           </div>
         </section>
       </div>
-      <div class="tracing-play-row">${playbackControls(v, 'timeline')}<div class="tracing-time-controls"><input id="tracing-time" aria-label="사건 시간 되감기" data-range="timeline" type="range" min="0" max="5" step="0.1" value="${s.timeline.tick}"><span class="trace-model-note" id="prevention-result"><span>${s.timeline.intervention===null?'접촉 경로 학습 모형 · 실제 감염 여부를 나타내지 않아요.':`모형 흔적 ${before.size}곳 → ${trace.size}곳 · ${avoided.length}곳의 연결이 달라졌어요.`}</span></span><span id="time-label">사건 ${s.timeline.tick.toFixed(1)} / 5</span></div></div></section>`;
+      <div class="tracing-play-row">${playbackControls(v, 'timeline')}<div class="tracing-time-controls"><input id="tracing-time" aria-label="사건 시간 되감기" data-range="timeline" type="range" min="0" max="5" step="0.1" value="${s.timeline.tick}"><span class="trace-model-note" id="prevention-result"><span>${s.timeline.intervention===null?'':`흔적 ${before.size}곳 → ${trace.size}곳`}</span></span><span id="time-label">사건 ${s.timeline.tick.toFixed(1)} / 5</span></div></div></section>`;
   }
   if (s.route === 'P06') {
     // 접촉 실험은 P05 기록과 같은 장면이라 탭을 따로 두지 않는다(자동으로 기록됨).
-    const labs = LABS.filter(l => l.id !== 'contact');
-    const next = labs.find(l => !s.labs.done.includes(l.id))?.id ?? 'synthesis';
-    const tabs = [...labs, { id: 'synthesis', name: '종합·복습', icon: 'link' }];
-    return `<section class="tracing-page tracing-p06"><p class="lab-model-notice">접촉은 앞 실험(P05)에서 다뤘어요. 종합은 배운 내용을 다시 쓰는 복습이에요.${['droplet','air','synthesis'].includes(v.lab)?'<span>비말과 공기 중 작은 입자는 같은 상황에서 함께 퍼질 수 있어요. 병마다 전파 방식이 달라요.</span>':''}</p><div class="lab-tabs tracing-lab-tabs" aria-label="실험 선택">${tabs.map(l => btn(`${icon(l.icon, 21)}<span>${l.name}</span>${s.labs.done.includes(l.id) || l.id === 'synthesis' && synthesisReady(s.labs.synthesis) ? icon('check', 16) : ''}`, 'lab', v.lab === l.id ? 'lab-tab selected' : 'lab-tab', `data-id="${l.id}" aria-pressed="${v.lab === l.id}"`)).join('')}</div>
+    const tabs = [...VISIBLE_LABS, { id: 'synthesis', name: '종합·복습', icon: 'link' }];
+    return `<section class="tracing-page tracing-p06"><div class="lab-tabs tracing-lab-tabs" aria-label="실험 선택">${tabs.map(l => btn(`${icon(l.icon, 21)}<span>${l.name}</span>${s.labs.done.includes(l.id) || l.id === 'synthesis' && synthesisReady(s.labs.synthesis) ? icon('check', 16) : ''}`, 'lab', v.lab === l.id ? 'lab-tab selected' : 'lab-tab', `data-id="${l.id}" aria-pressed="${v.lab === l.id}"`)).join('')}</div>
       <section class="lab-device tracing-device tracing-device-${v.lab}">${labDevice(s, v)}</section>
-      ${next !== v.lab && (s.labs.done.includes(v.lab) || v.lab === 'contact') ? `<div class="tracing-lab-play">${btn(`<span>${next === 'synthesis' ? '종합 문제 풀기' : `다음 실험: ${LABS.find(l => l.id === next)?.name}`}</span>${icon('arrow', 20)}`, 'lab', 'primary next-target', `data-id="${next}"`)}</div>` : ''}
-    </section>`;
+      </section>`;
   }
   return '';
 }
@@ -73,7 +71,7 @@ function learnerFigure(covered = false, coughing = false): string {
 function coughFigure(covered: boolean, synthesis = false): string {
   const action = synthesis ? 'data-action="synthesis" data-id="coughEtiquette"' : `data-action="lab-set" data-id="droplet" data-value="${covered?0:1}"`;
   return `<div class="tracing-cough-view ${covered?'is-covered':''}"><div class="tracing-cough-people">
-    <button type="button" class="tracing-cough-person lab-picture-control" ${action} aria-pressed="${covered}" aria-label="${covered?'가리지 않은 기침 보기':'옷소매로 입과 코 가리기'}">${learnerFigure(covered,true)}<b>${covered?'옷소매로 가린 기침':'가리지 않은 기침'}</b><span class="lab-touch-mark" aria-hidden="true">${icon(covered?'undo':'hand',19)}</span></button>
+    <button type="button" class="tracing-cough-person lab-picture-control" ${action} aria-pressed="${covered}" aria-label="${covered?'가리지 않은 기침 보기':'옷소매로 입과 코 가리기'}">${learnerFigure(covered,true)}<b>${covered?'옷소매로 가림':'가리지 않음'}</b><span class="lab-touch-mark" aria-hidden="true">${icon(covered?'undo':'hand',19)}</span></button>
     <div class="tracing-cough-path" aria-hidden="true"><span></span><i></i><i></i><i></i><i></i><i></i></div>
     <div class="tracing-cough-person tracing-cough-friend">${learnerFigure()}<b>함께 있는 친구</b></div>
   </div></div>`;
@@ -93,7 +91,7 @@ function foodIllustration(personal = false): string {
 function labDevice(s: State, v: View): string {
   const value = v.labPreview ?? s.labs.values[v.lab] ?? 0;
   // 한자어 실험 이름(비말·타액)은 제목 아래에 짧은 풀이를 붙인다. 낮은 가로 화면에서는 CSS로 숨긴다.
-const heading = (title: string, term = '') => `<h2 class="tracing-device-heading">${title}${term ? `<small class="tracing-term">${term}</small>` : ''}</h2>`;
+  const heading = (title: string) => `<h2 class="tracing-device-heading">${title}</h2>`;
   const result = (text: string, changed: boolean, compact = text, show = true) => !show ? '' : `<p class="device-result tracing-device-result ${changed ? 'is-observed' : ''}">${icon(changed ? 'check' : 'search', 20)}<span class="tracing-result-full">${text}</span><span class="tracing-result-compact">${compact}</span></p>`;
   switch (v.lab) {
     case 'contact':
@@ -101,7 +99,7 @@ const heading = (title: string, term = '') => `<h2 class="tracing-device-heading
         <div class="tracing-device-art tracing-contact">${DATA.p05.nodes.map((x, i) => `<div class="tracing-contact-node ${i <= v.demoStep ? 'observed' : ''}"><span class="tracing-contact-order">${i + 1}</span>${icon(nodeIcons[i], 66)}<b><span class="tracing-contact-name">${NODE_NAMES[x]}</span><span class="tracing-contact-short">${['책', 'A의 손', '공', 'B의 손', '손잡이', 'C의 손'][i]}</span></b>${i < 5 ? `<span class="tracing-contact-arrow" aria-hidden="true">${icon('arrow', 23)}</span>` : ''}</div>`).join('')}</div>
         ${result('늦게 손을 씻어도 이미 다른 물체에 옮겨진 흔적은 남아요.', s.labs.done.includes('contact'), '옮겨진 흔적은 남아요.')}`;
     case 'droplet':
-      return `${heading('옷소매로 입과 코를 가리면?', '비말은 기침·재채기 때 튀는 작은 침방울이에요.')}<div class="tracing-device-art">${coughFigure(!!value)}</div>
+      return `${heading('기침 뒤 흔적은 어떻게 퍼질까요?')}<div class="tracing-device-art">${coughFigure(!!value)}</div>
         ${result('흔적이 퍼지는 범위가 줄었어요.', !!value, '흔적 범위가 줄었어요.', !!value)}`;
     case 'air':
       return `${heading('창문을 열면 무엇이 달라질까요?')}
@@ -109,18 +107,18 @@ const heading = (title: string, term = '') => `<h2 class="tracing-device-heading
         ${result('바깥 공기와 바뀌며 공기 중 흔적이 줄어요.', !!value, '공기 흐름이 생겨요.', !!value)}`;
     case 'water':
       return `${heading('맑아 보이면 모두 괜찮을까요?')}
-        <div class="tracing-device-art water-options tracing-water-options"><button class="water-card ${value === 1 ? 'selected' : ''}" data-action="water" data-id="1" aria-pressed="${value === 1}">${waterGlass(true)}<strong>관리 기록이 확인된 물</strong><small>${icon('file', 18)} 학교에서 공급·관리</small></button><button class="water-card ${value === 2 ? 'selected' : ''}" data-action="water" data-id="2" aria-pressed="${value === 2}">${waterGlass(false)}<strong>출처가 확인되지 않은 물</strong><small>${icon('search', 18)} 어디서 담았는지 몰라요</small></button></div>
+        <div class="tracing-device-art water-options tracing-water-options"><button class="water-card ${value === 1 ? 'selected' : ''}" data-action="water" data-id="1" aria-pressed="${value === 1}">${waterGlass(true)}<strong>학교에서 받은 물</strong><small>관리 기록 있음</small></button><button class="water-card ${value === 2 ? 'selected' : ''}" data-action="water" data-id="2" aria-pressed="${value === 2}">${waterGlass(false)}<strong>출처를 모르는 물</strong><small>관리 기록 확인 못 함</small></button></div>
         ${result(value === 1 ? '공급·관리 정보를 근거로 골랐어요.' : value === 2 ? '투명해도 안전한지 알 수 없어요.' : '두 물의 겉모습보다 관리 정보를 살펴봐요.', value === 1, value === 1 ? '관리 정보를 확인했어요.' : '관리 정보를 살펴봐요.', value !== 0)}`;
     case 'synthesis': {
       const open = s.labs.synthesis.includes('ventilation');
-      return `${heading('닫힌 교실에서 기침한다면?')}<div class="tracing-device-art tracing-synthesis-scene">
+      return `<div class="tracing-device-art tracing-synthesis-scene">
         <button type="button" class="tracing-synthesis-window lab-picture-control ${open?'open':''}" data-action="synthesis" data-id="ventilation" aria-pressed="${open}" aria-label="${open?'창문 닫기':'창문 열기'}"><img src="${(open?labAssets.windowOpen:labAssets.windowClosed).src}" alt="" draggable="false"><b>${open?'열린 창문':'닫힌 창문'}</b><span class="lab-touch-mark" aria-hidden="true">${icon(open?'undo':'hand',19)}</span></button>
         ${coughFigure(s.labs.synthesis.includes('coughEtiquette'),true)}
         <button type="button" class="tracing-synthesis-hand lab-picture-control" data-action="synthesis" data-id="washHands"><img src="${labAssets.handPalm.src}" alt="" draggable="false"><b>손 씻기</b><span class="lab-touch-mark" aria-hidden="true">${icon('hand',19)}</span></button>
         </div>${result(synthesisReady(s.labs.synthesis) ? '기침 예절과 환기는 각각의 상황을 바꿔요.' : '기침과 닫힌 공간을 각각 바꾸는 두 행동을 골라요.', synthesisReady(s.labs.synthesis), undefined, s.labs.synthesis.length > 0)}`;
     }
     default:
-      return `${heading('공용 음식은 어떻게 덜어 먹을까요?', '타액은 입속의 침이에요.')}
+      return `${heading('함께 먹는 음식에 무엇이 닿을까요?')}
         <div class="tracing-device-art serving-demo tracing-serving ${value ? 'separated' : ''}"><div class="shared-bowl">${foodIllustration()}<b>공용 음식</b></div><div class="serving-tool" draggable="true" data-drag="serving" data-id="serve">${icon('plate', 38)}<span>덜기 도구</span>${icon('arrow', 24)}</div><button class="personal-plate ${value ? '' : 'next-target'}" data-action="lab-set" data-id="saliva" data-value="1" data-drop="serving" aria-label="개인 접시에 덜기">${value ? foodIllustration(true) : '<span class="tracing-empty-plate" aria-hidden="true"></span>'}<b>개인 접시</b></button></div>
         ${result('개인 숟가락과 공용 음식의 접촉이 줄었어요.', !!value, '접촉이 줄었어요.', !!value)}`;
   }

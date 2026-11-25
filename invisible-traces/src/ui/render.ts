@@ -1,5 +1,5 @@
 import {conceptRecall} from './concept-recall';
-import {learningFocus,nextInstruction} from './learning-guidance';
+import {nextInstruction} from './learning-guidance';
 import {DATA,STAGES,PAGES,LABS,SITES,CLUE_NAMES,asset} from '../data/game';
 import {branches,type State} from '../simulation/model';
 import {icon} from './icons';
@@ -9,26 +9,30 @@ export const viewFresh=():View=>({site:'classroom',clue:'',effect:'',lab:'contac
 import {btn,chip,image,actionName,CREDIT} from './render-parts';
 export {btn} from './render-parts';
 import {observationPages} from './stages-observation';
-import {tracingPages,synthesisReady} from './stages-tracing';
+import {tracingPages,nextLab} from './stages-tracing';
 import {strategyPages} from './stages-strategy';
 export {comparisonBoard,comparisonTasks} from './stages-strategy';
 /** 머리글 소리 버튼은 배경 음악과 효과음(목소리 포함)을 함께 켜고 끈다. 둘 중 하나라도 켜져 있으면 켜짐이다. */
 /** 헤더 소리 버튼: 배경 음악·효과음·목소리 중 하나라도 켜져 있으면 「끄기」. */
 export const soundOn=(s:State)=>s.settings.music||s.settings.sfx||s.settings.voice;
 /** `cards`는 소리 버튼 바로 앞에 넣는 성취 카드 칸(지도 화면에서만 main.ts가 넘긴다). */
-/** `focus`는 활동 화면의 개념·질문 띠(shell이 만든 것). 넓은 가로 화면에서는 위 띠 가운데에 이 사본을 보이고 아래 띠는 숨긴다(CSS). */
-export function header(s:State,sandbox:boolean,cards='',focus=''){
+export function header(s:State,sandbox:boolean,cards=''){
  const page=PAGES.find(p=>p.id===s.route);
  const onMap=s.route==='C01';
- const tools=`${sandbox&&!onMap?btn(`${icon('undo',20)}<span>본편 복귀</span>`,'exit-replay','small','aria-label="본편 복귀"'):''}${onMap?'':`<button class="icon-btn" data-action="records" aria-label="연구 기록">${icon('file')}</button>`}${cards}<button class="icon-btn" data-action="sound" aria-label="${soundOn(s)?'소리 끄기':'소리 켜기'}" aria-pressed="${soundOn(s)}">${icon(soundOn(s)?'sound':'mute')}</button><button class="icon-btn" data-action="settings" aria-label="설정">${icon('settings')}</button>`;
- if(page)return `<header class="topbar activity-topbar"><button class="icon-btn" data-action="map" aria-label="조사 지도로 돌아가기">${icon('map',22)}</button><div class="activity-heading"><span class="activity-mission">미션 ${Number(page.stage.slice(1))} / 5</span><h1>${page.name}</h1></div>${focus.replace('<aside class="learning-focus','<aside class="topbar-focus')}<nav class="tools" aria-label="공통 도구">${tools}</nav></header>`;
- return `<header class="topbar"><button class="brand" data-action="home" aria-label="메인으로"><span class="brand-mark">${icon('search',26)}</span><span>보이지 않는 흔적<small>학교 과학 조사</small></span></button><div class="header-center">${sandbox?chip('flask','다시 실험 · 본편 기록 보존','purple'):onMap?'':chip('file',`연구 기록 <b>${s.evidence.length}</b> / 5`)}</div><nav class="tools" aria-label="공통 도구">${tools}</nav></header>`;
+ const tools=`${sandbox&&!onMap?btn(`${icon('undo',20)}<span>본편 복귀</span>`,'exit-replay','small','aria-label="본편 복귀"'):''}${s.route!=='C00'&&!onMap?`<button class="icon-btn" data-action="records" aria-label="연구 기록">${icon('file')}</button>`:''}${cards}<button class="icon-btn" data-action="sound" aria-label="${soundOn(s)?'소리 끄기':'소리 켜기'}" aria-pressed="${soundOn(s)}">${icon(soundOn(s)?'sound':'mute')}</button><button class="icon-btn" data-action="settings" aria-label="설정">${icon('settings')}</button>`;
+ if(page)return `<header class="topbar activity-topbar"><button class="icon-btn" data-action="map" aria-label="조사 지도로 돌아가기">${icon('map',22)}</button><div class="activity-heading"><span class="activity-mission">미션 ${Number(page.stage.slice(1))} / 5</span><h1>${page.name}</h1></div><nav class="tools" aria-label="공통 도구">${tools}</nav></header>`;
+ if(s.route==='C00')return `<header class="topbar title-topbar"><nav class="tools" aria-label="공통 도구">${tools}</nav></header>`;
+ return `<header class="topbar map-topbar"><button class="brand" data-action="home" aria-label="메인으로"><span class="brand-mark">${icon('home',24)}</span><span>처음 화면</span></button><div class="header-center">${sandbox?chip('flask','다시 실험','purple'):''}</div><nav class="tools" aria-label="공통 도구">${tools}</nav></header>`;
 }
 // 그림 속 빛나는 자리(%)에 맞춰 신호가 깜빡인다.
 const TITLE_SIGNALS=[['purple',26.2,43.6],['blue',50.7,52.8],['amber',78,51.6],['orange',82.6,75.5]] as const;
 // 제작·저작권 표기: 시작 화면 우측 하단과 설정의 앱 정보에 같은 문구를 쓴다.
 export {CREDIT} from './render-parts';
-export function home(s:State){const active=s.found.length>0||s.clues.length>0;return `<main class="title-screen"><div class="title-world">${image('school','title-school')}${TITLE_SIGNALS.map(([color,x,y],i)=>`<i class="title-signal ${color}" style="left:${x}%;top:${y}%;animation-delay:${i*.7}s"></i>`).join('')}</div>${image('title-hero','title-person title-hero')}${image('title-mate','title-person title-mate')}<div class="title-center"><h1 class="title-logo">${image('title-logo','','보이지 않는 흔적')}</h1></div><div class="title-bottom"><div class="title-actions">${active?btn('새로 시작','new-start','primary'):btn(`시작하기 ${icon('arrow',22)}`,'start','primary')}${btn('이어 하기','continue','secondary',active?'':'disabled')}</div></div><p class="title-credit">${CREDIT}</p></main>`;}
+export function home(s:State){
+ const active=s.found.length>0||s.clues.length>0;
+ const start=btn(`${active?'이어 하기':'시작하기'} ${icon('arrow',22)}`,active?'continue':'start','primary');
+ return `<main class="title-screen"><div class="title-world">${image('school','title-school')}${TITLE_SIGNALS.map(([color,x,y],i)=>`<i class="title-signal ${color}" style="left:${x}%;top:${y}%;animation-delay:${i*.7}s"></i>`).join('')}</div>${image('title-hero','title-person title-hero')}${image('title-mate','title-person title-mate')}<div class="title-center"><h1 class="title-logo">${image('title-logo','','보이지 않는 흔적')}</h1></div><div class="title-bottom"><div class="title-actions">${start}${active?btn('새로 시작','new-start','text'):''}</div></div><p class="title-credit">${CREDIT}</p></main>`;
+}
 // 지도 위 다섯 장소의 상태. 입장 가능 여부는 캔버스와 이름표가 같은 값을 쓴다.
 export function mapStatus(s:State,v:View){const open=STAGES.map((_,i)=>i===0||s.evidence.includes(`E${i}`)||v.teacher);const done=STAGES.map(t=>s.completed.includes(t.pages[1]));return {open,done,next:STAGES.findIndex((_,i)=>open[i]&&!done[i])};}
 export const mapViewLabel=(mode:string)=>mode==='overview'?'이전 지도 보기로 돌아가기':'지도 한눈에 보기';
@@ -54,25 +58,25 @@ export function gateHint(s:State):string {
 }
 function progressLabel(s:State):string {
  switch(s.route){
- case 'P01':return `신호 ${s.found.length} / 3곳`;
- case 'P02':return `단서 ${s.clues.length} / 5개`;
- case 'P03':return `관계 ${branches(s)} / 2가지`;
- case 'P04':return `영향 ${Object.keys(s.impacts).length} / 3영역`;
- case 'P05':return s.completed.includes('P05')?'시간 추적 완료':`시작점 ${s.timeline.source==='book'?'찾음':s.timeline.source?'다시 찾기':'미선택'} · 비교 ${Math.min(2,s.timeline.tried.length)} / 2`;
- case 'P06':return `실험 ${s.labs.done.filter(x=>x!=='contact').length} / 4 · 종합 ${synthesisReady(s.labs.synthesis)?'완료':'확인 중'}`;
- case 'P07':return s.experiment.action?'행동 선택함 · 예측 대기':'행동 · 예측 미선택';
- case 'P08':{const action=DATA.p07.actionPool.find(a=>a.id===s.experiment.action);return `관찰 기록 ${Number(!!action&&s.experiment.pinned===action.differenceEvent)+Number(!!action&&s.experiment.explanation===action.metric)} / 2`;}
- case 'P09':return `대응 행동 ${s.strategy.placements.length}개 배치`;
- case 'P10':return s.final.phase==='report'?`연구 기록 ${s.evidence.length} / 5`:`실천 ${s.final.applied.length} / ${s.strategy.placements.length}`;
+ case 'P01':return `신호 ${s.found.length} / ${DATA.p01.requiredSites.length}`;
+ case 'P03':return `관계 ${branches(s)} / 2`;
+ case 'P04':return `연결 ${Object.keys(s.impacts).length} / 3`;
+ case 'P10':return `실천 ${s.final.applied.length} / ${s.strategy.placements.length}`;
  default:return '';
  }
 }
 export function shell(s:State,v:View,content:string){
  const done=s.completed.includes(s.route);
- // 놀이 영역 위 띠는 한 줄: 페이지 질문을 개념 칩 줄로 올려 합친다.
- const question=content.match(/<p class="mission-question">[\s\S]*?<\/p>/)?.[0]??'';
- if(question)content=content.replace(question,'');
- return `<main class="play-layout activity-layout" data-page="${s.route}" data-focus="${v.focus}"><section class="play-main">${learningFocus(s,v,question)}<div id="page-content" class="page-content">${content}</div><footer class="actionbar"><div class="activity-status"><button class="icon-btn activity-info" data-action="model-info" aria-label="조작 힌트와 학습 모형 안내">${icon('info',20)}</button><span class="status-line ${done?'success':''}" role="status"><span><small class="activity-progress">${progressLabel(s)}</small><b class="next-instruction">${nextInstruction(s,v)}</b></span></span></div>${s.route==='P10'?'':btn(`${PAGES.find(p=>p.id===s.route)?.next==='C01'?'조사 지도':'다음 조사'} ${icon('arrow',20)}`,'next',`primary ${done?'next-target':''}`,done?'':'disabled')}</footer></section></main>`;
+ const following=PAGES.find(p=>p.id===s.route)?.next;
+ const lab=s.route==='P06'&&s.labs.done.includes(v.lab)?nextLab(s):undefined;
+ let advance='';
+ if(s.route!=='P10'&&done)advance=btn(`${following==='C01'?'조사 지도':'다음 조사'} ${icon('arrow',20)}`,'next','primary next-target');
+ else if(lab&&lab!==v.lab)advance=btn(`${lab==='synthesis'?'종합 문제':'다음 실험'} ${icon('arrow',20)}`,'lab','primary next-target',`data-id="${lab}"`);
+ else if(s.route==='P09'&&s.strategy.placements.length&&!v.action&&!s.strategy.simulated)advance=btn(`${icon('play',20)}작전 실행`,'simulate','primary');
+ const progress=progressLabel(s);
+ const instruction=nextInstruction(s,v);
+ const task=content.replace(/<p class="mission-question">[\s\S]*?<\/p>/,'');
+ return `<main class="play-layout activity-layout" data-page="${s.route}" data-focus="${v.focus}"><section class="play-main"><div id="page-content" class="page-content">${task}</div><footer class="actionbar"><button class="icon-btn activity-info" data-action="model-info" aria-label="힌트와 학습 모형 안내">${icon('info',22)}</button><div class="activity-status" role="status"><b class="next-instruction">${instruction}</b>${progress?`<span class="activity-progress">${progress}</span>`:''}</div>${advance}</footer></section></main>`;
 }
 export function pageContent(s:State,v:View):string {
  const page=Number(s.route.slice(1));
@@ -80,4 +84,4 @@ export function pageContent(s:State,v:View):string {
  if(page<=6)return tracingPages(s,v);
  return strategyPages(s,v);
 }
-export function records(s:State){return `<div class="eyebrow">MY RESEARCH NOTE</div><h2>우리의 발견 기록</h2><p>플레이하며 남긴 근거가 여기 모여요.</p>${conceptRecall()}<div class="record-list">${DATA.evidence.map(e=>`<div class="record-entry ${s.evidence.includes(e.id)?'ready':''}"><span class="record-icon">${icon(s.evidence.includes(e.id)?'check':'lock',22)}</span><div><b>${e.name}</b><p>${s.evidence.includes(e.id)?e.id==='E1'?s.clues.map(id=>CLUE_NAMES[id]).join(' · '):e.id==='E2'?`설명한 관계 ${branches(s)}가지 · 생활 영향 3영역`:e.id==='E3'?'흔적의 이동과 다섯 생활 상황을 조사했어요.':e.id==='E4'?`${actionName(s.experiment.action)} 전후의 차이를 설명했어요.`:s.strategy.placements.map(p=>`${SITES.find(x=>x.id===p.site)?.name}: ${actionName(p.actionId)}`).join(' · '):'앞으로 탐구하며 채워갈 기록이에요.'}</p></div></div>`).join('')}</div>`;}
+export function records(s:State){return `<h2>연구 기록</h2>${conceptRecall()}<div class="record-list">${DATA.evidence.map(e=>`<div class="record-entry ${s.evidence.includes(e.id)?'ready':''}"><span class="record-icon">${icon(s.evidence.includes(e.id)?'check':'lock',22)}</span><div><b>${e.name}</b><p>${s.evidence.includes(e.id)?e.id==='E1'?s.clues.map(id=>CLUE_NAMES[id]).join(' · '):e.id==='E2'?`설명한 관계 ${branches(s)}가지 · 생활 영향 3영역`:e.id==='E3'?'흔적의 이동과 다섯 생활 상황을 조사했어요.':e.id==='E4'?`${actionName(s.experiment.action)} 전후의 차이를 설명했어요.`:s.strategy.placements.map(p=>`${SITES.find(x=>x.id===p.site)?.name}: ${actionName(p.actionId)}`).join(' · '):'앞으로 탐구하며 채워갈 기록이에요.'}</p></div></div>`).join('')}</div>`;}

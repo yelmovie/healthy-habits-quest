@@ -25,7 +25,7 @@ const CONDITION_TARGETS: Record<string, { x: number; y: number; label: string }>
 
 function conditionLab(s: State): string {
   const action = DATA.p07.actionPool.find(a => a.id === s.experiment.action);
-  return `<div class="strategy-activity condition-activity"><div class="condition-workspace">
+  return `<div class="strategy-activity condition-activity"><div class="condition-workspace ${action?'has-prediction':''}">
     <section class="condition-study" aria-label="점심시간 그림">
       <div class="condition-picture"><div class="condition-scene-area">${image('meal-20261110','condition-photo')}
         ${Object.entries(CONDITION_TARGETS).map(([id, target]) => {
@@ -39,11 +39,10 @@ function conditionLab(s: State): string {
       </div></div>
       <div class="condition-constants">${chip('lock','장소 · 친구 · 시간 · 순서는 같아요')}</div>
     </section>
-    <aside class="prediction-panel">
+    ${action?`<aside class="prediction-panel">
       <h2>흔적이 어떻게 달라질까요?</h2>
-      <p class="condition-selection" role="status">${action ? `${icon(ACTION_ICONS[action.id], 21)}<strong>${action.name}</strong>` : `${icon('hand', 21)}<span>그림에서 바꿔 볼 곳을 골라요.</span>`}</p>
-      <div class="prediction-choices">${[['fewer','줄어들 것 같아요','↘'],['same','비슷할 것 같아요','＝'],['unsure','아직 모르겠어요','?']].map(([id,label,mark])=>btn(`<span class="predict-mark" aria-hidden="true">${mark}</span>${label}`,'predict','small',`data-id="${id}" ${action?'':'disabled'}`)).join('')}</div>
-    </aside>
+      <div class="prediction-choices">${[['fewer','줄어들 것 같아요','↘'],['same','비슷할 것 같아요','＝'],['unsure','아직 모르겠어요','?']].map(([id,label,mark])=>btn(`<span class="predict-mark" aria-hidden="true">${mark}</span>${label}`,'predict','small',`data-id="${id}"`)).join('')}</div>
+    </aside>`:''}
   </div></div>`;
 }
 
@@ -70,13 +69,20 @@ const MODEL_LABELS:Record<string,[string,string,string]>={
  portionFood:['공용 음식','개인 접시','개인 식기와 공용 음식의 접촉']
 };
 
-const DIFFERENCE_AREAS: Record<string, { x: number; y: number; width: number; height: number; label: string }> = {
-  washHands: { x: 25, y: 50, width: 34, height: 84, label: '씻은 손' },
-  coughEtiquette: { x: 29, y: 40, width: 34, height: 60, label: '입과 코를 가린 옷소매' },
-  ventilation: { x: 50, y: 48, width: 57, height: 86, label: '열린 창문' },
-  personalItems: { x: 51, y: 51, width: 43, height: 69, label: '따로 쓰는 두 컵' },
-  portionFood: { x: 67, y: 47, width: 52, height: 65, label: '덜기 도구와 개인 접시' },
+const DIFFERENCE_ZONES = [
+  { id: 'left', label: '왼쪽' },
+  { id: 'center', label: '가운데' },
+  { id: 'right', label: '오른쪽' },
+] as const;
+
+const CHANGE_ZONE: Record<string, typeof DIFFERENCE_ZONES[number]['id']> = {
+  washHands: 'left',
+  coughEtiquette: 'left',
+  ventilation: 'center',
+  personalItems: 'center',
+  portionFood: 'right',
 };
+export const differenceZone = (id: string) => CHANGE_ZONE[id];
 
 // 도식은 연결의 차이를 나타내며, 실제 입자 수·감염 확률을 표현하지 않는다.
 function experimentDrawing(action:string,changed:boolean,after:boolean){
@@ -97,19 +103,17 @@ function experimentDrawing(action:string,changed:boolean,after:boolean){
  }else{
   drawing=`${picture(labAssets.servingBowl.src,15,15,170,130)}${picture(labAssets.personalPlate.src,264,40,145,105)}${arrow(223,93)}<g stroke="${active?teal:purple}" stroke-width="4" fill="none" stroke-linecap="round">${active?'<path d="m182 37 42 25"/><ellipse cx="233" cy="68" rx="12" ry="8"/>':'<path d="m174 39-39 29m27-37 18 15m-9-23 18 15m-9-23 18 15"/>'}</g>${signals(active?[]:[[151,87],[194,111],[312,109]])}`;
  }
- return `<svg class="experiment-drawing" viewBox="0 0 420 170" role="img" aria-label="${active?actionName(action)+' 적용 뒤의 연결 모형':'기본 행동의 연결 모형'}"><rect x="12" y="8" width="396" height="154" rx="24" fill="#fff" opacity=".78"/>${drawing}</svg>`;
+ return `<svg class="experiment-drawing" viewBox="0 0 420 170" role="img" aria-label="${active?actionName(action)+' 적용 뒤의 연결 모형':'기본 행동의 연결 모형'}"><rect x="12" y="8" width="396" height="154" rx="24" fill="#fff" opacity=".68"/>${drawing}</svg>`;
 }
 
 function compareScene(s:State,changed:boolean){
  const a=DATA.p07.actionPool.find(a=>a.id===s.experiment.action)!;
  const after=s.experiment.tick>=DATA.p07.events.find(e=>e.id===a.differenceEvent)!.time;
  const labels=MODEL_LABELS[a.id];
- const area=DIFFERENCE_AREAS[a.id];
- const areaStyle=`--target-x:${area.x}%;--target-y:${area.y}%;--target-width:${area.width}%;--target-height:${area.height}%`;
  const marker=changed&&after
-  ? s.experiment.pinned
-    ? `<span class="experiment-hit observed" style="${areaStyle}" aria-hidden="true"><span>${icon('check',20)}</span></span>`
-    : `<button type="button" class="experiment-hit" style="${areaStyle}" data-action="difference" aria-label="B 그림에서 ${area.label} 표시하기"><span aria-hidden="true">${icon('flag',20)}</span></button>`
+  ? `<div class="experiment-zones"${s.experiment.pinned?' aria-hidden="true"':' role="group" aria-label="B 그림에서 비교할 영역"'}>${DIFFERENCE_ZONES.map(({id,label}) => s.experiment.pinned
+    ? `<span class="experiment-zone recorded">${id===differenceZone(a.id)?icon('check',24):''}</span>`
+    : `<button type="button" class="experiment-zone" data-action="difference" data-id="${id}" aria-label="B 그림 ${label}"><span aria-hidden="true">${icon('search',20)}</span></button>`).join('')}</div>`
   : '';
  return `<div class="compare-scene experiment-scene ${changed&&after?'calmer':''}">${image('meal-20261110','compare-image')}<div class="experiment-playfield"><div class="experiment-picture">${experimentDrawing(a.id,changed,after)}${marker}</div></div><div class="experiment-object-labels"><span>${labels[0]}</span><span>${labels[1]}</span></div></div>`;
 }
@@ -117,8 +121,8 @@ function compareScene(s:State,changed:boolean){
 export function comparisonBoard(s:State){
  const a=DATA.p07.actionPool.find(a=>a.id===s.experiment.action);if(!a)return '';
  const after=s.experiment.tick>=DATA.p07.events.find(e=>e.id===a.differenceEvent)!.time;
- const result=after?(s.experiment.explanation===a.metric?EFFECTS[a.id]:'같은 곳을 A 그림과 비교해 봐요.'):'선택한 행동이 시작되기 전이에요.';
- return `<div class="prediction-record">내 예상: <b>${PREDICTIONS[s.experiment.prediction]??'아직 고르지 않았어요'}</b> · 예상은 채점하지 않아요.</div><div class="comparison-board strategy-comparison"><section class="compare-half"><div class="compare-label"><b class="compare-letter">A</b><span>기본 하루</span></div>${compareScene(s,false)}<div class="compare-result">기본 조건을 유지해요.</div></section><section class="compare-half modified ${s.experiment.pinned?'pinned':''}"><div class="compare-label"><b class="compare-letter">B</b><span>${a.name}</span>${s.experiment.pinned?icon('check',20):''}</div>${compareScene(s,true)}<div class="compare-result">${result}</div></section></div>`;
+ const result=after&&s.experiment.explanation===a.metric?EFFECTS[a.id]:'';
+ return `<div class="prediction-record">내 예상: <b>${PREDICTIONS[s.experiment.prediction]??'아직 고르지 않았어요'}</b></div><div class="comparison-board strategy-comparison"><section class="compare-half"><div class="compare-label"><b class="compare-letter">A</b><span>기본 하루</span></div>${compareScene(s,false)}</section><section class="compare-half modified ${s.experiment.pinned?'pinned':''}"><div class="compare-label"><b class="compare-letter">B</b><span>${a.name}</span></div>${compareScene(s,true)}</section></div>${result?`<p class="comparison-outcome">${result}</p>`:''}`;
 }
 
 const PREDICTIONS:Record<string,string>={fewer:'줄어들 것 같아요',same:'비슷할 것 같아요',unsure:'아직 모르겠어요'};
@@ -129,7 +133,7 @@ export function comparisonTasks(s:State){
  const change=btn(`${icon('undo',19)}<span>행동 바꾸기</span>`,'re-experiment','text');
  if(!s.experiment.pinned)return change;
  if(s.experiment.explanation===a.metric){
-  return `<div class="prediction-reflection"><b>내 예상과 뭐가 달랐나요?</b><span>결과 그림을 근거로 말한 뒤 골라요. 정답은 없어요.</span><div class="reflection-choices">${REFLECTIONS.map(([id,label])=>btn(label,'reflect',`small ${s.experiment.reflection===id?'selected':''}`,`data-id="${id}" aria-pressed="${s.experiment.reflection===id}"`)).join('')}</div></div>${change}`;
+  return `<div class="prediction-reflection"><b>내 예상과 뭐가 달랐나요?</b><div class="reflection-choices">${REFLECTIONS.map(([id,label])=>btn(label,'reflect',`small ${s.experiment.reflection===id?'selected':''}`,`data-id="${id}" aria-pressed="${s.experiment.reflection===id}"`)).join('')}</div></div>${change}`;
  }
  const pool=DATA.p07.actionPool,i=pool.findIndex(x=>x.id===a.id),options=[pool[i],pool[(i+1)%pool.length],pool[(i+3)%pool.length]].sort((x,y)=>x.metric.localeCompare(y.metric));
  return `<div class="explain-step"><span class="explain-label">${icon('link',19)}무엇이 달라졌나요?</span><div class="explain-choices">${options.map(x=>btn(SHORT_EFFECTS[x.id],'explain','choice',`data-id="${x.metric}"`)).join('')}</div></div>${change}`;
@@ -140,11 +144,8 @@ export const strategySceneHint=(site:string)=>SCENE_HINTS[site]??'그 장소에�
 
 function strategyBoard(s:State,v:View){
  const result=planResult(s.strategy.placements),cost=planCost(s.strategy.placements);
- const contexts:Record<string,string>={classroom:'함께 지내는 공간의 공기 흐름',cafeteria:'공용 음식에 쓰는 도구',gym:'체육 활동 뒤 간식 먹기 전의 손'};
  const activeSite=SITES.find(x=>x.id===v.focus)?.id??SITES[0].id;
- const remaining=SITES.find(x=>!result.resolved.includes(x.id));
- const feedback=s.strategy.simulated?(result.success?'세 장소의 대응안이 완성됐어요.':`${remaining?.name}: ${strategySceneHint(remaining?.id??'')}`):v.action?`‘${actionName(v.action)}’${objectParticle(actionName(v.action))} 적용할 장소를 눌러요.`:'행동을 고른 뒤 장소를 눌러 배치해요.';
- return `<div class="strategy-activity strategy-planning"><div class="strategy-toolbar"><div class="strategy-energy"><b>${5-cost}<small>/ 5</small></b><span>남은 에너지<br>게임 규칙</span><span class="energy-cells" aria-hidden="true">${[0,1,2,3,4].map(i=>`<i class="${i<5-cost?'available':''}"></i>`).join('')}</span></div>${btn(`${icon('people',20)}현장 질문 <b>${3-s.strategy.asked.length}</b>`,'questions','small')}<div class="strategy-selection-hint ${result.success&&s.strategy.simulated?'success':''}" role="status" ${s.strategy.simulated?'':'hidden'}>${icon(s.strategy.simulated?(result.success?'check':'search'):v.action?ACTION_ICONS[v.action]:'hand',20)}<span>${feedback}</span></div></div>
+ return `<div class="strategy-activity strategy-planning"><div class="strategy-toolbar"><div class="strategy-energy"><b>${5-cost}<small>/ 5</small></b><span>에너지</span><span class="energy-cells" aria-hidden="true">${[0,1,2,3,4].map(i=>`<i class="${i<5-cost?'available':''}"></i>`).join('')}</span></div>${btn(`${icon('people',20)}현장 질문 <b>${3-s.strategy.asked.length}</b>`,'questions','small')}</div>
  <div class="strategy-place-tabs" aria-label="살펴볼 장소">${SITES.map(x=>btn(x.name,'focus',activeSite===x.id?'small selected':'small',`data-id="${x.id}" aria-pressed="${activeSite===x.id}"`)).join('')}</div>
  <div class="strategy-zones">${SITES.map(x=>{
   const placed=s.strategy.placements.filter(p=>p.site===x.id);
@@ -153,14 +154,13 @@ function strategyBoard(s:State,v:View){
     <button class="strategy-zone ${s.strategy.simulated?(resolved?'resolved':'remaining'):''} ${v.action?'placement-ready':''}" data-action="place" data-id="${x.id}" data-drop="strategy">
       <span class="strategy-zone-picture">${image(PLAN_SCENES[x.id]??x.image)}<span aria-hidden="true">${icon(v.action?'hand':x.icon,23)}</span></span>
       <span class="strategy-zone-title"><strong>${x.name}</strong>${s.strategy.simulated?icon(resolved?'check':'search',21):''}</span>
-      <span class="strategy-zone-context">${contexts[x.id]}</span>
     </button>
     <div class="strategy-placement-tags">${placed.map(p=>btn(`${icon(ACTION_ICONS[p.actionId],17)}<span>${actionName(p.actionId)}</span>${icon('close',15)}`,'remove-placement','tiny',`data-id="${placementKey(p)}" aria-label="${x.name} ${actionName(p.actionId)} 배치 취소"`)).join('')}</div>
   </section>`;
  }).join('')}</div>
  <div class="strategy-actions">${DATA.p09.actions.map(a=>`<button class="action-card ${v.action===a.id?'selected':''}" data-action="strategy-action" data-id="${a.id}" draggable="true" data-drag="strategy" aria-pressed="${v.action===a.id}" aria-label="${a.label}, 에너지 ${a.cost}">
    <img class="strategy-action-art" src="${ACTION_ART[a.id]}" alt="" draggable="false"><b>${actionLabel(a.id,a.label)}</b><small>${icon('bolt',16)}${a.cost}</small>
- </button>`).join('')}${btn(`${icon('play',20)}작전 실행`,'simulate',s.strategy.placements.length?'primary next-target':'primary',s.strategy.placements.length?'':'disabled')}</div></div>`;
+ </button>`).join('')}</div></div>`;
 }
 
 function finalWindow(open: boolean, key: string): string {
@@ -181,8 +181,8 @@ function certificatePage(){
  <div class="cert-foot"><p class="cert-date"><small>완료한 날</small><b>${certDate()}</b></p><span class="cert-stamp" aria-hidden="true"><span>조사<br>완료</span></span><p class="cert-giver"><small>수여자</small><b>기록 파트너</b></p></div>
  <small class="cert-credit">${CREDIT}</small>
  </div></section>
- <aside class="cert-panel" aria-label="인증서 저장"><p class="cert-handwrite">인쇄한 뒤 학교·반·번호·이름을 직접 적어요.</p>
- <div class="ending-actions">${btn(`${icon('print',20)} 인증서 인쇄 / PDF 저장`,'print','primary')}${btn(`${icon('file',20)} PNG로 저장`,'cert-png','secondary')}${btn(`${icon('play',20)} 파이널 영상 다시 보기`,'film','secondary','data-id="outro"')}</div></aside>
+ <aside class="cert-panel" aria-label="인증서 저장">
+ <div class="ending-actions">${btn(`${icon('print',20)} 인증서 인쇄 / PDF 저장`,'print','primary')}${btn(`${icon('file',20)} PNG로 저장`,'cert-png','secondary')}${btn(`${icon('play',20)} 파이널 영상`,'film','text','data-id="outro"')}</div></aside>
  </div></div>`;
 }
 // 인증서 날짜: 인증서를 연 날을 `2026. 11. 22.` 꼴로(저장 구조는 바꾸지 않는다).
@@ -190,11 +190,11 @@ const certDate=(d=new Date())=>`${d.getFullYear()}. ${d.getMonth()+1}. ${d.getDa
 function finalPage(s:State,v:View){
  if(s.final.phase==='certificate')return certificatePage();
  if(['restored','ending','certificate'].includes(s.final.phase)){
-  const cert=false;return `<div class="ending strategy-ending ${cert?'certificate':''}">${image('restored','ending-background')}<div class="ending-card"><span class="core-emblem">${icon('spark',42)}</span><h2>${cert?'학교 과학 조사 인증서':'우리의 발견이 학교를 바꿨어요.'}</h2><div class="ending-badges">${chip('check','다섯 탐구 미션 완료')}${chip('file','연구 기록 5 / 5')}</div>${cert?'':'<p class="ending-practice">손 씻기·기침 예절·환기·덜어 먹기는 생활에서 모두 함께 실천해요.</p><p class="ending-share"><b>오늘의 약속을 말해요</b><span>나는 오늘 ______할 때 ______할 거야.<br>왜냐하면 ______을 줄일 수 있기 때문이야.</span></p>'}${cert?'<div class="cert-fields"><span>학교<i></i></span><span>학년·반<i></i></span><span>이름<i></i></span></div>':''}${cert?`<p class="cert-date">완료한 날 ${certDate()}</p>`:''}${cert?`<small class="cert-credit">${CREDIT}</small>`:''}<div class="ending-actions">${cert?btn(`${icon('print',20)} 인증서 인쇄 / PDF 저장`,'print','primary'):btn(`${icon('file',20)} 조사 인증서`,'certificate','primary next-target')}${btn(`${icon('play',20)} 파이널 영상 다시 보기`,'film','secondary','data-id="outro"')}</div></div></div>`;
+  return `<div class="ending strategy-ending">${image('restored','ending-background')}<div class="ending-card"><h2>우리의 발견이 학교를 바꿨어요.</h2><p class="ending-share"><b>오늘의 약속</b><span>나는 ______할 때 ______할 거야.</span></p><div class="ending-actions">${btn(`${icon('file',20)} 조사 인증서`,'certificate','primary next-target')}${btn(`${icon('play',20)} 파이널 영상`,'film','text','data-id="outro"')}</div></div></div>`;
  }
  if(s.final.phase==='report')return `<div class="strategy-activity strategy-report"><div class="final-report-heading">${icon('flag',26)}<h2>내가 설계한 계획을 실천해요</h2></div><div class="final-plan-cards">${s.strategy.placements.map((p,i)=>`<section class="final-plan-card"><div class="final-plan-picture">${image(SITES.find(x=>x.id===p.site)?.image??'classroom')}${experimentDrawing(p.actionId,true,true)}</div><div class="final-plan-caption"><b>${i+1}</b><span><small class="final-plan-place">${SITES.find(x=>x.id===p.site)?.name}</small><strong>${actionName(p.actionId)}</strong></span></div></section>`).join('')}</div>${btn(`직접 실천하기 ${icon('arrow',22)}`,'begin-apply','primary next-target')}</div>`;
  const p=nextPlacement(s);if(!p)return '';const key=placementKey(p);
- return `<div class="strategy-activity strategy-apply"><div class="apply-heading"><h2>${SITES.find(x=>x.id===p.site)?.name} · ${actionName(p.actionId)}</h2></div><div class="apply-device">${p.actionId==='ventilation'?finalWindow(v.demoStep>0,key):p.actionId==='washHands'?`<div class="handwashing-workspace wash-steps"><p class="wash-practice-note">세 부위 문지르기는 게임 연습이에요. 실제 손 씻기는 아래 그림 안내를 따라요.</p><div class="hand-zones">${[['palm','손바닥'],['back','손등'],['fingers','손가락 사이']].map(([id,label],i)=>`<button data-action="hand-zone" data-id="${id}" data-key="${key}" class="hand-zone ${s.final.hands.includes(id)?'done':'next-target'}"><span class="hand-zone-number">${s.final.hands.includes(id)?icon('check',18):i+1}</span>${image(['wash-palm-20261116','wash-back-20261116','wash-fingers-20261116'][i],'hand-zone-art')}<span class="hand-zone-cue">${['두 손바닥을 마주 대고 문질러요.','한 손바닥으로 다른 손등을 문질러요.','깍지를 끼고 손가락 사이를 문질러요.'][i]}</span><b>${label}</b><span class="rub-meter" aria-hidden="true"></span></button>`).join('')}</div>${realHandwashingGuide()}</div>`:`<div class="serving-demo final-serving"><div class="shared-bowl" draggable="true" data-drag="final-serve" data-id="${key}">${p.actionId==='portionFood'?image('serving-bowl-20261112','final-food-illustration','공용 음식과 덜기 도구'):icon(ACTION_ICONS[p.actionId],100)}<b>${p.actionId==='portionFood'?'공용 음식과 덜기 도구':'공용 물품'}</b></div><span class="final-serving-direction">${icon('arrow',40)}</span><button class="personal-plate ${v.demoStep>0?'filled':'next-target'}" data-action="apply" data-id="${key}" data-drop="final-serve" ${v.demoStep>0?'disabled':''}>${p.actionId==='portionFood'?(v.demoStep>0?image('personal-plate-20261112','final-food-illustration','개인 접시에 덜어 담은 음식'):'<span class="tracing-empty-plate" aria-hidden="true"></span>'):icon('bag',100)}<b>${v.demoStep>0?'내 접시에 덜었어요!':p.actionId==='portionFood'?'여기를 눌러 개인 접시에 덜기':'내 계획 적용하기'}</b></button></div>`}</div></div>`;
+ return `<div class="strategy-activity strategy-apply"><div class="apply-heading"><h2>${SITES.find(x=>x.id===p.site)?.name} · ${actionName(p.actionId)}</h2></div><div class="apply-device">${p.actionId==='ventilation'?finalWindow(v.demoStep>0,key):p.actionId==='washHands'?`<div class="handwashing-workspace wash-steps"><p class="wash-practice-note">게임에서는 세 부위를 연습해요.</p><div class="hand-zones">${[['palm','손바닥'],['back','손등'],['fingers','손가락 사이']].map(([id,label],i)=>`<button data-action="hand-zone" data-id="${id}" data-key="${key}" class="hand-zone ${s.final.hands.includes(id)?'done':'next-target'}"><span class="hand-zone-number">${s.final.hands.includes(id)?icon('check',18):i+1}</span>${image(['wash-palm-20261116','wash-back-20261116','wash-fingers-20261116'][i],'hand-zone-art')}<b>${label}</b><span class="rub-meter" aria-hidden="true"></span></button>`).join('')}</div>${realHandwashingGuide()}</div>`:`<div class="serving-demo final-serving"><div class="shared-bowl" draggable="true" data-drag="final-serve" data-id="${key}">${p.actionId==='portionFood'?image('serving-bowl-20261112','final-food-illustration','공용 음식과 덜기 도구'):icon(ACTION_ICONS[p.actionId],100)}<b>${p.actionId==='portionFood'?'공용 음식과 덜기 도구':'공용 물품'}</b></div><span class="final-serving-direction">${icon('arrow',40)}</span><button class="personal-plate ${v.demoStep>0?'filled':'next-target'}" data-action="apply" data-id="${key}" data-drop="final-serve" ${v.demoStep>0?'disabled':''}>${p.actionId==='portionFood'?(v.demoStep>0?image('personal-plate-20261112','final-food-illustration','개인 접시에 덜어 담은 음식'):'<span class="tracing-empty-plate" aria-hidden="true"></span>'):icon('bag',100)}<b>${v.demoStep>0?'내 접시에 덜었어요!':p.actionId==='portionFood'?'개인 접시':'내 계획 적용하기'}</b></button></div>`}</div></div>`;
 }
 
 function realHandwashingGuide(){

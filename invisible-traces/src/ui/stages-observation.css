@@ -26,7 +26,7 @@
 
 .observation-p02 .obs-site-picker { display: none; }
 .observation-p02 .evidence-layout { display: grid; grid-template-columns: minmax(0,1fr) minmax(235px,.33fr); grid-template-rows: minmax(0,1fr); flex: 1 1 0; min-height: 0; gap: .65rem; }
-.observation-p02 .evidence-layout .clue-board { display: grid; grid-template-rows: minmax(0, 1fr) auto; min-height: 0; padding: 0; background: #163d45; }
+.observation-p02 .evidence-layout .clue-board { display: grid; grid-template-rows: minmax(0, 1fr) auto; min-height: 0; padding: 0; background: transparent; }
 .observation-p02 .evidence-tray { display: flex; min-height: 0; padding: .7rem; gap: .6rem; border: 1px solid var(--line); box-shadow: none; }
 .observation-p02 .panel-heading { flex: none; font-size: 1rem; }
 .obs-evidence-slots { display: grid; grid-template-rows: repeat(5,minmax(0,1fr)); gap: .45rem; min-height: 0; flex: 1 1 0; }
@@ -193,7 +193,7 @@
   position: relative;
   container-type: size;
   min-height: 0;
-  background: radial-gradient(ellipse at center, #395d66, #163d45);
+ background: transparent;
 }
 .clue-scene {
   position: absolute;
